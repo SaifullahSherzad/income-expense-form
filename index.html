@@ -40,9 +40,7 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-    button:hover {
-      background: #0056b3;
-    }
+    button:hover { background: #0056b3; }
     #msg {
       margin-top: 16px;
       font-size: 14px;
@@ -77,30 +75,28 @@ function sendData() {
     return;
   }
 
-  // ✅ د نیټې برخې جدا کړه او د Date object له لارې جوړ کړه
+  // نیټه خوندي پارس کړه (UTC ته نه ځو)
   const parts = rawDate.split("-");
   const yyyy = Number(parts[0]);
-  const mm = Number(parts[1]) - 1; // monthIndex
+  const mmIdx = Number(parts[1]) - 1; // 0–11
   const dd = Number(parts[2]);
-  const d = new Date(yyyy, mm, dd); // ✅ دا د وخت زون خطا نه کوي
 
-  const date = `${String(dd).padStart(2,'0')}-${String(mm+1).padStart(2,'0')}-${yyyy}`;
+  // د نمایش لپاره dd-MM-yyyy
+  const date = `${String(dd).padStart(2,'0')}-${String(mmIdx+1).padStart(2,'0')}-${yyyy}`;
 
   const income = document.getElementById("income").value || 0;
   const expense = document.getElementById("expense").value || 0;
-  const detail = document.getElementById("detail").value.trim();
-  const note = document.getElementById("note").value.trim();
+  const detail = (document.getElementById("detail").value || '').trim();
+  const note = (document.getElementById("note").value || '').trim();
 
-  const finalURL = `${URL}?date=${encodeURIComponent(date)}&income=${income}&expense=${expense}&detail=${encodeURIComponent(detail)}&note=${encodeURIComponent(note)}`;
+  const finalURL =
+    `${URL}?date=${encodeURIComponent(date)}&income=${income}&expense=${expense}` +
+    `&detail=${encodeURIComponent(detail)}&note=${encodeURIComponent(note)}`;
 
   fetch(finalURL)
     .then(r => r.text())
-    .then(res => {
-      document.getElementById("msg").innerText = res;
-    })
-    .catch(err => {
-      document.getElementById("msg").innerText = "د معلوماتو لیږلو ستونزه";
-    });
+    .then(res => { document.getElementById("msg").innerText = res; })
+    .catch(() => { document.getElementById("msg").innerText = "د معلوماتو لیږلو ستونزه"; });
 }
 </script>
 

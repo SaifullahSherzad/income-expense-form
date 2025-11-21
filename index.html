@@ -77,11 +77,14 @@ function sendData() {
     return;
   }
 
-  const d = new Date(rawDate);
-  const dd = String(d.getDate()).padStart(2, '0');
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const yyyy = d.getFullYear();
-  const date = `${dd}-${mm}-${yyyy}`;
+  // ✅ د نیټې برخې جدا کړه او د Date object له لارې جوړ کړه
+  const parts = rawDate.split("-");
+  const yyyy = Number(parts[0]);
+  const mm = Number(parts[1]) - 1; // monthIndex
+  const dd = Number(parts[2]);
+  const d = new Date(yyyy, mm, dd); // ✅ دا د وخت زون خطا نه کوي
+
+  const date = `${String(dd).padStart(2,'0')}-${String(mm+1).padStart(2,'0')}-${yyyy}`;
 
   const income = document.getElementById("income").value || 0;
   const expense = document.getElementById("expense").value || 0;

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="د ټریلر ورځني حساب فورم - Premium Edition">
-    <title>د ټریلر د ورځني حساب فورم | Premium</title>
+    <title>ټېلر 2026 کال</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1160,22 +1160,22 @@
                 <div class="lock-icon">🔒</div>
                 <div>
                     <h2 class="password-title">محفوظ فورم</h2>
-                    <p class="password-subtitle">✨ پاس ورډ درج کړئ</p>
+                    <p class="password-subtitle">✨ پاسورډ داخل کړئ</p>
                 </div>
             </div>
 
             <div class="password-input-group">
-                <label class="password-input-label" for="passwordInput">🔐 پاس ورډ</label>
+                <label class="password-input-label" for="passwordInput">🔐 پاسورډ</label>
                 <input 
                     type="password" 
                     id="passwordInput" 
                     class="password-input" 
-                    placeholder="پاس ورډ ولیکئ..."
+                    placeholder="پاسورډ ولیکئ..."
                     autocomplete="off"
                 >
             </div>
 
-            <div class="password-error" id="passwordError">❌ پاس ورډ غلط دی</div>
+            <div class="password-error" id="passwordError">❌ پاسورډ غلط دئ</div>
 
             <button type="button" class="password-button" onclick="checkPassword()">
                 <span>دخول</span>
@@ -1194,25 +1194,25 @@
                 </div>
                 <div>
                     <h1>د ورځني حساب فورم</h1>
-                    <p class="subtitle">✨ مهرباني وکړئ ورځني معلومات ډک کړئ</p>
+                    <p class="subtitle">✨ مهرباني وکړئ ورځني معلومات صحیح ډک کړئ</p>
                 </div>
             </div>
 
             <form id="trailerForm" class="form-grid">
                 <div class="input-group full-width">
-                    <label for="date">📅 نیټه (2026)</label>
+                    <label for="date">📅 نېټه (2026)</label>
                     <input type="date" id="date" name="date" min="2026-01-01" max="2026-12-31" value="2026-01-01" required>
-                    <p class="hint">⭐ یوازې د 2026 کال نیټې</p>
+                    <p class="hint">⭐  یوازې د 2026 کال نیټې منل کیږي</p>
                 </div>
 
                 <div class="input-group">
                     <label for="income">💰 عائد</label>
-                    <input type="number" id="income" name="income" min="0" placeholder="عدد">
+                    <input type="number" id="income" name="income" min="0" placeholder="په دقیقه توګه عائد ولیکئ">
                 </div>
 
                 <div class="input-group">
                     <label for="expense">💸 مصارف</label>
-                    <input type="number" id="expense" name="expense" min="0" placeholder="عدد">
+                    <input type="number" id="expense" name="expense" min="0" placeholder="په دقیقه توګه مصارف ولیکئ">
                 </div>
 
                 <div class="input-group full-width">
@@ -1227,7 +1227,7 @@
 
                 <div class="submit-btn-wrapper full-width">
                     <button type="submit" class="btn-primary">
-                        <span id="submitText">ثبتول</span>
+                        <span id="submitText">ذخیره کول</span>
                     </button>
                 </div>
             </form>
@@ -1241,7 +1241,7 @@
                 <div class="modal-icon">⚠️</div>
                 <div>
                     <div class="modal-title">د معلوماتو بیا کتنه</div>
-                    <div class="modal-subtitle">✨ معلومات تصدیق کړئ</div>
+                    <div class="modal-subtitle">✨ د معلوماتو تصدیق وکړئ چې غلط خو ندي لیکل شوي</div>
                 </div>
             </div>
 
@@ -1249,11 +1249,11 @@
                 <div class="data-row">
                     <div class="data-row-grid">
                         <div class="data-field">
-                            <span class="data-label">📅 نیټه</span>
+                            <span class="data-label">📅 نېټه</span>
                             <span class="data-value" id="confirmDate">-</span>
                         </div>
                         <div class="data-field">
-                            <span class="data-label">💰 عاید</span>
+                            <span class="data-label">💰 عائد</span>
                             <span class="data-value" id="confirmIncome">-</span>
                         </div>
                     </div>
@@ -1262,11 +1262,11 @@
                 <div class="data-row">
                     <div class="data-row-grid">
                         <div class="data-field">
-                            <span class="data-label">💸 مصرف</span>
+                            <span class="data-label">💸 مصارف</span>
                             <span class="data-value" id="confirmExpense">-</span>
                         </div>
                         <div class="data-field" style="grid-column: 1 / -1;">
-                            <span class="data-label">📝 تفصیل</span>
+                            <span class="data-label">📝 د کار تفصیل</span>
                             <span class="data-value" id="confirmDetail">-</span>
                         </div>
                     </div>
@@ -1285,7 +1285,7 @@
                     <span>✏️ تصحیح</span>
                 </button>
                 <button type="button" class="btn-success" id="confirmButton" onclick="confirmSubmit()">
-                    <span id="confirmText">✓ تایید و ثبتول</span>
+                    <span id="confirmText">✓ تایید او ذخیره کړئ</span>
                 </button>
             </div>
         </div>
@@ -1298,7 +1298,7 @@
     </div>
 
     <script>
-        // Password Configuration - یہاں پاس ورډ بدل کریں
+        // Password Configuration - دلته پاسورډ بدلولئ شئ
         const CORRECT_PASSWORD = 'sherzad2026';
 
         const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxMuzcGNbDxdvzOaOw-n1hY-Mbr2OsxYEBVDqnC2TP35baYP3lkXbo0nyF87LltSVHB/exec';
@@ -1311,12 +1311,12 @@
             const errorDiv = document.getElementById('passwordError');
 
             if (password === CORRECT_PASSWORD) {
-                // صحیح پاس ورډ
+                // صحیح پاسورډ
                 document.getElementById('passwordScreen').classList.add('hidden');
                 document.getElementById('formContainer').classList.remove('hidden');
                 errorDiv.style.display = 'none';
             } else {
-                // غلط پاس ورډ
+                // غلط پاسورډ
                 errorDiv.style.display = 'block';
                 passwordInput.value = '';
                 passwordInput.focus();
@@ -1342,7 +1342,7 @@
 
             const year = new Date(date).getFullYear();
             if (year !== 2026) {
-                showToast('error', 'یوازې د 2026 کال نیټې منل کېږي', 'مهرباني وکړئ د 2026 کال نیټه انتخاب کړئ');
+                showToast('error', 'یوازې د 2026 کال نیټې منل کېږي', 'مهرباني وکړئ د 2026 کال اړوند نېټه انتخاب کړئ');
                 return;
             }
 
@@ -1356,8 +1356,8 @@
         function showModal() {
             document.getElementById('confirmDate').textContent = formDataToSubmit.formattedDate;
             document.getElementById('confirmIncome').textContent = formDataToSubmit.income;
-            document.getElementById('confirmExpense').textContent = formDataToSubmit.expense;
-            document.getElementById('confirmDetail').textContent = formDataToSubmit.detail || 'ندي';
+            document.getElementById('confirmExpense').textContent = formDataToSubmit.expense; 'ندي لیکل شوی';
+            document.getElementById('confirmDetail').textContent = formDataToSubmit.detail || 'ندي لیکل شوی';
             
             if (formDataToSubmit.note) {
                 document.getElementById('confirmNote').textContent = formDataToSubmit.note;
@@ -1394,7 +1394,7 @@
                 const result = await response.text();
 
                 if (result.includes('OK:')) {
-                    showToast('success', '✨ معلومات بریالی', 'حساب ذخیره شو');
+                    showToast('success', '✨ معلومات بریالی ولیکل شو', 'ډېره مننه حساب ذخیره شو');
                     document.getElementById('trailerForm').reset();
                     document.getElementById('date').value = '2026-01-01';
                     closeModal();
@@ -1406,7 +1406,7 @@
                 showToast('error', '❌ د معلوماتو ستونزه', 'بیا هڅه وکړئ');
             } finally {
                 confirmButton.disabled = false;
-                confirmText.textContent = '✓ تایید و ثبتول';
+                confirmText.textContent = '✓ تایید او ذخیره کړئ';
             }
         }
 

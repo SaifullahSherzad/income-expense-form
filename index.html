@@ -8,13 +8,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <link rel="icon" type="image/png" href="./favicon.png" sizes="32x32">
     <link rel="apple-touch-icon" href="./favicon.png">
     <link rel="shortcut icon" href="./favicon.ico">
+    
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { width: 100%; height: 100%; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
         body {
             font-family: 'Inter', 'Noto Naskh Arabic', system-ui, -apple-system, sans-serif;
             background: linear-gradient(135deg, #0a0515 0%, #020203 40%, #030712 100%);
@@ -28,121 +40,975 @@
             min-height: 100vh;
             overflow: auto;
         }
-        .bg-orbs { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
-        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: float-orb 20s ease-in-out infinite; }
-        .orb-1 { width: 400px; height: 400px; background: linear-gradient(135deg, #8b5cf6, #3b82f6); top: -200px; right: -200px; animation-duration: 20s; }
-        .orb-2 { width: 300px; height: 300px; background: linear-gradient(135deg, #ec4899, #f59e0b); bottom: -150px; left: -150px; animation-duration: 25s; animation-delay: -5s; }
-        .orb-3 { width: 350px; height: 350px; background: linear-gradient(135deg, #06b6d4, #8b5cf6); top: 50%; right: 10%; animation-duration: 30s; animation-delay: -10s; }
-        @keyframes float-orb { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(30px, -40px); } 50% { transform: translate(-20px, 30px); } 75% { transform: translate(40px, 20px); } }
-        .glass { background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04)); border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-radius: 24px; position: relative; overflow: hidden; }
-        .glass::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.05), transparent); pointer-events: none; }
-        .container { width: 100%; max-width: 750px; padding: 20px 16px; z-index: 10; animation: slideInDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; }
-        @media (min-width: 768px) { .container { padding: 30px 50px; } }
-        .glass-card { box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 80px rgba(139, 92, 246, 0.1); position: relative; z-index: 1; padding: 24px; }
-        @media (min-width: 768px) { .glass-card { padding: 40px; } }
-        @keyframes slideInDown { from { opacity: 0; transform: translateY(-40px); filter: blur(20px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
-        #authScreen { display: flex; flex-direction: column; gap: 20px; }
-        #authScreen.hidden { display: none !important; }
-        #formContainer { display: none; }
-        #formContainer.show { display: block; }
-        .header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; animation: fadeInUp 0.8s ease-out 0.2s both; }
-        @media (min-width: 768px) { .header { gap: 24px; margin-bottom: 28px; } }
-        .logo-wrapper { position: relative; width: 70px; height: 70px; perspective: 1000px; flex-shrink: 0; }
-        @media (min-width: 768px) { .logo-wrapper { width: 90px; height: 90px; } }
-        .logo { width: 100%; height: 100%; background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 50%, #ec4899 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 900; color: white; box-shadow: 0 20px 50px rgba(139, 92, 246, 0.5), inset -1px -1px 30px rgba(255, 255, 255, 0.3), inset 1px 1px 20px rgba(0, 0, 0, 0.2); position: relative; overflow: hidden; animation: floatLogo 4s ease-in-out infinite; text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); }
-        @media (min-width: 768px) { .logo { font-size: 42px; border-radius: 20px; } }
-        .logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; }
-        @media (min-width: 768px) { .logo img { border-radius: 20px; } }
-        @keyframes floatLogo { 0%, 100% { transform: translateY(0) rotateZ(0deg); box-shadow: 0 20px 50px rgba(139, 92, 246, 0.5), inset -1px -1px 30px rgba(255, 255, 255, 0.3), inset 1px 1px 20px rgba(0, 0, 0, 0.2); } 50% { transform: translateY(-10px) rotateZ(2deg); box-shadow: 0 25px 60px rgba(139, 92, 246, 0.7), inset -1px -1px 30px rgba(255, 255, 255, 0.3), inset 1px 1px 20px rgba(0, 0, 0, 0.2); } }
-        h1 { font-size: 28px; font-weight: 800; background: linear-gradient(to left, #c084fc, #60a5fa, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -1px; line-height: 1.2; text-shadow: 0 2px 20px rgba(139, 92, 246, 0.3); }
-        @media (min-width: 768px) { h1 { font-size: 40px; } }
-        .subtitle { color: #7dd3fc; font-size: 12px; margin-top: 6px; font-weight: 500; letter-spacing: 0.5px; }
-        @media (min-width: 768px) { .subtitle { font-size: 14px; margin-top: 8px; } }
-        .auth-header { text-align: center; margin-bottom: 30px; animation: fadeInUp 0.8s ease-out 0.2s both; }
-        .auth-header h2 { font-size: 32px; font-weight: 800; background: linear-gradient(to left, #c084fc, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px; }
-        .auth-header p { color: #7dd3fc; font-size: 14px; }
-        .auth-buttons { display: flex; flex-direction: column; gap: 12px; }
-        .btn-auth { width: 100%; padding: 14px 24px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; font-family: inherit; animation: fadeInUp 0.6s ease-out forwards; }
-        .btn-auth:nth-child(1) { animation-delay: 0.3s; }
-        .btn-auth:nth-child(2) { animation-delay: 0.4s; }
-        .btn-login { background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%); color: white; box-shadow: 0 15px 40px rgba(6, 182, 212, 0.4); }
-        .btn-login:hover { transform: translateY(-3px); }
-        .btn-login:active { transform: scale(0.98); }
-        .btn-signup { background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(59, 130, 246, 0.15)); border: 2px solid rgba(168, 85, 247, 0.5); color: #c084fc; }
-        .btn-signup:hover { border-color: rgba(168, 85, 247, 0.7); }
-        .auth-info { background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.05)); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 12px; padding: 12px; font-size: 12px; color: #bae6fd; line-height: 1.6; animation: fadeInUp 0.6s ease-out 0.5s both; }
-        .form-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 8px; }
-        @media (min-width: 768px) { .form-grid { grid-template-columns: 1fr 1fr; gap: 24px; } .full-width { grid-column: 1 / -1; } }
-        .input-group { position: relative; animation: fadeInUp 0.6s ease-out forwards; padding-top: 28px; }
-        @media (min-width: 768px) { .input-group { padding-top: 24px; } }
+
+        /* Animated Background Elements */
+        .bg-orbs {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float-orb 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            top: -200px;
+            right: -200px;
+            animation-duration: 20s;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #ec4899, #f59e0b);
+            bottom: -150px;
+            left: -150px;
+            animation-duration: 25s;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+            top: 50%;
+            right: 10%;
+            animation-duration: 30s;
+            animation-delay: -10s;
+        }
+
+        @keyframes float-orb {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(30px, -40px); }
+            50% { transform: translate(-20px, 30px); }
+            75% { transform: translate(40px, 20px); }
+        }
+
+        /* Glass Morphism */
+        .glass {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.05), transparent);
+            pointer-events: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 750px;
+            padding: 200px 16px 16px 16px;
+            z-index: 10;
+            animation: slideInDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 30px 50px;
+            }
+        }
+
+        .glass-card {
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                0 0 80px rgba(139, 92, 246, 0.1);
+            position: relative;
+            z-index: 1;
+            padding: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .glass-card {
+                padding: 40px;
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+                filter: blur(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        /* Netlify Auth Screen */
+        #passwordScreen {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 5, 21, 0.98);
+            backdrop-filter: blur(30px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 16px;
+        }
+
+        #passwordScreen.hidden {
+            display: none;
+        }
+
+        .password-card {
+            max-width: 500px;
+            width: 100%;
+            animation: modalPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.7) translateY(40px) rotateX(15deg);
+                filter: blur(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0) rotateX(0);
+                filter: blur(0);
+            }
+        }
+
+        .password-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @media (min-width: 768px) {
+            .password-header {
+                gap: 24px;
+                margin-bottom: 36px;
+            }
+        }
+
+        .lock-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #f59e0b, #f97316, #ef4444);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.5);
+            animation: pulseIcon 2s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+            .lock-icon {
+                width: 80px;
+                height: 80px;
+                border-radius: 20px;
+                font-size: 42px;
+            }
+        }
+
+        @keyframes pulseIcon {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 15px 40px rgba(245, 158, 11, 0.5);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 20px 50px rgba(245, 158, 11, 0.7);
+            }
+        }
+
+        .password-title {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(to left, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        @media (min-width: 768px) {
+            .password-title {
+                font-size: 36px;
+            }
+        }
+
+        .password-subtitle {
+            color: #7dd3fc;
+            font-size: 13px;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        @media (min-width: 768px) {
+            .password-subtitle {
+                font-size: 14px;
+                margin-top: 10px;
+            }
+        }
+
+        .auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
+            animation: fadeInUp 0.6s ease-out 0.35s both;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        @media (min-width: 768px) {
+            .auth-btn {
+                padding: 16px 32px;
+                font-size: 17px;
+                border-radius: 16px;
+            }
+        }
+
+        .auth-btn:nth-child(1) { animation-delay: 0.4s; }
+        .auth-btn:nth-child(2) { animation-delay: 0.5s; }
+
+        .btn-login {
+            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 50%, #ec4899 100%);
+            color: white;
+            box-shadow: 
+                0 15px 40px rgba(139, 92, 246, 0.4),
+                inset -1px -1px 20px rgba(255, 255, 255, 0.2),
+                inset 1px 1px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 
+                0 25px 60px rgba(139, 92, 246, 0.6),
+                inset -1px -1px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-signup {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(59, 130, 246, 0.15));
+            border: 2px solid rgba(168, 85, 247, 0.5);
+            color: #c084fc;
+        }
+
+        .btn-signup:hover {
+            border-color: rgba(168, 85, 247, 0.7);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(59, 130, 246, 0.25));
+        }
+
+        .auth-info {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.05));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 12px;
+            color: #bae6fd;
+            line-height: 1.6;
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @media (min-width: 768px) {
+            .header {
+                gap: 24px;
+                margin-bottom: 28px;
+            }
+        }
+
+        .logo-wrapper {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            perspective: 1000px;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+            .logo-wrapper {
+                width: 90px;
+                height: 90px;
+            }
+        }
+
+        .logo {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 50%, #ec4899 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 900;
+            color: white;
+            box-shadow: 
+                0 20px 50px rgba(139, 92, 246, 0.5),
+                inset -1px -1px 30px rgba(255, 255, 255, 0.3),
+                inset 1px 1px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: floatLogo 4s ease-in-out infinite;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        @media (min-width: 768px) {
+            .logo {
+                font-size: 42px;
+                border-radius: 20px;
+            }
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .logo img {
+                border-radius: 20px;
+            }
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+            animation: shimmer 3s infinite;
+            z-index: 2;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(139, 92, 246, 0.2), transparent 50%);
+            border-radius: inherit;
+            z-index: 3;
+        }
+
+        @keyframes floatLogo {
+            0%, 100% { 
+                transform: translateY(0) rotateZ(0deg);
+                box-shadow: 0 20px 50px rgba(139, 92, 246, 0.5), inset -1px -1px 30px rgba(255, 255, 255, 0.3), inset 1px 1px 20px rgba(0, 0, 0, 0.2);
+            }
+            50% { 
+                transform: translateY(-10px) rotateZ(2deg);
+                box-shadow: 0 25px 60px rgba(139, 92, 246, 0.7), inset -1px -1px 30px rgba(255, 255, 255, 0.3), inset 1px 1px 20px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(to left, #c084fc, #60a5fa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            text-shadow: 0 2px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 40px;
+            }
+        }
+
+        .subtitle {
+            color: #7dd3fc;
+            font-size: 12px;
+            margin-top: 6px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        @media (min-width: 768px) {
+            .subtitle {
+                font-size: 14px;
+                margin-top: 8px;
+            }
+        }
+
+        /* Form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+            margin-bottom: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+            }
+            .full-width {
+                grid-column: 1 / -1;
+            }
+        }
+
+        .input-group {
+            position: relative;
+            animation: fadeInUp 0.6s ease-out forwards;
+            padding-top: 28px;
+        }
+
+        @media (min-width: 768px) {
+            .input-group {
+                padding-top: 24px;
+            }
+        }
+
         .input-group:nth-child(1) { animation-delay: 0.25s; }
         .input-group:nth-child(2) { animation-delay: 0.35s; }
         .input-group:nth-child(3) { animation-delay: 0.45s; }
         .input-group:nth-child(4) { animation-delay: 0.55s; }
         .input-group:nth-child(5) { animation-delay: 0.65s; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        label { position: absolute; top: -10px; right: 0; background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(59, 130, 246, 0.15)); padding: 5px 11px; font-size: 10px; font-weight: 700; color: #c084fc; z-index: 10; border-radius: 50px; border: 1px solid rgba(192, 132, 252, 0.4); backdrop-filter: blur(12px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
-        @media (min-width: 768px) { label { padding: 6px 14px; font-size: 12px; top: -12px; } }
-        input, textarea { width: 100%; padding: 14px 16px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)); border: 2px solid rgba(139, 92, 246, 0.3); border-radius: 14px; color: #f8fafc; font-size: 15px; font-family: inherit; transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); backdrop-filter: blur(12px); box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2), 0 4px 15px rgba(139, 92, 246, 0.1); position: relative; z-index: 1; }
-        @media (min-width: 768px) { input, textarea { padding: 16px 20px; border-radius: 16px; font-size: 16px; } }
-        input:hover, textarea:hover { border-color: rgba(168, 85, 247, 0.6); background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05)); box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2), 0 8px 30px rgba(139, 92, 246, 0.25); transform: translateY(-3px); }
-        input:focus, textarea:focus { outline: none; border-color: #a78bfa; background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08)); box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 40px rgba(168, 85, 247, 0.4), inset 0 0 20px rgba(139, 92, 246, 0.1); }
-        textarea { min-height: 120px; resize: none; }
-        @media (min-width: 768px) { textarea { min-height: 140px; } }
-        input::placeholder, textarea::placeholder { color: #4a5568; }
-        .hint { font-size: 12px; color: #7dd3fc; margin-top: 8px; font-weight: 500; animation: fadeIn 0.6s ease-out; }
-        @media (min-width: 768px) { .hint { font-size: 13px; margin-top: 10px; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .submit-btn-wrapper { display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px; animation: fadeInUp 0.6s ease-out 0.75s both; }
-        @media (min-width: 768px) { .submit-btn-wrapper { margin-top: 16px; } }
-        button { padding: 13px 32px; min-height: 48px; border: none; border-radius: 14px; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); font-family: inherit; position: relative; overflow: hidden; text-transform: uppercase; letter-spacing: 0.5px; }
-        @media (min-width: 768px) { button { padding: 14px 40px; min-height: 54px; font-size: 16px; border-radius: 16px; } }
-        .btn-primary { background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 50%, #ec4899 100%); color: white; box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4), inset -1px -1px 20px rgba(255, 255, 255, 0.2), inset 1px 1px 20px rgba(0, 0, 0, 0.2); }
-        .btn-primary:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 25px 60px rgba(139, 92, 246, 0.6), inset -1px -1px 20px rgba(255, 255, 255, 0.3); }
-        .btn-primary:active { transform: translateY(-1px) scale(0.99); }
-        .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
-        .btn-logout { background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(220, 38, 38, 0.15)); border: 2px solid rgba(252, 165, 165, 0.5); color: #fca5a5; padding: 10px 20px; }
-        .btn-logout:hover { border-color: rgba(252, 165, 165, 0.7); }
-        .modal-overlay { position: fixed; inset: 0; background: rgba(10, 5, 21, 0.95); backdrop-filter: blur(30px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
-        .modal-overlay.active { display: flex; }
-        .modal { max-width: 500px; width: 100%; }
-        .modal-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; animation: fadeInUp 0.8s ease-out 0.2s both; }
-        @media (min-width: 768px) { .modal-header { gap: 24px; margin-bottom: 36px; } }
-        .modal-icon { width: 70px; height: 70px; border-radius: 16px; background: linear-gradient(135deg, #f59e0b, #f97316, #ef4444); display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 15px 40px rgba(245, 158, 11, 0.5); flex-shrink: 0; }
-        @media (min-width: 768px) { .modal-icon { width: 80px; height: 80px; border-radius: 20px; font-size: 42px; } }
-        .modal-title { font-size: 28px; font-weight: 800; background: linear-gradient(to left, #c084fc, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -1px; }
-        @media (min-width: 768px) { .modal-title { font-size: 36px; } }
-        .modal-subtitle { color: #7dd3fc; font-size: 13px; margin-top: 8px; font-weight: 600; }
-        @media (min-width: 768px) { .modal-subtitle { font-size: 14px; margin-top: 10px; } }
-        .data-grid { margin-bottom: 24px; }
-        .data-row { margin-bottom: 20px; padding: 16px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.05)); border-radius: 12px; animation: fadeInUp 0.6s ease-out 0.3s both; }
-        @media (min-width: 768px) { .data-row { margin-bottom: 24px; padding: 20px; } }
-        .data-row-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        @media (min-width: 768px) { .data-row-grid { gap: 20px; } }
-        .data-field { display: flex; flex-direction: column; gap: 8px; }
-        @media (min-width: 768px) { .data-field { gap: 10px; } }
-        .data-label { font-size: 11px; font-weight: 800; color: #7dd3fc; text-transform: uppercase; letter-spacing: 0.5px; }
-        @media (min-width: 768px) { .data-label { font-size: 12px; } }
-        .data-value { font-size: 16px; font-weight: 800; color: #f8fafc; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); background: linear-gradient(to left, #c084fc, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        @media (min-width: 768px) { .data-value { font-size: 18px; } }
-        .modal-actions { display: flex; flex-direction: column-reverse; gap: 12px; justify-content: flex-end; animation: fadeInUp 0.6s ease-out 0.45s both; }
-        @media (min-width: 768px) { .modal-actions { flex-direction: row; gap: 14px; } }
-        .btn-secondary { background: linear-gradient(135deg, rgba(234, 88, 12, 0.25), rgba(239, 68, 68, 0.15)); border: 2px solid rgba(251, 146, 60, 0.5); color: #fed7aa; box-shadow: 0 8px 20px rgba(234, 88, 12, 0.2); }
-        .btn-secondary:hover { background: linear-gradient(135deg, rgba(234, 88, 12, 0.35), rgba(239, 68, 68, 0.25)); border-color: rgba(251, 146, 60, 0.7); box-shadow: 0 15px 40px rgba(234, 88, 12, 0.35); transform: translateY(-3px); }
-        .btn-success { background: linear-gradient(135deg, #10b981 0%, #06b6d4 50%, #14b8a6 100%); color: white; box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4), inset -1px -1px 20px rgba(255, 255, 255, 0.2), inset 1px 1px 20px rgba(0, 0, 0, 0.2); }
-        .btn-success:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 25px 60px rgba(16, 185, 129, 0.6), inset -1px -1px 20px rgba(255, 255, 255, 0.3); }
-        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(200px); background: rgba(10, 11, 14, 0.95); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 16px 20px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1); z-index: 1000; opacity: 0; transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); max-width: 90%; backdrop-filter: blur(20px); }
-        @media (min-width: 768px) { .toast { top: 30px; bottom: auto; border-radius: 16px; padding: 20px 28px; transform: translateX(-50%) translateY(-150px); } }
-        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-        .toast.success { background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 20px 50px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1); }
-        .toast.error { background: rgba(248, 113, 113, 0.15); border-color: rgba(248, 113, 113, 0.4); box-shadow: 0 20px 50px rgba(248, 113, 113, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1); }
-        .toast.success .toast-title { color: #86efac; }
-        .toast.error .toast-title { color: #fca5a5; }
-        .toast-title { font-weight: 800; margin-bottom: 4px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
-        @media (min-width: 768px) { .toast-title { font-size: 16px; margin-bottom: 6px; } }
-        .toast-description { font-size: 13px; opacity: 0.9; }
-        @media (min-width: 768px) { .toast-description { font-size: 14px; } }
-        .logout-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        label {
+            position: absolute;
+            top: -10px;
+            right: 0;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(59, 130, 246, 0.15));
+            padding: 5px 11px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #c084fc;
+            z-index: 10;
+            border-radius: 50px;
+            border: 1px solid rgba(192, 132, 252, 0.4);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        @media (min-width: 768px) {
+            label {
+                padding: 6px 14px;
+                font-size: 12px;
+                top: -12px;
+            }
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 14px;
+            color: #f8fafc;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            backdrop-filter: blur(12px);
+            box-shadow: 
+                inset 0 2px 8px rgba(0, 0, 0, 0.2),
+                0 4px 15px rgba(139, 92, 246, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (min-width: 768px) {
+            input, textarea {
+                padding: 16px 20px;
+                border-radius: 16px;
+                font-size: 16px;
+            }
+        }
+
+        input:hover, textarea:hover {
+            border-color: rgba(168, 85, 247, 0.6);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+            box-shadow: 
+                inset 0 2px 8px rgba(0, 0, 0, 0.2),
+                0 8px 30px rgba(139, 92, 246, 0.25);
+            transform: translateY(-3px);
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #a78bfa;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+            box-shadow: 
+                inset 0 2px 8px rgba(0, 0, 0, 0.2),
+                0 0 40px rgba(168, 85, 247, 0.4),
+                inset 0 0 20px rgba(139, 92, 246, 0.1);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: none;
+        }
+
+        @media (min-width: 768px) {
+            textarea {
+                min-height: 140px;
+            }
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #4a5568;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #7dd3fc;
+            margin-top: 8px;
+            font-weight: 500;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @media (min-width: 768px) {
+            .hint {
+                font-size: 13px;
+                margin-top: 10px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .submit-btn-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 12px;
+            animation: fadeInUp 0.6s ease-out 0.75s both;
+        }
+
+        @media (min-width: 768px) {
+            .submit-btn-wrapper {
+                margin-top: 16px;
+            }
+        }
+
+        button {
+            padding: 13px 32px;
+            min-height: 48px;
+            border: none;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        @media (min-width: 768px) {
+            button {
+                padding: 14px 40px;
+                min-height: 54px;
+                font-size: 16px;
+                border-radius: 16px;
+            }
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 50%, #ec4899 100%);
+            color: white;
+            box-shadow: 
+                0 15px 40px rgba(139, 92, 246, 0.4),
+                inset -1px -1px 20px rgba(255, 255, 255, 0.2),
+                inset 1px 1px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 
+                0 25px 60px rgba(139, 92, 246, 0.6),
+                inset -1px -1px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px) scale(0.99);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 5, 21, 0.95);
+            backdrop-filter: blur(30px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @media (min-width: 768px) {
+            .modal-header {
+                gap: 24px;
+                margin-bottom: 36px;
+            }
+        }
+
+        .modal-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #f59e0b, #f97316, #ef4444);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.5);
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+            .modal-icon {
+                width: 80px;
+                height: 80px;
+                border-radius: 20px;
+                font-size: 42px;
+            }
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(to left, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        @media (min-width: 768px) {
+            .modal-title {
+                font-size: 36px;
+            }
+        }
+
+        .modal-subtitle {
+            color: #7dd3fc;
+            font-size: 13px;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        @media (min-width: 768px) {
+            .modal-subtitle {
+                font-size: 14px;
+                margin-top: 10px;
+            }
+        }
+
+        .data-grid {
+            margin-bottom: 24px;
+        }
+
+        .data-row {
+            margin-bottom: 20px;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.05));
+            border-radius: 12px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        @media (min-width: 768px) {
+            .data-row {
+                margin-bottom: 24px;
+                padding: 20px;
+            }
+        }
+
+        .data-row-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .data-row-grid {
+                gap: 20px;
+            }
+        }
+
+        .data-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .data-field {
+                gap: 10px;
+            }
+        }
+
+        .data-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: #7dd3fc;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (min-width: 768px) {
+            .data-label {
+                font-size: 12px;
+            }
+        }
+
+        .data-value {
+            font-size: 16px;
+            font-weight: 800;
+            color: #f8fafc;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(to left, #c084fc, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @media (min-width: 768px) {
+            .data-value {
+                font-size: 18px;
+            }
+        }
+
+        .modal-actions {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 12px;
+            justify-content: flex-end;
+            animation: fadeInUp 0.6s ease-out 0.45s both;
+        }
+
+        @media (min-width: 768px) {
+            .modal-actions {
+                flex-direction: row;
+                gap: 14px;
+            }
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, rgba(234, 88, 12, 0.25), rgba(239, 68, 68, 0.15));
+            border: 2px solid rgba(251, 146, 60, 0.5);
+            color: #fed7aa;
+            box-shadow: 0 8px 20px rgba(234, 88, 12, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, rgba(234, 88, 12, 0.35), rgba(239, 68, 68, 0.25));
+            border-color: rgba(251, 146, 60, 0.7);
+            box-shadow: 0 15px 40px rgba(234, 88, 12, 0.35);
+            transform: translateY(-3px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #06b6d4 50%, #14b8a6 100%);
+            color: white;
+            box-shadow: 
+                0 15px 40px rgba(16, 185, 129, 0.4),
+                inset -1px -1px 20px rgba(255, 255, 255, 0.2),
+                inset 1px 1px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 
+                0 25px 60px rgba(16, 185, 129, 0.6),
+                inset -1px -1px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(200px);
+            background: rgba(10, 11, 14, 0.95);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 16px 20px;
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-width: 90%;
+            backdrop-filter: blur(20px);
+        }
+
+        @media (min-width: 768px) {
+            .toast {
+                top: 30px;
+                bottom: auto;
+                border-radius: 16px;
+                padding: 20px 28px;
+                transform: translateX(-50%) translateY(-150px);
+            }
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.success {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow: 
+                0 20px 50px rgba(16, 185, 129, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .toast.error {
+            background: rgba(248, 113, 113, 0.15);
+            border-color: rgba(248, 113, 113, 0.4);
+            box-shadow: 
+                0 20px 50px rgba(248, 113, 113, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .toast.success .toast-title {
+            color: #86efac;
+        }
+
+        .toast.error .toast-title {
+            color: #fca5a5;
+        }
+
+        .toast-title {
+            font-weight: 800;
+            margin-bottom: 4px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (min-width: 768px) {
+            .toast-title {
+                font-size: 16px;
+                margin-bottom: 6px;
+            }
+        }
+
+        .toast-description {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        @media (min-width: 768px) {
+            .toast-description {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -152,16 +1018,20 @@
         <div class="orb orb-3"></div>
     </div>
 
-    <div class="container" id="authScreen">
-        <div class="glass glass-card">
-            <div class="auth-header">
-                <h2>🔐 د 2026 کال فورم</h2>
-                <p>✨ لاګ ان یا نیو اکاؤنٹ بنائیں</p>
+    <!-- Netlify Auth Screen -->
+    <div id="passwordScreen">
+        <div class="glass-card password-card">
+            <div class="password-header">
+                <div class="lock-icon">🔐</div>
+                <div>
+                    <h2 class="password-title">د 2026 کال فورم</h2>
+                    <p class="password-subtitle">✨ لاګ ان یا نیو اکاؤنٹ بنائیں</p>
+                </div>
             </div>
 
             <div class="auth-buttons">
-                <button class="btn-auth btn-login" onclick="handleLogin()">🔓 لاګ ان</button>
-                <button class="btn-auth btn-signup" onclick="handleSignup()">📝 نیو اکاؤنٹ</button>
+                <button class="auth-btn btn-login" onclick="handleLogin()">🔓 لاګ ان</button>
+                <button class="auth-btn btn-signup" onclick="handleSignup()">📝 نیو اکاؤنٹ</button>
             </div>
 
             <div class="auth-info">
@@ -171,28 +1041,26 @@
         </div>
     </div>
 
+    <!-- Main Form Container -->
     <div class="container hidden" id="formContainer">
-        <div class="glass glass-card">
-            <div class="logout-header">
-                <div class="header" style="margin: 0; flex: 1;">
-                    <div class="logo-wrapper">
-                        <div class="logo">
-                            <img src="./logo.jpg" alt="SHERZAD Logo">
-                        </div>
-                    </div>
-                    <div>
-                        <h1>د ورځني حساب فورم</h1>
-                        <p class="subtitle">✨ مهرباني وکړئ ورځني معلومات صحیح ډک کړئ</p>
+        <div class="glass-card">
+            <div class="header">
+                <div class="logo-wrapper">
+                    <div class="logo">
+                        <img src="./logo.jpg" alt="SHERZAD Logo">
                     </div>
                 </div>
-                <button class="btn-logout" onclick="handleLogout()">🚪 خروج</button>
+                <div>
+                    <h1>د ورځني حساب فورم</h1>
+                    <p class="subtitle">✨ مهرباني وکړئ ورځني معلومات صحیح ډک کړئ</p>
+                </div>
             </div>
 
             <form id="trailerForm" class="form-grid">
                 <div class="input-group full-width">
                     <label for="date">📅 نېټه (2026)</label>
                     <input type="date" id="date" name="date" min="2026-01-01" max="2026-12-31" value="2026-01-01" required>
-                    <p class="hint">⭐ یوازې د 2026 کال نیټې منل کیږي</p>
+                    <p class="hint">⭐  یوازې د 2026 کال نیټې منل کیږي</p>
                 </div>
 
                 <div class="input-group">
@@ -217,20 +1085,21 @@
 
                 <div class="submit-btn-wrapper full-width">
                     <button type="submit" class="btn-primary">
-                        <span id="submitText">✅ ذخیره کول</span>
+                        <span id="submitText">ذخیره کول</span>
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- Modal -->
     <div id="modalOverlay" class="modal-overlay">
-        <div class="glass glass-card modal">
+        <div class="glass-card modal">
             <div class="modal-header">
                 <div class="modal-icon">⚠️</div>
                 <div>
                     <div class="modal-title">د معلوماتو بیا کتنه</div>
-                    <div class="modal-subtitle">✨ د معلوماتو تصدیق وکړئ</div>
+                    <div class="modal-subtitle">✨ د معلوماتو تصدیق وکړئ چې غلط خو ندي لیکل شوي</div>
                 </div>
             </div>
 
@@ -270,12 +1139,17 @@
             </div>
 
             <div class="modal-actions">
-                <button type="button" class="btn-secondary" onclick="closeModal()">✏️ تصحیح</button>
-                <button type="button" class="btn-success" id="confirmButton" onclick="confirmSubmit()">✓ تایید او ذخیره کړئ</button>
+                <button type="button" class="btn-secondary" onclick="closeModal()">
+                    <span>✏️ تصحیح</span>
+                </button>
+                <button type="button" class="btn-success" id="confirmButton" onclick="confirmSubmit()">
+                    <span id="confirmText">✓ تایید او ذخیره کړئ</span>
+                </button>
             </div>
         </div>
     </div>
 
+    <!-- Toast -->
     <div id="toast" class="toast">
         <div class="toast-title" id="toastTitle"></div>
         <div class="toast-description" id="toastDescription"></div>
@@ -285,68 +1159,51 @@
         const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxMuzcGNbDxdvzOaOw-n1hY-Mbr2OsxYEBVDqnC2TP35baYP3lkXbo0nyF87LltSVHB/exec';
         let formDataToSubmit = null;
 
-        console.log('📱 فورم لوڈ شو');
-
+        // Netlify Identity Setup
         if (window.netlifyIdentity) {
-            console.log('✅ Netlify Identity لوڈ شو');
-
             window.netlifyIdentity.on('init', (user) => {
-                console.log('✅ Netlify initialized');
                 updateUI();
             });
 
             window.netlifyIdentity.on('login', (user) => {
-                console.log('✅ یوزر لاګ ان شو:', user.email);
                 updateUI();
                 showToast('success', '✨ خوش آمدید!', 'تاسو کامیابی سره لاګ ان شوئ');
             });
 
             window.netlifyIdentity.on('logout', () => {
-                console.log('✅ یوزر لاګ آوٹ شو');
                 updateUI();
             });
 
             window.netlifyIdentity.init();
-        } else {
-            console.error('❌ Netlify Identity نه ملی');
         }
 
         function updateUI() {
             const user = window.netlifyIdentity?.currentUser?.();
-            const authScreen = document.getElementById('authScreen');
+            const authScreen = document.getElementById('passwordScreen');
             const formContainer = document.getElementById('formContainer');
 
             if (user) {
-                console.log('👤 یوزر موجود ہے');
                 authScreen.classList.add('hidden');
-                formContainer.classList.add('show');
+                formContainer.classList.remove('hidden');
             } else {
-                console.log('❌ یوزر موجود نہیں');
                 authScreen.classList.remove('hidden');
-                formContainer.classList.remove('show');
+                formContainer.classList.add('hidden');
             }
         }
 
         function handleLogin() {
-            console.log('🔓 لاگ ان بٹن دبایا');
             if (window.netlifyIdentity) {
                 window.netlifyIdentity.open('login');
             }
         }
 
         function handleSignup() {
-            console.log('📝 سائن اپ بٹن دبایا');
             if (window.netlifyIdentity) {
                 window.netlifyIdentity.open('signup');
             }
         }
 
-        function handleLogout() {
-            if (window.netlifyIdentity) {
-                window.netlifyIdentity.logout();
-            }
-        }
-
+        // Form submission
         document.getElementById('trailerForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -418,7 +1275,7 @@
                     throw new Error(result);
                 }
             } catch (error) {
-                console.error('خرابی:', error);
+                console.error('Error:', error);
                 showToast('error', '❌ د معلوماتو ستونزه', 'بیا هڅه وکړئ');
             } finally {
                 confirmButton.disabled = false;

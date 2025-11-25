@@ -13,8 +13,6 @@
     <link rel="apple-touch-icon" href="./favicon.png">
     <link rel="shortcut icon" href="./favicon.ico">
     
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { width: 100%; height: 100%; }
@@ -216,7 +214,6 @@
             .auth-btn { padding: 16px 32px; font-size: 17px; border-radius: 16px; }
         }
         .auth-btn:nth-child(1) { animation-delay: 0.4s; }
-        .auth-btn:nth-child(2) { animation-delay: 0.5s; }
         .btn-login {
             background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 50%, #ec4899 100%);
             color: white;
@@ -226,24 +223,63 @@
             transform: translateY(-4px) scale(1.02);
             box-shadow: 0 25px 60px rgba(139, 92, 246, 0.6), inset -1px -1px 20px rgba(255, 255, 255, 0.3);
         }
-        .btn-signup {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(59, 130, 246, 0.15));
-            border: 2px solid rgba(168, 85, 247, 0.5);
-            color: #c084fc;
-        }
-        .btn-signup:hover {
-            border-color: rgba(168, 85, 247, 0.7);
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(59, 130, 246, 0.25));
-        }
         .auth-info {
             background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.05));
             border: 1px solid rgba(168, 85, 247, 0.2);
             border-radius: 12px;
-            padding: 12px;
+            padding: 16px;
             font-size: 12px;
             color: #bae6fd;
-            line-height: 1.6;
-            animation: fadeInUp 0.6s ease-out 0.6s both;
+            line-height: 1.8;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .password-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .password-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 2px solid rgba(168, 85, 247, 0.5);
+            border-radius: 10px;
+            color: #f8fafc;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        .password-input::placeholder { color: #7dd3fc; }
+        .password-input:focus {
+            outline: none;
+            border-color: #a78bfa;
+            background: rgba(139, 92, 246, 0.25);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+        }
+        .password-submit {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #10b981 0%, #06b6d4 50%, #14b8a6 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .password-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+        }
+        .password-submit:active {
+            transform: translateY(0);
         }
         .header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; animation: fadeInUp 0.8s ease-out 0.2s both; }
         @media (min-width: 768px) { .header { gap: 24px; margin-bottom: 28px; } }
@@ -523,18 +559,20 @@
                 <div class="lock-icon">🔐</div>
                 <div>
                     <h2 class="password-title">د 2026 کال فورم</h2>
-                    <p class="password-subtitle">✨ لاګ ان یا نیو اکاؤنٹ بنائیں</p>
+                    <p class="password-subtitle">✨ پاسورډ درج کړئ</p>
                 </div>
             </div>
 
             <div class="auth-buttons">
-                <button type="button" class="auth-btn btn-login" id="loginBtn">🔓 لاګ ان</button>
-                <button type="button" class="auth-btn btn-signup" id="signupBtn">📝 نیو اکاؤنٹ</button>
+                <button type="button" class="auth-btn btn-login" onclick="showPasswordInput()">🔓 دخول کریں</button>
             </div>
 
-            <div class="auth-info">
-                ✨ <strong>Netlify Identity:</strong> محفوظ لاګ ان سیستم<br>
-                🔒 تمام معلومات مکمل محفوظ دی
+            <div class="auth-info" id="passwordInputContainer" style="display: none;">
+                <div class="password-input-group">
+                    <label style="position: relative; top: auto; background: transparent; padding: 0; border: none; box-shadow: none; color: #7dd3fc; font-size: 12px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px;">🔑 پاسورډ</label>
+                    <input type="password" id="passwordInput" class="password-input" placeholder="پاسورډ ولیکئ" onkeypress="if(event.key==='Enter') verifyPassword()">
+                </div>
+                <button type="button" class="password-submit" onclick="verifyPassword()">✓ تایید کړئ</button>
             </div>
         </div>
     </div>
@@ -652,45 +690,24 @@
 
     <script>
         const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxMuzcGNbDxdvzOaOw-n1hY-Mbr2OsxYEBVDqnC2TP35baYP3lkXbo0nyF87LltSVHB/exec';
+        const PASSWORD = 'sherzad2026';
         let formDataToSubmit = null;
 
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.on('login', function() {
-                updateAuthUI();
-                showToast('success', '✨ خوش آمدید!', 'تاسو کامیابی سره لاګ ان شوئ');
-            });
-
-            window.netlifyIdentity.on('logout', function() {
-                updateAuthUI();
-            });
-
-            window.netlifyIdentity.init();
+        function showPasswordInput() {
+            document.getElementById('passwordInputContainer').style.display = 'flex';
+            document.getElementById('passwordInput').focus();
         }
 
-        document.getElementById('loginBtn').addEventListener('click', function() {
-            if (window.netlifyIdentity) {
-                window.netlifyIdentity.open('login');
-            }
-        });
-
-        document.getElementById('signupBtn').addEventListener('click', function() {
-            if (window.netlifyIdentity) {
-                window.netlifyIdentity.open('signup');
-            }
-        });
-
-        function updateAuthUI() {
-            if (!window.netlifyIdentity) return;
-            const user = window.netlifyIdentity.currentUser();
-            const authScreen = document.getElementById('passwordScreen');
-            const formContainer = document.getElementById('formContainer');
-
-            if (user) {
-                authScreen.classList.add('hidden');
-                formContainer.classList.remove('hidden');
+        function verifyPassword() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === PASSWORD) {
+                document.getElementById('passwordScreen').classList.add('hidden');
+                document.getElementById('formContainer').classList.remove('hidden');
+                showToast('success', '✨ خوش آمدید!', 'تاسو کامیابی سره دخول کړئ');
             } else {
-                authScreen.classList.remove('hidden');
-                formContainer.classList.add('hidden');
+                showToast('error', '❌ غلط پاسورډ', 'دوبارہ کوشش کریں');
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
             }
         }
 
@@ -789,8 +806,6 @@
         document.getElementById('modalOverlay').addEventListener('click', e => {
             if (e.target.id === 'modalOverlay') closeModal();
         });
-
-        updateAuthUI();
     </script>
 </body>
 </html>

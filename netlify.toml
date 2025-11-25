@@ -1,8 +1,19 @@
 [build]
   command = ""
-  publish = "."
+  publish = "public"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+[context.production]
+  command = ""
+  publish = "public"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"

@@ -1022,8 +1022,8 @@
             </div>
 
             <div class="auth-buttons">
-                <button type="button" class="auth-btn btn-login" onclick="openAuth('login')">🔓 لاګ ان</button>
-                <button type="button" class="auth-btn btn-signup" onclick="openAuth('signup')">📝 نیو اکاؤنٹ</button>
+                <button type="button" class="auth-btn btn-login" id="loginBtn">🔓 لاګ ان</button>
+                <button type="button" class="auth-btn btn-signup" id="signupBtn">📝 نیو اکاؤنٹ</button>
             </div>
 
             <div class="auth-info">
@@ -1148,29 +1148,47 @@
         const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxMuzcGNbDxdvzOaOw-n1hY-Mbr2OsxYEBVDqnC2TP35baYP3lkXbo0nyF87LltSVHB/exec';
         let formDataToSubmit = null;
 
-        // Netlify Identity Setup
-        function setupAuth() {
-            if (window.netlifyIdentity) {
-                window.netlifyIdentity.on('init', function(user) {
-                    updateAuthUI();
-                });
+        function waitForNetlifyIdentity() {
+            return new Promise((resolve) => {
+                if (window.netlifyIdentity) {
+                    resolve();
+                } else {
+                    const checkInterval = setInterval(() => {
+                        if (window.netlifyIdentity) {
+                            clearInterval(checkInterval);
+                            resolve();
+                        }
+                    }, 100);
+                    setTimeout(() => {
+                        clearInterval(checkInterval);
+                        resolve();
+                    }, 3000);
+                }
+            });
+        }
 
-                window.netlifyIdentity.on('login', function(user) {
-                    updateAuthUI();
-                    showToast('success', '✨ خوش آمدید!', 'تاسو کامیابی سره لاګ ان شوئ');
-                });
-
-                window.netlifyIdentity.on('logout', function() {
-                    updateAuthUI();
-                    showToast('success', 'لاګ آؤٹ شوئ', '');
-                });
-
-                window.netlifyIdentity.init();
+        function initAuth() {
+            if (!window.netlifyIdentity) {
+                console.error('Netlify Identity widget failed to load');
+                return;
             }
+
+            window.netlifyIdentity.on('init', updateAuthUI);
+            window.netlifyIdentity.on('login', function() {
+                updateAuthUI();
+                showToast('success', '✨ خوش آمدید!', 'تاسو کامیابی سره لاګ ان شوئ');
+            });
+            window.netlifyIdentity.on('logout', function() {
+                updateAuthUI();
+                showToast('success', 'لاګ آؤٹ شوئ', '');
+            });
+
+            window.netlifyIdentity.init();
         }
 
         function updateAuthUI() {
-            const user = window.netlifyIdentity ? window.netlifyIdentity.currentUser() : null;
+            if (!window.netlifyIdentity) return;
+            const user = window.netlifyIdentity.currentUser();
             const authScreen = document.getElementById('passwordScreen');
             const formContainer = document.getElementById('formContainer');
 
@@ -1183,13 +1201,18 @@
             }
         }
 
-        function openAuth(method) {
+        document.getElementById('loginBtn').addEventListener('click', function() {
             if (window.netlifyIdentity) {
-                window.netlifyIdentity.open(method);
+                window.netlifyIdentity.open('login');
             }
-        }
+        });
 
-        // Form submission
+        document.getElementById('signupBtn').addEventListener('click', function() {
+            if (window.netlifyIdentity) {
+                window.netlifyIdentity.open('signup');
+            }
+        });
+
         document.getElementById('trailerForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -1286,8 +1309,9 @@
             if (e.target.id === 'modalOverlay') closeModal();
         });
 
-        // Initialize on page load
-        setupAuth();
+        waitForNetlifyIdentity().then(() => {
+            initAuth();
+        });
     </script>
 </body>
 </html>

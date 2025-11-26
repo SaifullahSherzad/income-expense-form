@@ -1249,7 +1249,6 @@
     <script>
         // ✅✅✅ ستاسو Apps Script Web App URL ✅✅✅
         const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxFcrvtMWU8oEY0GkTo55rYP90UT-AOej9ZMf5iaEQd4acSy7ILolUwpN9rwlw9TGpT/exec';
-        // دا URL د Apps Script خپرولو وروسته ترلاسه کیږي
         
         const JOBS = [
             { id: 'saudi', name: 'سعودي حساب', password: 'saudi123', icon: '🕌', desc: 'د سعودي کار' },
@@ -1353,21 +1352,27 @@
             const btn = document.getElementById('confirmButton');
             btn.disabled = true;
             try {
-                const params = new URLSearchParams({
-                    date: formDataToSubmit.formattedDate,  // Format: 15-01-2026
-                    workType: currentJob.id,               // e.g., 'saudi', 'brooklyn'
-                    income: formDataToSubmit.income || '0',
-                    expense: formDataToSubmit.expense || '0',
-                    detail: formDataToSubmit.detail || '',
-                    note: formDataToSubmit.note || ''
-                });
-                await fetch(GOOGLE_SHEETS_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
+                // د URL جوړول
+                const url = new URL(GOOGLE_SHEETS_URL);
+                url.searchParams.append('date', formDataToSubmit.formattedDate);
+                url.searchParams.append('workType', currentJob.id);
+                url.searchParams.append('income', formDataToSubmit.income || '0');
+                url.searchParams.append('expense', formDataToSubmit.expense || '0');
+                url.searchParams.append('detail', formDataToSubmit.detail || '');
+                url.searchParams.append('note', formDataToSubmit.note || '');
+                
+                console.log('د لیږلو URL:', url.toString()); // د دیباګ لپاره
+                console.log('د کار ډول:', currentJob.id); // د دیباګ لپاره
+                
+                await fetch(url.toString(), { method: 'GET', mode: 'no-cors' });
+                
                 showToast('success', '✨ معلومات بریالی ولیکل شو', 'ډېره مننه حساب ذخیره شو');
                 document.getElementById('trailerForm').reset();
                 const today = new Date().toISOString().split('T')[0];
                 document.getElementById('date').value = today;
                 closeModal();
             } catch (error) {
+                console.error('ستونزه:', error);
                 showToast('error', '❌ د معلوماتو ستونزه', 'بیا هڅه وکړئ یا انټرنیټ چیک کړئ');
             } finally { btn.disabled = false; }
         }

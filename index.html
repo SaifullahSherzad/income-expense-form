@@ -175,8 +175,9 @@
             z-index: 10;
             animation: slideInDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
-            max-height: 90vh;
+            max-height: 95vh;
             overflow-y: auto;
+            overflow-x: hidden;
         }
 
         @media (min-width: 768px) {
@@ -294,8 +295,9 @@
             max-width: 550px;
             width: 100%;
             animation: modalPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            max-height: 80vh;
+            max-height: 85vh;
             overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .job-header {
@@ -455,6 +457,9 @@
             max-width: 500px;
             width: 100%;
             animation: modalPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-height: 85vh;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .password-header {
@@ -688,6 +693,9 @@
             box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2), 0 4px 15px rgba(139, 92, 246, 0.1);
             position: relative;
             z-index: 1;
+            min-height: 52px;
+            display: flex;
+            align-items: center;
         }
 
         @media (min-width: 768px) {
@@ -713,18 +721,30 @@
         }
 
         textarea {
-            min-height: 120px;
+            min-height: 52px;
             resize: none;
+            align-items: flex-start;
+            padding-top: 12px;
         }
 
         @media (min-width: 768px) {
             textarea {
-                min-height: 140px;
+                min-height: 52px;
             }
         }
 
         input::placeholder, textarea::placeholder {
             color: #4a5568;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            min-width: 100%;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            color: #a78bfa;
         }
 
         .hint {
@@ -1074,6 +1094,11 @@
                 </div>
             </div>
 
+            <div style="text-align: center; padding: 16px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(59, 130, 246, 0.06)); border: 2px solid rgba(139, 92, 246, 0.25); border-radius: 16px; margin-bottom: 24px;">
+                <div style="font-size: 28px; margin-bottom: 8px;" id="currentJobIcon"></div>
+                <div style="font-size: 16px; font-weight: 800; background: linear-gradient(to left, #c084fc, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;" id="currentJobName"></div>
+            </div>
+
             <form id="trailerForm" class="form-grid">
                 <div class="input-group full-width">
                     <label for="date">📅 نېټه (2026)</label>
@@ -1122,10 +1147,33 @@
             </div>
 
             <div class="data-grid">
-                <div class="data-row" id="lastSaveRow" style="display: none;">
-                    <div class="data-field">
-                        <span class="data-label">⏰ آخری بار ذخیره</span>
-                        <span class="data-value" id="lastSaveDate">-</span>
+                <div class="data-row" id="lastSaveRow" style="display: none; border-bottom: 2px solid rgba(139, 92, 246, 0.3); padding-bottom: 20px; margin-bottom: 20px;">
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <span class="data-label" style="display: block; margin-bottom: 12px; color: #f472b6; font-size: 12px;">⏰ آخری بار ذخیره شوی معلومات</span>
+                    </div>
+                    <div class="data-row-grid">
+                        <div class="data-field">
+                            <span class="data-label">📅 نېټه</span>
+                            <span class="data-value" id="lastSaveDate">-</span>
+                        </div>
+                        <div class="data-field">
+                            <span class="data-label">💰 عائد</span>
+                            <span class="data-value" id="lastSaveIncome">-</span>
+                        </div>
+                        <div class="data-field">
+                            <span class="data-label">💸 مصارف</span>
+                            <span class="data-value" id="lastSaveExpense">-</span>
+                        </div>
+                        <div class="data-field" style="grid-column: 1 / -1;">
+                            <span class="data-label">📝 تفصیل</span>
+                            <span class="data-value" id="lastSaveDetail">-</span>
+                        </div>
+                    </div>
+                    <div class="data-row" id="lastSaveNoteRow" style="display: none; margin-top: 16px;">
+                        <div class="data-field">
+                            <span class="data-label">📌 یاداشت</span>
+                            <span class="data-value" id="lastSaveNote">-</span>
+                        </div>
                     </div>
                 </div>
 
@@ -1216,6 +1264,16 @@
             currentJob = null;
         }
 
+        function logout() {
+            document.getElementById('formContainer').classList.add('hidden');
+            document.getElementById('jobSelectionScreen').classList.remove('hidden');
+            document.getElementById('passwordScreen').classList.add('hidden');
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordError').style.display = 'none';
+            document.getElementById('trailerForm').reset();
+            currentJob = null;
+        }
+
         function checkPassword() {
             const password = document.getElementById('passwordInput').value;
             const errorDiv = document.getElementById('passwordError');
@@ -1227,6 +1285,12 @@
                 const today = new Date().toISOString().split('T')[0];
                 dateInput.value = today;
                 errorDiv.style.display = 'none';
+                
+                const currentJobData = JOBS.find(job => job.id === currentJob.id);
+                if (currentJobData) {
+                    document.getElementById('currentJobIcon').textContent = currentJobData.icon;
+                    document.getElementById('currentJobName').textContent = currentJobData.name;
+                }
             } else {
                 errorDiv.style.display = 'block';
                 document.getElementById('passwordInput').value = '';
@@ -1291,9 +1355,19 @@
             } else {
                 document.getElementById('noteRow').style.display = 'none';
             }
-            const lastSave = localStorage.getItem('lastSaveDate');
-            if (lastSave) {
-                document.getElementById('lastSaveDate').textContent = lastSave;
+            const lastSaveData = localStorage.getItem('lastSaveData');
+            if (lastSaveData) {
+                const data = JSON.parse(lastSaveData);
+                document.getElementById('lastSaveDate').textContent = data.date;
+                document.getElementById('lastSaveIncome').textContent = data.income || '0';
+                document.getElementById('lastSaveExpense').textContent = data.expense || '0';
+                document.getElementById('lastSaveDetail').textContent = data.detail || 'ندي لیکل شوی';
+                if (data.note) {
+                    document.getElementById('lastSaveNote').textContent = data.note;
+                    document.getElementById('lastSaveNoteRow').style.display = 'block';
+                } else {
+                    document.getElementById('lastSaveNoteRow').style.display = 'none';
+                }
                 document.getElementById('lastSaveRow').style.display = 'block';
             } else {
                 document.getElementById('lastSaveRow').style.display = 'none';
@@ -1320,7 +1394,14 @@
                 
                 await fetch(url.toString(), { method: 'GET', mode: 'no-cors' });
                 
-                localStorage.setItem('lastSaveDate', formDataToSubmit.formattedDate);
+                const lastSaveData = {
+                    date: formDataToSubmit.formattedDate,
+                    income: formDataToSubmit.income || '0',
+                    expense: formDataToSubmit.expense || '0',
+                    detail: formDataToSubmit.detail || '',
+                    note: formDataToSubmit.note || ''
+                };
+                localStorage.setItem('lastSaveData', JSON.stringify(lastSaveData));
                 showToast('success', '✨ معلومات بریالی ولیکل شو', 'ډېره مننه حساب ذخیره شو');
                 document.getElementById('trailerForm').reset();
                 const today = new Date().toISOString().split('T')[0];

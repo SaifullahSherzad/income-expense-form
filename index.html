@@ -911,16 +911,32 @@
             font-size: 14px;
             font-weight: 800;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             font-family: inherit;
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 50%, #10b981 100%);
             color: white;
-            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4), inset -1px -1px 20px rgba(255, 255, 255, 0.2), inset 1px 1px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-success::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+            animation: shine 3s infinite;
         }
 
         .btn-success:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.5);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 25px 60px rgba(16, 185, 129, 0.6), inset -1px -1px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-success:active {
+            transform: translateY(-2px) scale(0.98);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4), inset -1px -1px 20px rgba(255, 255, 255, 0.2);
+            animation: buttonPress 0.2s ease-out;
         }
 
         .toast {
@@ -1106,6 +1122,13 @@
             </div>
 
             <div class="data-grid">
+                <div class="data-row" id="lastSaveRow" style="display: none;">
+                    <div class="data-field">
+                        <span class="data-label">⏰ آخری بار ذخیره</span>
+                        <span class="data-value" id="lastSaveDate">-</span>
+                    </div>
+                </div>
+
                 <div class="data-row">
                     <div class="data-row-grid">
                         <div class="data-field">
@@ -1268,6 +1291,13 @@
             } else {
                 document.getElementById('noteRow').style.display = 'none';
             }
+            const lastSave = localStorage.getItem('lastSaveDate');
+            if (lastSave) {
+                document.getElementById('lastSaveDate').textContent = lastSave;
+                document.getElementById('lastSaveRow').style.display = 'block';
+            } else {
+                document.getElementById('lastSaveRow').style.display = 'none';
+            }
             document.getElementById('modalOverlay').classList.add('active');
         }
 
@@ -1290,6 +1320,7 @@
                 
                 await fetch(url.toString(), { method: 'GET', mode: 'no-cors' });
                 
+                localStorage.setItem('lastSaveDate', formDataToSubmit.formattedDate);
                 showToast('success', '✨ معلومات بریالی ولیکل شو', 'ډېره مننه حساب ذخیره شو');
                 document.getElementById('trailerForm').reset();
                 const today = new Date().toISOString().split('T')[0];

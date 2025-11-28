@@ -1501,16 +1501,6 @@
             setTimeout(() => toast.classList.remove('show'), 5000);
         }
 
-        function logout() {
-            document.getElementById('formContainer').classList.add('hidden');
-            document.getElementById('jobSelectionScreen').classList.remove('hidden');
-            document.getElementById('passwordScreen').classList.add('hidden');
-            document.getElementById('passwordInput').value = '';
-            document.getElementById('passwordError').style.display = 'none';
-            document.getElementById('trailerForm').reset();
-            currentJob = null;
-        }
-
         initJobSelector();
     </script>
 

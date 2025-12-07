@@ -729,88 +729,287 @@
         }
 
         .btn-back {
-            background: rgba(255, 255, 255, 0.1);
-            color: #cbd5e1;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, rgba(234, 88, 12, 0.25), rgba(239, 68, 68, 0.15));
+            border: 2px solid rgba(251, 146, 60, 0.5);
+            color: #fed7aa;
+            box-shadow: 0 8px 20px rgba(234, 88, 12, 0.2);
         }
 
         .btn-back:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: linear-gradient(135deg, rgba(234, 88, 12, 0.35), rgba(239, 68, 68, 0.25));
+            border-color: rgba(251, 146, 60, 0.7);
+            box-shadow: 0 15px 40px rgba(234, 88, 12, 0.35);
+            transform: translateY(-3px);
+        }
+
+        .btn-history {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            background: rgba(139, 92, 246, 0.15);
+            color: #c084fc;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-history:hover {
+            background: rgba(139, 92, 246, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .calc-btn {
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #a78bfa;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+            opacity: 0.7;
+            transition: all 0.2s;
+            z-index: 5;
+        }
+
+        .calc-btn:hover {
+            opacity: 1;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Calculator Modal Styles */
+        .calc-modal {
+            max-width: 320px !important;
+        }
+
+        .calc-display {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 24px;
+            color: #f8fafc;
+            text-align: right;
+            margin-bottom: 16px;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .calc-key {
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+            transition: all 0.2s;
+        }
+
+        .calc-key:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .calc-key.operator {
+            color: #f472b6;
+            background: rgba(244, 114, 182, 0.1);
+        }
+
+        .calc-key.equal {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
             color: white;
+            grid-column: span 2;
+        }
+
+        .calc-key.clear {
+            color: #fca5a5;
+            background: rgba(248, 113, 113, 0.1);
+        }
+
+        /* History List Styles */
+        .history-list {
+            max-height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .history-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-date {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .history-amount {
+            font-weight: 700;
+            color: #c084fc;
+            font-size: 14px;
+        }
+
+        .history-desc {
+            font-size: 13px;
+            color: #e2e8f0;
+            margin-bottom: 4px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #94a3b8;
+            font-size: 14px;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 16px;
-            animation: fadeInUp 0.8s ease-out 0.4s both;
+            gap: 18px;
+            margin-bottom: 8px;
         }
 
         @media (min-width: 768px) {
             .form-grid {
                 grid-template-columns: 1fr 1fr;
-                gap: 20px;
+                gap: 24px;
+            }
+            .full-width {
+                grid-column: 1 / -1;
             }
         }
 
         .input-group {
             position: relative;
+            animation: fadeInUp 0.6s ease-out forwards;
         }
 
-        .input-group.full-width {
-            grid-column: 1 / -1;
-        }
+        .input-group:nth-child(1) { animation-delay: 0.25s; }
+        .input-group:nth-child(2) { animation-delay: 0.35s; }
+        .input-group:nth-child(3) { animation-delay: 0.45s; }
+        .input-group:nth-child(4) { animation-delay: 0.55s; }
+        .input-group:nth-child(5) { animation-delay: 0.65s; }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             color: #c084fc;
+            margin-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        input, select, textarea {
+        @media (min-width: 768px) {
+            label {
+                font-size: 12px;
+                margin-bottom: 10px;
+            }
+        }
+
+        input, textarea {
             width: 100%;
             padding: 14px 16px;
-            background: rgba(10, 5, 21, 0.6);
-            border: 2px solid rgba(139, 92, 246, 0.2);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+            border: 2px solid rgba(139, 92, 246, 0.3);
             border-radius: 14px;
             color: #f8fafc;
             font-size: 15px;
             font-family: inherit;
-            transition: all 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            backdrop-filter: blur(12px);
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2), 0 4px 15px rgba(139, 92, 246, 0.1);
+            position: relative;
+            z-index: 1;
+            min-height: 52px;
+            display: flex;
+            align-items: center;
         }
 
-        input:focus, select:focus, textarea:focus {
+        @media (min-width: 768px) {
+            input, textarea {
+                padding: 16px 20px;
+                border-radius: 16px;
+                font-size: 16px;
+            }
+        }
+
+        input:hover, textarea:hover {
+            border-color: rgba(168, 85, 247, 0.6);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2), 0 8px 30px rgba(139, 92, 246, 0.25);
+            transform: translateY(-3px);
+        }
+
+        input:focus, textarea:focus {
             outline: none;
             border-color: #a78bfa;
-            background: rgba(10, 5, 21, 0.8);
-            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 40px rgba(168, 85, 247, 0.4), inset 0 0 20px rgba(139, 92, 246, 0.1);
         }
 
         textarea {
-            min-height: 100px;
-            resize: vertical;
+            min-height: 52px;
+            resize: none;
+            align-items: flex-start;
+            padding-top: 12px;
+        }
+
+        @media (min-width: 768px) {
+            textarea {
+                min-height: 52px;
+            }
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #4a5568;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            min-width: 100%;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            color: #a78bfa;
         }
 
         .hint {
-            font-size: 11px;
-            color: #94a3b8;
-            margin-top: 6px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            font-size: 12px;
+            color: #7dd3fc;
+            margin-top: 8px;
+            font-weight: 500;
         }
 
         .error-message {
+            font-size: 12px;
             color: #fca5a5;
-            font-size: 11px;
             margin-top: 6px;
-            display: none;
-            animation: shake 0.4s ease-in-out;
             font-weight: 600;
+            display: none;
         }
 
         .error-message.show {
@@ -818,103 +1017,102 @@
         }
 
         .submit-btn-wrapper {
-            margin-top: 24px;
             display: flex;
             gap: 12px;
+            margin-top: 20px;
+            animation: fadeInUp 0.6s ease-out 0.75s both;
+        }
+
+        @media (min-width: 768px) {
+            .submit-btn-wrapper {
+                gap: 14px;
+                margin-top: 24px;
+            }
         }
 
         .btn-secondary {
-            padding: 14px 24px;
-            border: none;
+            padding: 13px 32px;
+            border: 2px solid rgba(251, 146, 60, 0.5);
+            color: #fed7aa;
+            background: linear-gradient(135deg, rgba(234, 88, 12, 0.25), rgba(239, 68, 68, 0.15));
             border-radius: 14px;
-            font-size: 14px;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.08);
-            color: #e2e8f0;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             font-family: inherit;
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, rgba(234, 88, 12, 0.35), rgba(239, 68, 68, 0.25));
+            border-color: rgba(251, 146, 60, 0.7);
+            box-shadow: 0 15px 40px rgba(234, 88, 12, 0.35);
+            transform: translateY(-3px);
         }
 
-        /* Modal Styles */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            z-index: 100;
-            display: flex;
+            background: rgba(10, 5, 21, 0.98);
+            backdrop-filter: blur(30px);
+            display: none;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 10000;
             padding: 16px;
+            overflow-y: auto;
+            max-height: 100vh;
         }
 
         .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
+            display: flex;
         }
 
         .modal {
             max-width: 600px;
             width: 100%;
-            transform: scale(0.9) translateY(20px);
-            opacity: 0;
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            max-height: 90vh;
+            animation: modalPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-height: 75vh;
             overflow-y: auto;
-        }
-
-        .modal-overlay.active .modal {
-            transform: scale(1) translateY(0);
-            opacity: 1;
         }
 
         .modal-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 16px;
-            margin-bottom: 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 20px;
+            margin-bottom: 28px;
         }
 
         .modal-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            background: rgba(245, 158, 11, 0.15);
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #f59e0b, #f97316, #ef4444);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            color: #f59e0b;
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            font-size: 32px;
             flex-shrink: 0;
         }
 
         .modal-title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 800;
-            color: #f8fafc;
-            margin-bottom: 4px;
+            background: linear-gradient(to left, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .modal-subtitle {
-            font-size: 13px;
-            color: #94a3b8;
+            color: #7dd3fc;
+            font-size: 12px;
+            margin-top: 6px;
+            font-weight: 500;
         }
 
         .data-grid {
-            background: rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.05));
+            border: 1px solid rgba(139, 92, 246, 0.2);
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 24px;
@@ -1181,6 +1379,12 @@
                 </div>
             </div>
 
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+                 <button type="button" class="btn-history" onclick="showHistory()">
+                    <span>📜</span> مخکینی حسابونه
+                </button>
+            </div>
+
             <div style="text-align: center; padding: 16px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(59, 130, 246, 0.06)); border: 2px solid rgba(139, 92, 246, 0.25); border-radius: 16px; margin-bottom: 24px;">
                 <div style="font-size: 28px; margin-bottom: 8px;" id="currentJobIcon"></div>
                 <div style="font-size: 16px; font-weight: 800; background: linear-gradient(to left, #c084fc, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;" id="currentJobName"></div>
@@ -1195,13 +1399,19 @@
 
                 <div class="input-group">
                     <label for="income">💰 عائد</label>
-                    <input type="number" id="income" name="income" min="0" placeholder="عائد ولیکئ">
+                    <div style="position: relative;">
+                        <input type="number" id="income" name="income" min="0" placeholder="عائد ولیکئ" style="padding-left: 40px;">
+                        <button type="button" class="calc-btn" onclick="openCalculator('income')">🧮</button>
+                    </div>
                     <p class="error-message" id="incomeError">❌ عائد لیکل لازم دی (صفر یا لوړ عدد ولیکئ)</p>
                 </div>
 
                 <div class="input-group">
                     <label for="expense">💸 مصارف</label>
-                    <input type="number" id="expense" name="expense" min="0" placeholder="مصارف ولیکئ">
+                    <div style="position: relative;">
+                        <input type="number" id="expense" name="expense" min="0" placeholder="مصارف ولیکئ" style="padding-left: 40px;">
+                        <button type="button" class="calc-btn" onclick="openCalculator('expense')">🧮</button>
+                    </div>
                     <p class="error-message" id="expenseError">❌ مصارف لیکل لازم دی (صفر یا لوړ عدد ولیکئ)</p>
                 </div>
 
@@ -1309,6 +1519,70 @@
         </div>
     </div>
 
+    <!-- History Modal -->
+    <div id="historyModal" class="modal-overlay">
+        <div class="glass-card modal">
+            <div class="modal-header">
+                <div class="modal-icon">📜</div>
+                <div>
+                    <div class="modal-title">مخکینی حسابونه</div>
+                    <div class="modal-subtitle">وروستي 10 ثبت شوي حسابونه</div>
+                </div>
+            </div>
+            
+            <div id="historyList" class="history-list"></div>
+            
+            <div class="modal-actions" style="margin-top: 20px;">
+                <button type="button" class="btn-secondary" style="width: 100%;" onclick="closeHistory()">بندول</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calculator Modal -->
+    <div id="calcModal" class="modal-overlay">
+        <div class="glass-card modal calc-modal">
+            <div class="modal-header" style="margin-bottom: 16px;">
+                <div class="modal-icon" style="width: 40px; height: 40px; font-size: 20px;">🧮</div>
+                <div>
+                    <div class="modal-title" style="font-size: 18px;">ماشین حساب</div>
+                </div>
+            </div>
+            
+            <div id="calcDisplay" class="calc-display">0</div>
+            
+            <div class="calc-grid">
+                <button type="button" class="calc-key clear" onclick="calcClear()">C</button>
+                <button type="button" class="calc-key" onclick="calcAppend('(')">(</button>
+                <button type="button" class="calc-key" onclick="calcAppend(')')">)</button>
+                <button type="button" class="calc-key operator" onclick="calcAppend('/')">÷</button>
+                
+                <button type="button" class="calc-key" onclick="calcAppend('7')">7</button>
+                <button type="button" class="calc-key" onclick="calcAppend('8')">8</button>
+                <button type="button" class="calc-key" onclick="calcAppend('9')">9</button>
+                <button type="button" class="calc-key operator" onclick="calcAppend('*')">×</button>
+                
+                <button type="button" class="calc-key" onclick="calcAppend('4')">4</button>
+                <button type="button" class="calc-key" onclick="calcAppend('5')">5</button>
+                <button type="button" class="calc-key" onclick="calcAppend('6')">6</button>
+                <button type="button" class="calc-key operator" onclick="calcAppend('-')">-</button>
+                
+                <button type="button" class="calc-key" onclick="calcAppend('1')">1</button>
+                <button type="button" class="calc-key" onclick="calcAppend('2')">2</button>
+                <button type="button" class="calc-key" onclick="calcAppend('3')">3</button>
+                <button type="button" class="calc-key operator" onclick="calcAppend('+')">+</button>
+                
+                <button type="button" class="calc-key" onclick="calcAppend('0')">0</button>
+                <button type="button" class="calc-key" onclick="calcAppend('.')">.</button>
+                <button type="button" class="calc-key equal" onclick="calcEqual()">=</button>
+            </div>
+            
+            <div class="modal-actions" style="margin-top: 20px;">
+                <button type="button" class="btn-success" onclick="calcApply()" style="width: 100%;">تایید</button>
+                <button type="button" class="btn-secondary" onclick="closeCalc()" style="width: 100%;">بندول</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast" class="toast">
         <div class="toast-title" id="toastTitle"></div>
@@ -1334,6 +1608,98 @@
         let currentJob = null;
         let currentPassword = null;
         let formDataToSubmit = null;
+        let calcTargetInput = null;
+
+        // History Functions
+        function getHistory() {
+            const history = localStorage.getItem('accountHistory');
+            return history ? JSON.parse(history) : [];
+        }
+
+        function addToHistory(data) {
+            const history = getHistory();
+            const newEntry = {
+                ...data,
+                timestamp: new Date().getTime(),
+                jobName: currentJob.name
+            };
+            history.unshift(newEntry);
+            if (history.length > 50) history.pop(); // Keep last 50
+            localStorage.setItem('accountHistory', JSON.stringify(history));
+        }
+
+        function showHistory() {
+            const history = getHistory();
+            const listEl = document.getElementById('historyList');
+            
+            if (history.length === 0) {
+                listEl.innerHTML = '<div class="empty-state">تراوسه کوم حساب ندی ثبت شوی</div>';
+            } else {
+                listEl.innerHTML = history.map(item => `
+                    <div class="history-item">
+                        <div>
+                            <div class="history-desc">${item.jobName}</div>
+                            <div class="history-date">${item.formattedDate}</div>
+                            <div class="history-desc" style="font-size: 11px; opacity: 0.7;">${item.detail || 'بدون تفصیل'}</div>
+                        </div>
+                        <div style="text-align: left;">
+                            ${item.income && item.income !== '0' ? `<div class="history-amount" style="color: #86efac;">+${item.income}</div>` : ''}
+                            ${item.expense && item.expense !== '0' ? `<div class="history-amount" style="color: #fca5a5;">-${item.expense}</div>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            document.getElementById('historyModal').classList.add('active');
+        }
+
+        function closeHistory() {
+            document.getElementById('historyModal').classList.remove('active');
+        }
+
+        // Calculator Functions
+        function openCalculator(inputId) {
+            calcTargetInput = document.getElementById(inputId);
+            document.getElementById('calcDisplay').textContent = calcTargetInput.value || '0';
+            document.getElementById('calcModal').classList.add('active');
+        }
+
+        function closeCalc() {
+            document.getElementById('calcModal').classList.remove('active');
+            calcTargetInput = null;
+        }
+
+        function calcAppend(val) {
+            const display = document.getElementById('calcDisplay');
+            if (display.textContent === '0' && val !== '.') {
+                display.textContent = val;
+            } else {
+                display.textContent += val;
+            }
+        }
+
+        function calcClear() {
+            document.getElementById('calcDisplay').textContent = '0';
+        }
+
+        function calcEqual() {
+            const display = document.getElementById('calcDisplay');
+            try {
+                // Safe evaluation
+                const result = eval(display.textContent);
+                display.textContent = result;
+            } catch (e) {
+                display.textContent = 'Error';
+            }
+        }
+
+        function calcApply() {
+            const display = document.getElementById('calcDisplay');
+            if (calcTargetInput && display.textContent !== 'Error') {
+                calcTargetInput.value = display.textContent;
+            }
+            closeCalc();
+        }
 
         function initJobSelector() {
             const container = document.getElementById('jobGrid');
@@ -1552,7 +1918,13 @@
                     detail: formDataToSubmit.detail || '',
                     note: formDataToSubmit.note || ''
                 };
+                
+                // Save to localStorage
                 localStorage.setItem('lastSaveData', JSON.stringify(lastSaveData));
+                
+                // Add to history
+                addToHistory(lastSaveData);
+                
                 showToast('success', '✨ معلومات بریالي ولیکل شول', 'نړئ مننه حساب ذخیره شو');
                 document.getElementById('trailerForm').reset();
                 const today = new Date().toISOString().split('T')[0];

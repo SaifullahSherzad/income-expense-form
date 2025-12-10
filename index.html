@@ -1391,8 +1391,8 @@
                     <p class="hint">⭐ یوازې د 2026 کال نیټې منل کیږي</p>
                 </div>
 
-                <!-- Income Field Removed/Hidden -->
-                <div class="input-group" style="display: none;">
+                <!-- Income Field (Hidden for Home Accounts, Visible for others) -->
+                <div class="input-group" id="incomeGroup" style="display: none;">
                     <label for="income">💰 عائد</label>
                     <input type="number" id="income" name="income" min="0" placeholder="عائد ولیکئ">
                     <p class="error-message" id="incomeError">❌ عائد لیکل لازم دی (صفر یا لوړ عدد ولیکئ)</p>
@@ -1725,6 +1725,7 @@
                     
                     document.getElementById('categoryGroup').style.display = 'block';
                     document.getElementById('noteGroup').style.display = 'none';
+                    document.getElementById('incomeGroup').style.display = 'none'; // Hide Income for Home
                     // document.getElementById('category').required = true; // Hidden input doesn't support required attribute the same way visually, handled in validation
 
 
@@ -1738,6 +1739,7 @@
                     document.getElementById('balanceSection').style.display = 'none';
                     document.getElementById('categoryGroup').style.display = 'none';
                     document.getElementById('noteGroup').style.display = 'block';
+                    document.getElementById('incomeGroup').style.display = 'block'; // Show Income for others
                     document.getElementById('category').required = false;
                 }
 

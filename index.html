@@ -3270,12 +3270,41 @@
         }
         function clearAllData() { 
             if (confirm("آیا تاسو ډاډه یاست چې ټوله هیسټري او ډیټا پاکول غواړئ؟ دا عمل د بیرته راګرځیدو وړ نه دی!")) { 
-                localStorage.removeItem("history_" + currentJob.id); 
-                localStorage.removeItem("stats_" + currentJob.id); 
-                localStorage.removeItem("lastSaveData_" + currentJob.id); 
-                showToast("success", "پاک شو", "ټوله ډیټا پاکه شوه"); 
-                closeDashboard(); 
-                closeReport(); 
+                
+                // Determine which account's data to delete
+                let targetAccountId = currentJob.id;
+                
+                // If in Report Screen (Admin might be viewing another account)
+                if (document.getElementById('reportScreen').classList.contains('active')) {
+                     const accountSelector = document.getElementById('reportAccountSelector');
+                     const adminSelectContainer = document.getElementById('adminAccountSelectContainer');
+                     
+                     if (adminSelectContainer && adminSelectContainer.style.display !== 'none' && accountSelector && accountSelector.value !== 'current') {
+                        targetAccountId = accountSelector.value;
+                     }
+                }
+                
+                // If in Dashboard Screen (Admin might be viewing another account)
+                 if (document.getElementById('dashboardScreen').classList.contains('active')) {
+                     const dashboardSelector = document.getElementById('dashboardAccountSelector');
+                     if (dashboardSelector && dashboardSelector.value !== 'current') {
+                        targetAccountId = dashboardSelector.value;
+                     }
+                }
+
+                // Delete Data
+                localStorage.removeItem("history_" + targetAccountId); 
+                localStorage.removeItem("stats_" + targetAccountId); 
+                localStorage.removeItem("lastSaveData_" + targetAccountId); 
+                
+                showToast("success", "پاک شو", "ټوله ډیټا په بریالیتوب سره پاکه شوه"); 
+                
+                // Refresh the current view instead of closing
+                if (document.getElementById('reportScreen').classList.contains('active')) {
+                    filterReportByDuration(); // Refresh report list
+                } else if (document.getElementById('dashboardScreen').classList.contains('active')) {
+                    updateDashboardStats(targetAccountId === currentJob.id ? 'current' : targetAccountId); // Refresh dashboard stats
+                }
             } 
         }
     </script>

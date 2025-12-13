@@ -21,6 +21,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- OCR & QR Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
     <style>
         * {
             margin: 0;
@@ -1140,7 +1144,7 @@
             border: 1px solid rgba(245, 158, 11, 0.3);
             border-radius: 12px;
         }
-
+        
         .last-save-title {
             font-size: 13px;
             font-weight: 700;
@@ -1151,6 +1155,7 @@
             gap: 8px;
         }
 
+        /* Toast Notification */
         .toast {
             position: fixed;
             bottom: 20px;
@@ -1198,7 +1203,7 @@
             color: rgba(255, 255, 255, 0.9);
             font-weight: 500;
         }
-
+        
         .back-button-container {
             position: absolute;
             top: 16px;
@@ -1220,6 +1225,7 @@
                 top: 16px;
             }
         }
+
         /* CATEGORY ICONS STYLES */
         .category-grid {
             display: grid;
@@ -1270,12 +1276,171 @@
             font-size: 11px;
             font-weight: 600;
         }
-
+        
         #customCategoryInput {
             margin-top: 12px;
             display: none;
             animation: fadeInUp 0.4s ease-out;
         }
+        
+        /* Checkbox for Document Mode */
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .checkbox-wrapper:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #8b5cf6;
+            margin: 0;
+            cursor: pointer;
+        }
+        
+        .checkbox-label {
+            font-size: 13px;
+            color: #e2e8f0;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Camera Modal Styles */
+        #cameraModal {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 20000;
+            display: none;
+            flex-direction: column;
+        }
+
+        #cameraView {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .camera-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            pointer-events: none;
+        }
+
+        .camera-controls-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: auto;
+        }
+
+        .camera-controls-bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            pointer-events: auto;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding-bottom: 20px;
+        }
+
+        .camera-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        .shutter-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .shutter-btn:active {
+            transform: scale(0.9);
+        }
+
+        .camera-mode-selector {
+            display: flex;
+            gap: 20px;
+            background: rgba(0,0,0,0.5);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        .camera-mode {
+            color: #ccc;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .camera-mode.active {
+            color: #fbbf24; /* Warning yellow */
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+        }
+
+        #qr-reader {
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        /* Loading Overlay for OCR */
+        .loading-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 20001;
+            color: white;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
     </style>
 </head>
 <body>
@@ -1470,25 +1635,43 @@
                     <!-- Main Container Box -->
                     <div id="billImageArea" style="background: rgba(255, 255, 255, 0.05); border: 2px dashed rgba(139, 92, 246, 0.3); border-radius: 14px; padding: 15px; transition: all 0.3s;">
                         
-                        <!-- Inner Flex Container (Single Option) -->
-                        <div style="display: flex; justify-content: center; align-items: center;">
+                        <!-- Inner Flex Container (Grid Option) -->
+                        <div style="display: flex; justify-content: space-around; align-items: center; gap: 10px; flex-wrap: wrap;">
                             
                             <!-- Option 1: Gallery (Standard Image) -->
-                            <div onclick="document.getElementById('billImageGallery').click()" style="text-align: center; cursor: pointer; width: 100%; padding: 10px; border-radius: 10px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
-                                <div style="font-size: 28px; margin-bottom: 4px;">📸</div>
-                                <div style="font-size: 13px; color: #a78bfa; font-weight: 600;">ګالري / فایل</div>
-                                <div style="font-size: 10px; color: #94a3b8;">له فایلونو څخه</div>
+                            <div onclick="document.getElementById('billImageGallery').click()" style="text-align: center; cursor: pointer; flex: 1; min-width: 80px; padding: 10px; border-radius: 10px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                                <div style="font-size: 24px; margin-bottom: 4px;">📂</div>
+                                <div style="font-size: 11px; color: #a78bfa; font-weight: 600;">فایل/ګالري</div>
+                            </div>
+
+                            <!-- Option 2: Smart Camera -->
+                            <div onclick="openCamera('photo')" style="text-align: center; cursor: pointer; flex: 1; min-width: 80px; padding: 10px; border-radius: 10px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                                <div style="font-size: 24px; margin-bottom: 4px;">📸</div>
+                                <div style="font-size: 11px; color: #6ee7b7; font-weight: 600;">سمارټ کېمره</div>
+                            </div>
+
+                            <!-- Option 3: QR Scan -->
+                            <div onclick="openCamera('qr')" style="text-align: center; cursor: pointer; flex: 1; min-width: 80px; padding: 10px; border-radius: 10px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                                <div style="font-size: 24px; margin-bottom: 4px;">🔍</div>
+                                <div style="font-size: 11px; color: #fbbf24; font-weight: 600;">QR سکین</div>
                             </div>
 
                         </div>
                     </div>
+                    
+                    <!-- Document Mode Toggle -->
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" id="documentModeToggle" onchange="reprocessImage()">
+                        <span class="checkbox-label">📄 د اسنادو حالت (Document Mode)</span>
+                    </label>
 
                     <!-- Hidden Inputs -->
                     <input type="file" id="billImageGallery" name="billImageGallery" accept="image/*" style="display: none;" onchange="handleImageSelect(this)">
 
                     <!-- Preview Area -->
-                    <div id="imagePreview" style="display: none; margin-top: 12px; position: relative;">
-                        <img id="previewImg" src="" style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <div id="imagePreview" style="display: none; margin-top: 12px; position: relative; text-align: center;">
+                        <img id="previewImg" src="" style="width: 100%; max-height: 300px; object-fit: contain; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <div id="compressionInfo" style="font-size: 11px; color: #6ee7b7; margin-top: 5px;"></div>
                         <button type="button" onclick="removeImage()" style="position: absolute; top: 10px; right: 10px; background: rgba(239, 68, 68, 0.9); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: bold;">✕</button>
                     </div>
                 </div>
@@ -1569,7 +1752,7 @@
                 <div class="data-row" id="imageRow" style="display: none;">
                     <div class="data-field">
                         <span class="data-label">📷 بیل ضمیمه</span>
-                        <span class="data-value" style="color: #6ee7b7;">✓ عکس انتخاب شو</span>
+                        <span class="data-value" style="color: #6ee7b7;">✓ عکس انتخاب شو (Compressed)</span>
                     </div>
                 </div>
 
@@ -1680,6 +1863,41 @@
         </div>
     </div>
 
+    <!-- Smart Camera Modal -->
+    <div id="cameraModal">
+        <div class="camera-overlay">
+            <div class="camera-controls-top">
+                <button type="button" class="camera-btn" onclick="closeCamera()">✕</button>
+                <div style="color: white; font-weight: 600; text-shadow: 0 0 5px rgba(0,0,0,0.5);">کېمره</div>
+                <button type="button" class="camera-btn" id="flashBtn" onclick="toggleFlash()">⚡</button>
+            </div>
+            
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                 <div id="qr-reader"></div> <!-- QR Scan Area -->
+                 <div id="focus-area" style="width: 250px; height: 350px; border: 2px solid rgba(255,255,255,0.5); border-radius: 20px; box-shadow: 0 0 0 1000px rgba(0,0,0,0.3); pointer-events: none;"></div>
+            </div>
+
+            <div class="camera-controls-bottom">
+                <div class="camera-mode-selector">
+                    <div class="camera-mode" id="mode-photo" onclick="switchMode('photo')">عکس</div>
+                    <div class="camera-mode" id="mode-qr" onclick="switchMode('qr')">QR سکین</div>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 30px;">
+                     <button type="button" class="camera-btn" onclick="extractText()">📝<span style="font-size: 8px; position:absolute; bottom:2px;">OCR</span></button>
+                     <button type="button" class="shutter-btn" id="shutterBtn" onclick="takePicture()"></button>
+                     <button type="button" class="camera-btn" style="opacity: 0;">.</button> <!-- Spacer -->
+                </div>
+            </div>
+        </div>
+        <video id="cameraView" autoplay playsinline></video>
+        <canvas id="cameraCanvas" style="display: none;"></canvas>
+        <div id="loadingOverlay" class="loading-overlay">
+             <div class="spinner"></div>
+             <div id="loadingText">پروسس روان دی...</div>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast" class="toast">
         <div class="toast-title" id="toastTitle"></div>
@@ -1688,6 +1906,8 @@
 
     <script>
         const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxUgijxJUusdYz6gBc1Cxo0VxO2Kzalg77G_fpEndycuYmzguf72zceS0pN4T_ZF7Whpw/exec';
+        // Note: DRIVE_FOLDER_URL is usually handled by the Google Script, not frontend directly unless using Google Picker API,
+        // but keeping it here as it was in the original code.
         const DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1I5FZzH-exwNCoFTMsfMnjS31ep8MX8RX';
         
         const JOBS = [
@@ -1714,6 +1934,13 @@
         let currentJob = null;
         let currentPassword = null;
         let formDataToSubmit = null;
+        let originalImageFile = null; // Store the original file
+        let compressedImageBlob = null; // Store the compressed blob
+
+        // Camera Variables
+        let videoStream = null;
+        let currentMode = 'photo';
+        let html5QrCode = null;
 
         function initJobSelector() {
             const container = document.getElementById('jobGrid');
@@ -1771,7 +1998,7 @@
         }
 
         function selectSaudiSubAccount(subId, subName, password, image) {
-            currentJob = { id: subId, name: subName, image: image };
+            currentJob = { id: subId, name: subName, image: image, icon: '🚛' };
             currentPassword = password;
             document.getElementById('saudiSubAccountScreen').classList.add('hidden');
             document.getElementById('passwordScreen').classList.remove('hidden');
@@ -1810,32 +2037,225 @@
             currentJob = null;
         }
 
-        let selectedImageFile = null;
+        // --- IMAGE & CAMERA LOGIC ---
 
         function handleImageSelect(input) {
             if (input.files && input.files[0]) {
-                const file = input.files[0];
-                selectedImageFile = file;
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('previewImg').src = e.target.result;
-                    document.getElementById('imagePreview').style.display = 'block';
-                    document.getElementById('billImageArea').style.borderColor = '#10b981';
-                    document.getElementById('billImageArea').style.background = 'rgba(16, 185, 129, 0.1)';
-                }
-                reader.readAsDataURL(file);
+                originalImageFile = input.files[0];
+                processImage(originalImageFile);
             }
+        }
+        
+        function reprocessImage() {
+            if (originalImageFile) {
+                processImage(originalImageFile);
+            }
+        }
+
+        function processImage(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const maxWidth = 1600; 
+                    const maxHeight = 1600;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width *= maxHeight / height;
+                            height = maxHeight;
+                        }
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    
+                    const isDocMode = document.getElementById('documentModeToggle').checked;
+                    
+                    if (isDocMode) {
+                         ctx.filter = 'contrast(1.4) brightness(1.1) grayscale(1)';
+                    }
+                    
+                    ctx.drawImage(img, 0, 0, width, height);
+                    ctx.filter = 'none';
+
+                    canvas.toBlob((blob) => {
+                        compressedImageBlob = blob;
+                        
+                        const previewUrl = URL.createObjectURL(blob);
+                        document.getElementById('previewImg').src = previewUrl;
+                        document.getElementById('imagePreview').style.display = 'block';
+                        document.getElementById('billImageArea').style.borderColor = '#10b981';
+                        document.getElementById('billImageArea').style.background = 'rgba(16, 185, 129, 0.1)';
+                        
+                        const originalSize = (file.size / 1024).toFixed(1) + ' KB';
+                        const compressedSize = (blob.size / 1024).toFixed(1) + ' KB';
+                        document.getElementById('compressionInfo').innerHTML = `اصلی: ${originalSize} <br> کمپریس شوی: <span style="color: #fff; font-weight:bold;">${compressedSize}</span> ${isDocMode ? '(Document Mode)' : ''}`;
+
+                    }, 'image/jpeg', 0.7);
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
         }
 
         function removeImage() {
             if(document.getElementById('billImageGallery')) document.getElementById('billImageGallery').value = '';
-            if(document.getElementById('billImageCamera')) document.getElementById('billImageCamera').value = '';
             
-            selectedImageFile = null;
+            originalImageFile = null;
+            compressedImageBlob = null;
+            
             document.getElementById('imagePreview').style.display = 'none';
             document.getElementById('billImageArea').style.borderColor = 'rgba(139, 92, 246, 0.3)';
             document.getElementById('billImageArea').style.background = 'rgba(255, 255, 255, 0.05)';
+        }
+
+        // --- SMART CAMERA IMPLEMENTATION ---
+
+        async function openCamera(mode) {
+            currentMode = mode;
+            document.getElementById('cameraModal').style.display = 'flex';
+            switchMode(mode);
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: "environment" },
+                    audio: false 
+                });
+                videoStream = stream;
+                document.getElementById('cameraView').srcObject = stream;
+            } catch (err) {
+                console.error("Camera access error:", err);
+                alert("کیمرې ته لاسرسی نشته! مهرباني وکړئ اجازه ورکړئ.");
+                closeCamera();
+            }
+        }
+
+        function closeCamera() {
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+                videoStream = null;
+            }
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => { html5QrCode.clear(); }).catch(err => {});
+            }
+            document.getElementById('cameraModal').style.display = 'none';
+            document.getElementById('qr-reader').innerHTML = '';
+        }
+
+        function switchMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.camera-mode').forEach(el => el.classList.remove('active'));
+            document.getElementById('mode-' + mode).classList.add('active');
+
+            const shutterBtn = document.getElementById('shutterBtn');
+            const focusArea = document.getElementById('focus-area');
+            const qrReader = document.getElementById('qr-reader');
+
+            if (mode === 'qr') {
+                shutterBtn.style.display = 'none';
+                focusArea.style.display = 'none';
+                qrReader.style.display = 'block';
+                startQrScanner();
+            } else {
+                shutterBtn.style.display = 'block';
+                focusArea.style.display = 'block';
+                qrReader.style.display = 'none';
+                if (html5QrCode) {
+                    html5QrCode.stop().then(() => { html5QrCode.clear(); }).catch(err => {});
+                }
+            }
+        }
+
+        async function toggleFlash() {
+            if (videoStream) {
+                const track = videoStream.getVideoTracks()[0];
+                const capabilities = track.getCapabilities();
+                if (capabilities.torch) {
+                    const currentSettings = track.getSettings();
+                    try {
+                        await track.applyConstraints({
+                            advanced: [{ torch: !currentSettings.torch }]
+                        });
+                        document.getElementById('flashBtn').style.color = !currentSettings.torch ? '#fbbf24' : 'white';
+                    } catch (err) {
+                        console.error("Flash error:", err);
+                    }
+                } else {
+                    showToast('warning', 'فلش نشته', 'ستاسو وسیله فلش نه ملاتړ کوي.');
+                }
+            }
+        }
+
+        function takePicture() {
+            const video = document.getElementById('cameraView');
+            const canvas = document.getElementById('cameraCanvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            canvas.toBlob(blob => {
+                const file = new File([blob], "camera_capture.jpg", { type: "image/jpeg" });
+                originalImageFile = file;
+                processImage(file);
+                closeCamera();
+            }, 'image/jpeg', 0.8);
+        }
+
+        function startQrScanner() {
+             html5QrCode = new Html5Qrcode("qr-reader");
+             html5QrCode.start(
+                 { facingMode: "environment" }, 
+                 { fps: 10, qrbox: { width: 250, height: 250 } },
+                 (decodedText, decodedResult) => {
+                     // Handle QR Code Success
+                     console.log(`Scan result: ${decodedText}`, decodedResult);
+                     document.getElementById('detail').value = `Scanned QR: ${decodedText}`;
+                     showToast('success', 'QR سکین شو!', decodedText);
+                     closeCamera();
+                 },
+                 (errorMessage) => {
+                     // parse error, ignore it.
+                 })
+             .catch((err) => {
+                 console.log(err);
+             });
+        }
+
+        function extractText() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            const video = document.getElementById('cameraView');
+            const canvas = document.getElementById('cameraCanvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const dataUrl = canvas.toDataURL('image/jpeg');
+
+            Tesseract.recognize(
+                dataUrl,
+                'eng', // English + maybe Pashto if available? Tesseract standard is usually eng
+                { logger: m => document.getElementById('loadingText').textContent = `OCR: ${Math.round(m.progress * 100)}%` }
+            ).then(({ data: { text } }) => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                document.getElementById('detail').value += `\n[OCR Text]: ${text}`;
+                showToast('success', 'متن استخراج شو', 'متن په تفصیل کې اضافه شو');
+            }).catch(err => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                console.error(err);
+                showToast('error', 'OCR ناکام شو', 'متن نشو لوستلی');
+            });
         }
 
         function logout() {
@@ -1861,6 +2281,7 @@
             // Reset category selection visually
             document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('customCategoryInput').style.display = 'none';
+            removeImage(); // Clear image
         }
 
         function checkPassword() {
@@ -2013,7 +2434,7 @@
                 document.getElementById('noteRow').style.display = 'none';
             }
 
-            if (selectedImageFile) {
+            if (compressedImageBlob || originalImageFile) {
                 document.getElementById('imageRow').style.display = 'block';
             } else {
                 document.getElementById('imageRow').style.display = 'none';
@@ -2097,17 +2518,21 @@
                 let fetchUrl = url.toString();
                 let fetchOptions = {};
 
-                if (selectedImageFile) {
+                // Use the compressed blob if available, otherwise original file (though we should always have compressed one if file selected)
+                const fileToSend = compressedImageBlob; 
+                const originalName = originalImageFile ? originalImageFile.name : 'image.jpg';
+
+                if (fileToSend) {
                     // Convert image to Base64
                     const base64Data = await new Promise((resolve, reject) => {
                         const reader = new FileReader();
-                        reader.readAsDataURL(selectedImageFile);
+                        reader.readAsDataURL(fileToSend);
                         reader.onload = () => resolve(reader.result.split(',')[1]);
                         reader.onerror = error => reject(error);
                     });
 
-                    params.imageName = selectedImageFile.name;
-                    params.imageMimeType = selectedImageFile.type;
+                    params.imageName = originalName;
+                    params.imageMimeType = 'image/jpeg'; // We always convert to JPEG
                     params.imageData = base64Data;
                     
                     method = 'POST';
@@ -2152,7 +2577,7 @@
                 localStorage.setItem('lastSaveData_' + currentJob.id, JSON.stringify(lastSaveData));
                 
                 let successMsg = 'نړئ مننه حساب ذخیره شو';
-                if (selectedImageFile) {
+                if (fileToSend) {
                     successMsg += ' او عکس ګوګل ډرایو ته ولیږل شو';
                 }
                 showToast('success', '✨ معلومات بریالي ولیکل شول', successMsg);
@@ -2260,19 +2685,18 @@
             }
 
             container.innerHTML = history.map(data => {
-                const isExpense = parseFloat(data.expense) > 0;
-                const amount = isExpense ? data.expense : data.income;
-                const color = isExpense ? '#ef4444' : '#10b981';
-                const sign = isExpense ? '-' : '+';
-                const title = data.category || (isExpense ? 'مصرف' : 'عاید');
+                const amount = parseFloat(data.expense) > 0 ? -parseFloat(data.expense) : parseFloat(data.income);
+                const color = amount < 0 ? '#ef4444' : '#10b981';
+                const sign = amount > 0 ? '+' : '';
+                const desc = data.detail || data.category || 'بی تفصیله';
                 
                 return `
                     <div class="data-row" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; flex-direction: column; gap: 4px;">
-                            <span style="font-size: 14px; font-weight: 700; color: #f8fafc;">${title}</span>
-                            <span style="font-size: 11px; color: #94a3b8;">${data.date} | ${data.detail ? data.detail.substring(0, 20) : ''}...</span>
+                            <span style="font-size: 14px; font-weight: 700; color: #f8fafc;">${desc}</span>
+                            <span style="font-size: 11px; color: #94a3b8;">${data.date}</span>
                         </div>
-                        <span style="color: ${color}; font-weight: 700;">${sign}${parseFloat(amount).toLocaleString()} ؋</span>
+                        <span style="color: ${color}; font-weight: 700;">${sign}${amount.toLocaleString()} ؋</span>
                     </div>
                 `;
             }).join('');

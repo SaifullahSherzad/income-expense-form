@@ -2081,29 +2081,64 @@
                 localStorage.setItem('stats_' + currentJob.id, JSON.stringify(stats));
                 // ***************************************************************
 
-                const url = new URL(GOOGLE_SHEETS_URL);
-                url.searchParams.append('date', formDataToSubmit.formattedDate);
-                url.searchParams.append('workType', currentJob.id); // Keeping ID for backend
-                url.searchParams.append('income', formDataToSubmit.income || '0');
-                url.searchParams.append('expense', formDataToSubmit.expense || '0');
-                url.searchParams.append('detail', formDataToSubmit.detail || '');
-                url.searchParams.append('note', formDataToSubmit.note || '');
-                // ADDED CATEGORY PARAMETER
-                url.searchParams.append('category', formDataToSubmit.category || '');
-                
-                // NOTE: In a real implementation with backend, we would upload 'selectedImageFile' here
-                // We are simulating the upload to the provided Drive Folder
+                let url = new URL(GOOGLE_SHEETS_URL);
+                let params = {
+                    date: formDataToSubmit.formattedDate,
+                    workType: currentJob.id,
+                    income: formDataToSubmit.income || '0',
+                    expense: formDataToSubmit.expense || '0',
+                    detail: formDataToSubmit.detail || '',
+                    note: formDataToSubmit.note || '',
+                    category: formDataToSubmit.category || ''
+                };
+
+                let method = 'GET';
+                let body = null;
+                let fetchUrl = url.toString();
+                let fetchOptions = {};
+
                 if (selectedImageFile) {
-                    console.log("Uploading image to:", DRIVE_FOLDER_URL);
-                    // We can't actually upload from static HTML without a backend proxy or client-side auth flow.
-                    // But we will notify the user.
+                    // Convert image to Base64
+                    const base64Data = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(selectedImageFile);
+                        reader.onload = () => resolve(reader.result.split(',')[1]);
+                        reader.onerror = error => reject(error);
+                    });
+
+                    params.imageName = selectedImageFile.name;
+                    params.imageMimeType = selectedImageFile.type;
+                    params.imageData = base64Data;
+                    
+                    method = 'POST';
+                    fetchUrl = GOOGLE_SHEETS_URL;
+                    
+                    // Build form body for POST
+                    const formData = new URLSearchParams();
+                    Object.keys(params).forEach(key => formData.append(key, params[key]));
+                    
+                    fetchOptions = {
+                        method: 'POST',
+                        body: formData,
+                        // 'no-cors' mode allows sending data to Google Script without CORS errors,
+                        // but prevents reading the response text.
+                        mode: 'no-cors' 
+                    };
+                } else {
+                    // Standard GET request for text-only (Legacy behavior preserved)
+                    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+                    fetchUrl = url.toString();
+                    fetchOptions = { method: 'GET' };
                 }
 
-                const response = await fetch(url.toString(), { method: 'GET' });
-                const text = await response.text();
+                const response = await fetch(fetchUrl, fetchOptions);
                 
-                if (text.includes("ERROR")) {
-                    throw new Error(text);
+                // Only check text response if NOT in no-cors mode (GET requests)
+                if (method === 'GET') {
+                    const text = await response.text();
+                    if (text.includes("ERROR")) {
+                        throw new Error(text);
+                    }
                 }
                 
                 const lastSaveData = {
@@ -2118,7 +2153,7 @@
                 
                 let successMsg = 'نړئ مننه حساب ذخیره شو';
                 if (selectedImageFile) {
-                    successMsg += ' (عکس اپلوډ نشو ځکه سیسټم یې ملاتړ نه کوي)';
+                    successMsg += ' او عکس ګوګل ډرایو ته ولیږل شو';
                 }
                 showToast('success', '✨ معلومات بریالي ولیکل شول', successMsg);
                 

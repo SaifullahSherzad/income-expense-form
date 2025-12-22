@@ -21,8 +21,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- OCR & QR Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- QR Library -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
     <style>
@@ -240,14 +241,14 @@
         }
 
         .logo {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 50%, #ec4899 100%);
             border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 900;
             color: white;
             box-shadow: 0 20px 50px rgba(139, 92, 246, 0.5), inset -1px -1px 30px rgba(255, 255, 255, 0.3), inset 1px 1px 20px rgba(0, 0, 0, 0.2);
@@ -260,20 +261,46 @@
 
         @media (min-width: 768px) and (max-width: 1023px) {
             .logo {
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
+                width: 60px;
+                height: 60px;
+                font-size: 28px;
                 border-radius: 12px;
             }
         }
 
         @media (min-width: 1024px) {
             .logo {
-                width: 90px;
-                height: 90px;
-                font-size: 42px;
+                width: 100px;
+                height: 100px;
+                font-size: 48px;
                 border-radius: 20px;
             }
+        }
+
+        .btn-close-fancy {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-close-fancy:hover {
+            background: rgba(239, 68, 68, 0.8);
+            border-color: rgba(239, 68, 68, 1);
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
         }
 
         .logo::before {
@@ -1476,7 +1503,59 @@
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    </style>
+        /* DASHBOARD STYLES */
+        @media (min-width: 768px) {
+            .dashboard-container {
+                flex-direction: row !important;
+            }
+            .dashboard-sidebar {
+                width: 280px;
+                border-left: 1px solid rgba(255,255,255,0.1);
+                border-bottom: none;
+                height: 100vh;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .dashboard-sidebar {
+                width: 100%;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                border-left: none;
+                flex-direction: row !important;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px 16px !important;
+                gap: 10px !important;
+            }
+            .nav-menu {
+                display: none !important; /* Hide menu items on mobile for simplicity or use hamburger */
+            }
+        }
+
+        .saudi-asset-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .saudi-asset-row:last-child {
+            border-bottom: none;
+        }
+
+        /* Ensure default hidden state */
+        .hidden { display: none !important; }
+    
+        .saudi-asset-row {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(59, 130, 246, 0.03));
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+</style>
 </head>
 <body>
     <div class="bg-orbs">
@@ -1495,16 +1574,152 @@
                     <p class="job-header-subtitle">حساب انتخاب کړئ</p>
                 </div>
             </div>
+            
             <div class="job-grid" id="jobGrid"></div>
+
+            <div style="margin-top: 25px; border-top: none; padding-top: 20px;">
+                <button onclick="openGeneralDashboardAuth()" style="width: 100%; padding: 14px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: #94a3b8; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    📊 عمومي مالي ډشبورډ
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- Saudi Sub-Account Selection Screen -->
+    <!-- General Dashboard Screen -->
+    <div id="generalDashboardScreen" class="hidden" style="position: fixed; inset: 0; background: rgba(10, 5, 21, 0.98); backdrop-filter: blur(30px); display: flex; align-items: flex-start; justify-content: center; z-index: 9999; padding: 60px 10px 20px 10px; overflow: auto;">
+        <div class="glass-card job-selection-card" style="max-width: 1400px; width: 98%; max-height: 98vh; height: auto; overflow-y: auto; display: flex; flex-direction: column; padding: 20px;">
+             <button type="button" onclick="closeGeneralDashboard()" class="btn-close-fancy" style="top: 15px; left: 15px;">✕</button>
+            
+            <div class="job-header" style="flex-direction: row; margin-bottom: 25px; gap: 20px; flex-shrink: 0; align-items: center; padding-top: 20px;">
+                <div class="logo" style="width: 100px; height: 100px; font-size: 40px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.1);"><img src="./logo.jpg" alt="Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 20px;"></div>
+                <div style="text-align: right;">
+                    <h2 style="font-size: 28px; margin-bottom: 5px;">شېرزاد حسابونه</h2>
+                    <p class="job-header-subtitle" style="font-size: 16px;">عمومي مالي ډشبورډ</p>
+                </div>
+            </div>
+
+            <div class="job-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; flex-grow: 1; align-content: start; padding-bottom: 20px;">
+                <!-- Chart Area -->
+                <div class="job-card" style="grid-column: span 2; min-height: 300px; padding: 20px; background: rgba(255,255,255,0.03); cursor: default; pointer-events: none;">
+                    <h3 style="font-size: 16px; margin-bottom: 15px; color: #94a3b8; text-align: right;">📊 د عاید او مصرف ګراف</h3>
+                    <div style="height: 250px; width: 100%;">
+                        <canvas id="dashboardChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- COLUMN 1: Assets & Income (Left/Top in Mobile) -->
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <h3 style="color: #6ee7b7; font-size: 18px; margin-bottom: 5px; border-bottom: 1px solid rgba(110, 231, 183, 0.2); padding-bottom: 5px;">عاید او سرمایه</h3>
+                    
+                    <div class="job-card" style="padding: 16px; gap: 8px; cursor: default; pointer-events: none;">
+                        <div class="job-icon" style="font-size: 32px;">🌍</div>
+                        <div class="job-name" style="font-size: 16px;">ټوله سرمایه</div>
+                        <div class="job-desc" style="font-size: 20px;"><span id="dashTotalWorth">0</span> <span style="font-size: 12px;">افغانۍ</span></div>
+                    </div>
+
+                    <div class="job-card" style="padding: 16px; gap: 8px; cursor: default; pointer-events: none;">
+                        <div class="job-icon" style="font-size: 32px;">📈</div>
+                        <div class="job-name" style="font-size: 16px;">خالصه ګټه</div>
+                        <div class="job-desc" style="font-size: 20px; color: #6ee7b7;"><span id="dashNetProfit">0</span> <span style="font-size: 12px;">افغانۍ</span></div>
+                    </div>
+
+                    <div class="job-card" style="padding: 16px; gap: 8px; cursor: default; pointer-events: none;">
+                        <div class="job-icon" style="font-size: 32px;">💰</div>
+                        <div class="job-name" style="font-size: 16px;">ټول عاید</div>
+                        <div class="job-desc" style="font-size: 20px; color: #6ee7b7;"><span id="dashTotalIncome">0</span> <span style="font-size: 12px;">افغانۍ</span></div>
+                    </div>
+
+                    <div class="job-card" style="padding: 16px; gap: 8px; cursor: default; pointer-events: none;">
+                        <div class="job-icon" style="font-size: 32px;">💵</div>
+                        <div class="job-name" style="font-size: 16px;">موجوده نقده</div>
+                        <div class="job-desc" style="font-size: 20px;"><span id="dashTotalCash">0</span> <span style="font-size: 12px;">افغانۍ</span></div>
+                    </div>
+
+                    <div class="job-card" style="padding: 16px; gap: 8px; cursor: default; pointer-events: none;">
+                        <div class="job-icon" style="font-size: 32px;">📦</div>
+                        <div class="job-name" style="font-size: 16px;">د ګدام ارزښت</div>
+                        <div class="job-desc" style="font-size: 20px;"><span id="dashInventory">0</span> <span style="font-size: 12px;">افغانۍ</span></div>
+                    </div>
+
+                    <div class="job-card" style="position: relative; padding: 16px; gap: 8px; cursor: default; pointer-events: none;">
+                        <div class="job-icon" style="font-size: 32px;">🤝</div>
+                        <div class="job-name" style="color: #fdba74; font-size: 16px;">پر خلکو قرضونه</div>
+                        <div class="job-desc" style="color: #fdba74; font-size: 20px;"><span id="dashReceivable">0</span> <span style="font-size: 12px;">افغانۍ</span></div>
+                    </div>
+
+                    <div class="job-card" style="padding: 16px; gap: 8px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1)); border-color: rgba(16, 185, 129, 0.3); cursor: default; pointer-events: none;">
+                        <div class="job-icon" style="font-size: 32px;">🌙</div>
+                        <div class="job-name" style="color: #6ee7b7; font-size: 16px;">د زکات کره اندازه</div>
+                        <div class="job-desc" style="color: #6ee7b7; font-size: 20px;"><span id="dashZakat">0</span> <span style="font-size: 12px;">افغانۍ</span></div>
+                    </div>
+
+                    <div class="job-card" style="padding: 16px; gap: 8px; cursor: default; pointer-events: none;">
+                        <div class="job-icon" style="font-size: 32px;">📊</div>
+                        <div class="job-name" style="font-size: 16px;">میاشتنۍ وده</div>
+                        <div class="job-desc" style="font-size: 20px; color: #60a5fa;"><span id="dashGrowth">0</span> <span style="font-size: 12px;">%</span></div>
+                    </div>
+                </div>
+
+                <!-- COLUMN 2: Expenses & Liabilities (Right/Bottom in Mobile) -->
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <h3 style="color: #fca5a5; font-size: 18px; margin-bottom: 5px; border-bottom: 1px solid rgba(252, 165, 165, 0.2); padding-bottom: 5px;">مصارف او قرضونه</h3>
+
+                    <div class="job-card" style="padding: 16px; gap: 8px; cursor: default; pointer-events: none;">
+                        <div class="job-icon" style="font-size: 32px;">📉</div>
+                        <div class="job-name" style="font-size: 16px;">د کار ټول مصارف</div>
+                        <div class="job-desc" style="font-size: 20px; color: #fca5a5;"><span id="dashTotalExpense">0</span> <span style="font-size: 12px;">افغانۍ</span></div>
+                    </div>
+
+                <!-- Operating Expenses -->
+                <div class="job-card" style="position: relative; padding: 16px; gap: 8px; cursor: pointer;" onclick="openOpExpScreen()">
+                    <div class="job-icon" style="font-size: 32px;">💸</div>
+                    <div class="job-name" style="font-size: 16px;">عملیاتي مصارف</div>
+                    <div class="job-desc" style="font-size: 20px; color: #f87171;"><span id="dashOpExp">0</span> <span style="font-size: 12px;">افغانۍ</span></div>
+                    <div style="font-size: 10px; color: #94a3b8;">د ثبت لپاره کلیک وکړئ</div>
+                </div>
+
+                <!-- Capital Expenses -->
+                <div class="job-card" style="position: relative; padding: 16px; gap: 8px; cursor: pointer;" onclick="openCapExpScreen()">
+                    <div class="job-icon" style="font-size: 32px;">🏗️</div>
+                    <div class="job-name" style="font-size: 16px;">پانګیز مصارف</div>
+                    <div class="job-desc" style="font-size: 20px; color: #fb923c;"><span id="dashCapExp">0</span> <span style="font-size: 12px;">افغانۍ</span></div>
+                    <div style="font-size: 10px; color: #94a3b8;">د ثبت لپاره کلیک وکړئ</div>
+                </div>
+
+                    <div class="job-card" style="padding: 16px; gap: 8px; cursor: default; pointer-events: none;">
+                        <div class="job-icon" style="font-size: 32px;">💸</div>
+                        <div class="job-name" style="font-size: 16px;">شخصي مصارف</div>
+                        <div class="job-desc" style="font-size: 20px; color: #fca5a5;"><span id="dashPersonalExpense">0</span> <span style="font-size: 12px;">افغانۍ</span></div>
+                    </div>
+
+                    <div class="job-card" style="position: relative; padding: 16px; gap: 8px; cursor: default; pointer-events: none;">
+                        <div class="job-icon" style="font-size: 32px;">📉</div>
+                        <div class="job-name" style="color: #fca5a5; font-size: 16px;">پر مونږ قرضونه</div>
+                        <div class="job-desc" style="color: #fca5a5; font-size: 20px;"><span id="dashLiability">0</span> <span style="font-size: 12px;">افغانۍ</span></div>
+                    </div>
+
+                    <div class="job-card" style="padding: 16px; gap: 8px; cursor: default; pointer-events: none;">
+                        <div class="job-icon" style="font-size: 32px;">🏗️</div>
+                        <div class="job-name" style="font-size: 16px;">سرمایه په بند کې</div>
+                        <div class="job-desc" style="font-size: 20px;"><span id="dashCapitalInUse">0</span> <span style="font-size: 12px;">افغانۍ</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Debt Book Button -->
+            <div style="margin-top: 15px; flex-shrink: 0;">
+                <button onclick="openDebtScreen()" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; color: white; font-size: 18px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; gap: 12px; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); transform: scale(1);">
+                    <span style="font-size: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">📒</span> 
+                    <span style="text-shadow: 0 2px 4px rgba(0,0,0,0.2);">د قرضونو کتابچه</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+<!-- Saudi Sub-Account Selection Screen -->
     <div id="saudiSubAccountScreen" class="hidden">
         <div class="glass-card job-selection-card">
-            <div class="back-button-container">
-                <button type="button" class="btn-back" onclick="backFromSaudiSubAccount()" style="padding: 10px 20px; font-size: 30px; border-radius: 12px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1);">شاته</button>
-            </div>
+            <button type="button" onclick="backFromSaudiSubAccount()" style="position: absolute; top: 20px; left: 20px; width: 45px; height: 45px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; border: 1px solid rgba(255,255,255,0.2); z-index: 100; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='scale(1.1)';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.transform='scale(1)';">✕</button>
             <div class="job-header">
                 <div class="logo"><img src="./logo.jpg" alt="Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 16px;"></div>
                 <div>
@@ -1519,9 +1734,7 @@
     <!-- Home Sub-Account Selection Screen -->
     <div id="homeSubAccountScreen" class="hidden">
         <div class="glass-card job-selection-card">
-            <div class="back-button-container">
-                <button type="button" class="btn-back" onclick="backFromHomeSubAccount()" style="padding: 10px 20px; font-size: 30px; border-radius: 12px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1);">شاته</button>
-            </div>
+            <button type="button" onclick="backFromHomeSubAccount()" style="position: absolute; top: 20px; left: 20px; width: 45px; height: 45px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; border: 1px solid rgba(255,255,255,0.2); z-index: 100; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='scale(1.1)';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.transform='scale(1)';">✕</button>
             <div class="job-header">
                 <div class="logo"><img src="./logo.jpg" alt="Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 16px;"></div>
                 <div>
@@ -1536,6 +1749,7 @@
     <!-- Password Screen -->
     <div id="passwordScreen" class="hidden">
         <div class="glass-card password-card">
+            <button type="button" onclick="backToJobs()" style="position: absolute; top: 20px; left: 20px; width: 45px; height: 45px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; border: 1px solid rgba(255,255,255,0.2); z-index: 100; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='scale(1.1)';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.transform='scale(1)';">✕</button>
             <div class="password-header">
                 <div class="lock-icon">🔒</div>
                 <div>
@@ -1552,8 +1766,7 @@
             <div class="password-error" id="passwordError">❌ پاسورډ غلط دئ</div>
 
             <div class="password-buttons">
-                <button type="button" class="password-button btn-back" onclick="backToJobs()">شاته</button>
-                <button type="button" class="password-button btn-primary" onclick="checkPassword()">دخول</button>
+                <button type="button" class="password-button btn-primary" style="width: 100%;" onclick="checkPassword()">دخول</button>
             </div>
         </div>
     </div>
@@ -1608,7 +1821,15 @@
 
                 <div class="input-group full-width">
                     <label for="expense">💸 مصارف</label>
-                    <input type="number" id="expense" name="expense" min="0" placeholder="مصارف ولیکئ">
+                    <div style="display: flex; gap: 8px;">
+                        <input type="number" id="expense" name="expense" min="0" placeholder="مصارف ولیکئ" style="flex: 1;">
+                        <select id="currency" name="currency" style="width: 100px; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; cursor: pointer;">
+                            <option value="AFN" selected>؋ AFN</option>
+                            <option value="USD">$ USD</option>
+                            <option value="PKR">₨ PKR</option>
+                            <option value="SAR">ر.س SAR</option>
+                        </select>
+                    </div>
                     <p class="error-message" id="expenseError">❌ مصارف لیکل لازم دی (صفر یا لوړ عدد ولیکئ)</p>
                 </div>
 
@@ -1802,17 +2023,71 @@
 
     <!-- Dashboard Screen -->
     <div id="dashboardScreen" class="modal-overlay">
-        <div class="glass-card modal" style="max-width: 600px;">
-            <div class="modal-header">
+        <div class="glass-card modal" style="max-width: 700px; height: 90vh; display: flex; flex-direction: column;">
+            <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;">
                 <div class="modal-icon" style="background: linear-gradient(135deg, #8b5cf6, #6366f1); box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);">📊</div>
                 <div>
                     <div class="modal-title">ډشبورډ</div>
                     <p class="modal-subtitle">د حساب عمومي معلومات</p>
                 </div>
-                <button type="button" id="dashboardDeleteBtn" class="btn-secondary" style="margin-right: auto; background: rgba(239, 68, 68, 0.2); color: #fca5a5; margin-left: 10px; font-size: 12px; display: none;" onclick="clearAllData()">🗑️ ړنګول</button> <button type="button" class="btn-secondary" style="width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center;" onclick="closeDashboard()">✕</button>
+                <button type="button" id="dashboardDeleteBtn" class="btn-secondary" style="margin-right: auto; background: rgba(239, 68, 68, 0.2); color: #fca5a5; margin-left: 10px; font-size: 12px; display: none;" onclick="clearAllData()">🗑️ ړنګول</button>
+                <button type="button" class="btn-close-fancy" onclick="closeDashboard()" style="position: absolute; top: 15px; left: 15px;">✕</button>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 20px;">
+                <!-- Data Management & Features -->
+                <div id="adminOnlyFeatures" style="display:none;">
+                <div style="margin-bottom: 15px;">
+                     <button class="btn-primary" onclick="downloadBackup()" style="width: 100%; background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);">💾 بیک اپ (Backup)</button>
+                </div>
+                <div style="margin-bottom: 15px; display: flex; gap: 10px;">
+                    <input type="file" id="restoreFile" style="display: none;" onchange="restoreBackup(this)">
+                    <button class="btn-secondary" onclick="document.getElementById('restoreFile').click()" style="width: 100%; border: 1px dashed #6366f1; color: #818cf8;">📂 ډیټا بیرته پورته کول (Restore)</button>
+                </div>
+
+                <!-- Budget Warning -->
+                <div id="budgetWarning" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; padding: 12px; border-radius: 12px; margin-bottom: 15px; display: none; align-items: center; gap: 8px; font-size: 13px;">
+                    ⚠️ خبرتیا: ستاسو مصارف ټاکل شوي حد ته نږدې دي!
+                </div>
+
+                <!-- Currency Converter -->
+                <div style="background: rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 15px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <div style="font-size: 13px; font-weight: 700; color: #fbbf24; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <span>💱 د اسعارو تبادله (ته AFN)</span>
+                        <button onclick="fetchRates()" style="background: none; border: none; color: #6ee7b7; cursor: pointer; font-size: 16px;" title="نرخونه تازه کړئ">🔄</button>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <select id="currencySelect" style="width: 35%; padding: 8px; border-radius: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: white;" onchange="updateRatePlaceholder()">
+                            <option value="SAR">SAR (ریال)</option>
+                            <option value="USD">USD (ډالر)</option>
+                            <option value="PKR">PKR (کلدار)</option>
+                        </select>
+                        <input type="number" id="currencyInput" placeholder="مقدار" style="flex: 1; min-width: 0; padding: 8px; border-radius: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: white;" oninput="convertCurrency()">
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center; margin-top: 8px; flex-wrap: wrap;">
+                        <span style="color: #94a3b8; font-size: 12px;">نرخ:</span>
+                        <input type="number" id="exchangeRate" placeholder="نرخ" value="18.5" style="width: 80px; padding: 8px; border-radius: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: white;" oninput="convertCurrency()">
+                        <span style="color: #94a3b8;">=</span>
+                        <span id="afnResult" style="color: #6ee7b7; font-weight: 800; min-width: 60px;">0 AFN</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);">
+                        <div style="text-align: center; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 6px;">
+                            <div style="font-size: 10px; color: #94a3b8;">$ USD</div>
+                            <div id="rateUSD" style="font-size: 12px; color: #6ee7b7; font-weight: bold;">--</div>
+                        </div>
+                        <div style="text-align: center; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 6px;">
+                            <div style="font-size: 10px; color: #94a3b8;">ر.س SAR</div>
+                            <div id="rateSAR" style="font-size: 12px; color: #6ee7b7; font-weight: bold;">--</div>
+                        </div>
+                        <div style="text-align: center; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 6px;">
+                            <div style="font-size: 10px; color: #94a3b8;">₨ PKR</div>
+                            <div id="ratePKR" style="font-size: 12px; color: #6ee7b7; font-weight: bold;">--</div>
+                        </div>
+                    </div>
+                    <div id="rateLastUpdated" style="font-size: 10px; color: #64748b; margin-top: 5px; text-align: left;"></div>
+                </div>
+
+                                </div>
                 <!-- Summary Cards -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px;">
                     <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 16px; border-radius: 16px;">
@@ -1851,17 +2126,18 @@
 
     <!-- Report Screen -->
     <div id="reportScreen" class="modal-overlay">
-        <div class="glass-card modal" style="max-width: 600px;">
-            <div class="modal-header">
+        <div class="glass-card modal" style="max-width: 700px; height: 90vh; display: flex; flex-direction: column;">
+            <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;">
                 <div class="modal-icon" style="background: linear-gradient(135deg, #f43f5e, #fb7185); box-shadow: 0 12px 30px rgba(244, 63, 94, 0.4);">📈</div>
                 <div>
                     <div class="modal-title">وروستي راپورونه</div>
                     <p class="modal-subtitle">د وروستیو معاملو لیست</p>
                 </div>
-                <button type="button" id="reportDeleteBtn" class="btn-secondary" style="margin-right: auto; background: rgba(239, 68, 68, 0.2); color: #fca5a5; margin-left: 10px; font-size: 12px; display: none;" onclick="clearAllData()">🗑️ ړنګول</button> <button type="button" class="btn-secondary" style="width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center;" onclick="closeReport()">✕</button>
+                <button type="button" id="reportDeleteBtn" class="btn-secondary" style="margin-right: auto; background: rgba(239, 68, 68, 0.2); color: #fca5a5; margin-left: 10px; font-size: 12px; display: none;" onclick="clearAllData()">🗑️ ړنګول</button>
+                <button type="button" class="btn-close-fancy" onclick="closeReport()" style="position: absolute; top: 15px; left: 15px;">✕</button>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 20px;">
                 <!-- Admin Account Selector -->
                 <div id="adminAccountSelectContainer" style="margin-bottom: 12px; display: none;">
                     <label style="color: #94a3b8; font-size: 11px; margin-bottom: 4px; display: block;">د حساب انتخاب (ادمین):</label>
@@ -1882,6 +2158,16 @@
                     <button class="btn-secondary" style="padding: 10px 16px; font-size: 12px; background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3);" onclick="exportToCSV()">📊 Excel / CSV</button>
                 </div>
                 
+                <!-- Search Box -->
+                <div class="search-box-container" style="margin-bottom: 15px;">
+                    <input type="text" id="reportSearchInput" placeholder="🔍 په راپورونو کې لټون (Search)..." style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: white;">
+                </div>
+
+                <!-- Pie Chart Container -->
+                <div class="chart-container" style="position: relative; height: 250px; width: 100%; margin-bottom: 20px;">
+                    <canvas id="expensePieChart"></canvas>
+                </div>
+
                 <div class="report-list" style="display: flex; flex-direction: column; gap: 10px;">
                     <!-- Report Item (Mock) -->
                     <div class="data-row" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
@@ -1903,6 +2189,205 @@
                     <!-- Dynamic Last Saved Item will be injected here via JS if available -->
                     <div id="lastSavedReportItem" style="display: none;"></div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Debt Screen -->
+    <div id="debtScreen" class="modal-overlay">
+        <div class="glass-card modal" style="max-width: 600px; height: 90vh; display: flex; flex-direction: column; position: relative;">
+            <button type="button" onclick="closeDebtScreen()" class="btn-close-fancy" style="top: 15px; left: 15px;">✕</button>
+            <div class="modal-header" style="padding-top: 10px;">
+                <div class="modal-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 12px 30px rgba(245, 158, 11, 0.4);">📒</div>
+                <div>
+                    <div class="modal-title">د قرضونو کتابچه</div>
+                    <p class="modal-subtitle">د پور او غوښتنو مدیریت</p>
+                </div>
+            </div>
+
+            <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 20px;">
+                <!-- Summary -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 20px; border-radius: 20px; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 13px; color: #6ee7b7; margin-bottom: 8px; font-weight: 600;">زمونږ په خلکو قرضونه</div>
+                        <div style="font-size: 22px; font-weight: 800; color: #fff; letter-spacing: 1px;" id="debtTotalReceivable">0</div>
+                        <div style="font-size: 10px; color: #94a3b8; margin-top: 4px;">Receivable</div>
+                    </div>
+                    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); padding: 20px; border-radius: 20px; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 13px; color: #fca5a5; margin-bottom: 8px; font-weight: 600;">د خلکو په مونږ قرضونه</div>
+                        <div style="font-size: 22px; font-weight: 800; color: #fff; letter-spacing: 1px;" id="debtTotalLiability">0</div>
+                        <div style="font-size: 10px; color: #94a3b8; margin-top: 4px;">Liability</div>
+                    </div>
+                </div>
+
+                <!-- Add Button -->
+                 <button class="btn-primary" onclick="openDebtForm()" style="width: 100%; height: 55px; border-radius: 15px; margin-bottom: 25px; background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3); font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span style="font-size: 20px;">➕</span> نوی ریکارډ اضافه کول
+                 </button>
+
+                <!-- List Section Header -->
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 0 5px;">
+                    <div style="height: 2px; flex: 1; background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.2));"></div>
+                    <span style="color: #94a3b8; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">د ثبت شویو پورونو لیست</span>
+                    <div style="height: 2px; flex: 1; background: linear-gradient(270deg, transparent, rgba(245, 158, 11, 0.2));"></div>
+                </div>
+
+                <!-- List -->
+                <div id="debtList" style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 20px;">
+                    <!-- JS Populates this -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Debt Form Modal -->
+    <div id="debtFormModal" class="modal-overlay" style="z-index: 10001;">
+        <div class="glass-card modal" style="max-width: 500px; position: relative;">
+            <button type="button" onclick="closeDebtForm()" class="btn-close-fancy" style="top: 15px; left: 15px;">✕</button>
+             <div class="modal-header" style="padding-top: 10px;">
+                <div class="modal-icon" style="background: linear-gradient(135deg, #6366f1, #a855f7); box-shadow: 0 12px 30px rgba(99, 102, 241, 0.3);">✏️</div>
+                <div>
+                    <div class="modal-title">د قرض ثبتول</div>
+                    <p class="modal-subtitle">معلومات په دقت سره ولیکئ</p>
+                </div>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <form id="debtForm" onsubmit="handleDebtSubmit(event)" style="display: flex; flex-direction: column; gap: 18px;">
+                    <input type="hidden" id="debtId">
+                    
+                    <div class="input-group full-width">
+                        <label style="color: #94a3b8; font-size: 13px; margin-bottom: 8px; display: block; font-weight: 500;">د راکړې ورکړې ډول</label>
+                        <div style="display: flex; gap: 12px;">
+                            <label style="flex: 1; cursor: pointer; position: relative;">
+                                <input type="radio" name="debtType" value="receivable" checked onchange="updateDebtTypeStyles()" style="position: absolute; opacity: 0;">
+                                <div class="debt-type-btn" id="btnReceivable" style="padding: 12px; border-radius: 12px; text-align: center; border: 1px solid #10b981; background: rgba(16, 185, 129, 0.15); color: #6ee7b7; font-weight: 600; transition: all 0.3s ease;">زمونږ په خلکو قرض</div>
+                            </label>
+                            <label style="flex: 1; cursor: pointer; position: relative;">
+                                <input type="radio" name="debtType" value="liability" onchange="updateDebtTypeStyles()" style="position: absolute; opacity: 0;">
+                                <div class="debt-type-btn" id="btnLiability" style="padding: 12px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #94a3b8; font-weight: 600; transition: all 0.3s ease;">د خلکو په مونږ قرض</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="input-group full-width">
+                        <label style="color: #94a3b8; font-size: 13px; margin-bottom: 8px; display: block; font-weight: 500;">👤 د شخص نوم</label>
+                        <input type="text" id="debtName" required placeholder="د قرضدار نوم دلته ولیکئ..." style="width: 100%; padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; color: white; outline: none; transition: border-color 0.3s ease;" onfocus="this.style.borderColor='rgba(245, 158, 11, 0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="input-group">
+                            <label style="color: #94a3b8; font-size: 13px; margin-bottom: 8px; display: block; font-weight: 500;">💰 مقدار (افغانۍ)</label>
+                            <input type="number" id="debtAmount" required min="0" placeholder="0" style="width: 100%; padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; color: white; outline: none; font-weight: 700;" onfocus="this.style.borderColor='rgba(245, 158, 11, 0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                        </div>
+                        <div class="input-group">
+                            <label style="color: #94a3b8; font-size: 13px; margin-bottom: 8px; display: block; font-weight: 500;">📅 نېټه</label>
+                            <input type="date" id="debtDate" required style="width: 100%; padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; color: white; outline: none;" onfocus="this.style.borderColor='rgba(245, 158, 11, 0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                        </div>
+                    </div>
+
+                    <div class="input-group full-width">
+                        <label style="color: #94a3b8; font-size: 13px; margin-bottom: 8px; display: block; font-weight: 500;">📝 تفصیل</label>
+                        <textarea id="debtDesc" rows="3" placeholder="نور اړین معلومات دلته ولیکئ..." style="width: 100%; padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; color: white; outline: none; resize: none;" onfocus="this.style.borderColor='rgba(245, 158, 11, 0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn" style="height: 55px; border-radius: 15px; margin-top: 10px; background: linear-gradient(135deg, #10b981, #059669); font-weight: 700; font-size: 16px; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);">✓ معلومات ذخیره کړئ</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="opExpScreen" class="modal-overlay">
+        <div class="glass-card modal" style="max-width: 600px; height: 90vh; display: flex; flex-direction: column; position: relative;">
+            <button type="button" onclick="closeOpExpScreen()" class="btn-close-fancy" style="top: 15px; left: 15px;">✕</button>
+            <div class="modal-header" style="padding-top: 10px;">
+                <div class="modal-icon" style="background: linear-gradient(135deg, #f43f5e, #fb7185); box-shadow: 0 12px 30px rgba(244, 63, 94, 0.4);">💸</div>
+                <div>
+                    <div class="modal-title">عملیاتي مصارف</div>
+                    <p class="modal-subtitle">د ورځني فعالیت مصارف</p>
+                </div>
+            </div>
+            <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 20px;">
+                <form onsubmit="handleOpExpSubmit(event)" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <input type="number" id="opExpAmount" required placeholder="مقدار (افغانۍ)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
+                        <input type="date" id="opExpDate" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
+                    </div>
+                    <input type="text" id="opExpDesc" required placeholder="تفصیل (مثلا: تېل، ترمیم...)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
+                    <button type="submit" class="btn-primary" style="background: #10b981;">ذخیره کول</button>
+                </form>
+                <div id="opExpList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="capExpScreen" class="modal-overlay">
+        <div class="glass-card modal" style="max-width: 600px; height: 90vh; display: flex; flex-direction: column; position: relative;">
+            <button type="button" onclick="closeCapExpScreen()" class="btn-close-fancy" style="top: 15px; left: 15px;">✕</button>
+            <div class="modal-header" style="padding-top: 10px;">
+                <div class="modal-icon" style="background: linear-gradient(135deg, #fb923c, #f97316); box-shadow: 0 12px 30px rgba(251, 146, 60, 0.4);">🏗️</div>
+                <div>
+                    <div class="modal-title">پانګیز مصارف</div>
+                    <p class="modal-subtitle">د شتمنیو او دایمي وسایلو مصارف</p>
+                </div>
+            </div>
+            <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 20px;">
+                <form onsubmit="handleCapExpSubmit(event)" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <input type="number" id="capExpAmount" required placeholder="مقدار (افغانۍ)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
+                        <input type="date" id="capExpDate" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
+                    </div>
+                    <input type="text" id="capExpDesc" required placeholder="تفصیل (مثلا: موټر اخیستل، ودانۍ...)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
+                    <button type="submit" class="btn-primary" style="background: #fb923c;">ذخیره کول</button>
+                </form>
+                <div id="capExpList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="opExpScreen" class="modal-overlay">
+        <div class="glass-card modal" style="max-width: 600px; height: 90vh; display: flex; flex-direction: column; position: relative;">
+            <button type="button" onclick="closeOpExpScreen()" class="btn-close-fancy" style="top: 15px; left: 15px;">✕</button>
+            <div class="modal-header" style="padding-top: 10px;">
+                <div class="modal-icon" style="background: linear-gradient(135deg, #f43f5e, #fb7185); box-shadow: 0 12px 30px rgba(244, 63, 94, 0.4);">💸</div>
+                <div>
+                    <div class="modal-title">عملیاتي مصارف</div>
+                    <p class="modal-subtitle">د ورځني فعالیت مصارف</p>
+                </div>
+            </div>
+            <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 20px;">
+                <form onsubmit="handleOpExpSubmit(event)" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <input type="number" id="opExpAmount" required placeholder="مقدار (افغانۍ)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
+                        <input type="date" id="opExpDate" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
+                    </div>
+                    <input type="text" id="opExpDesc" required placeholder="تفصیل (مثلا: تېل، ترمیم...)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
+                    <button type="submit" class="submit-btn" style="background: #10b981;">ذخیره کول</button>
+                </form>
+                <div id="opExpList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="capExpScreen" class="modal-overlay">
+        <div class="glass-card modal" style="max-width: 600px; height: 90vh; display: flex; flex-direction: column; position: relative;">
+            <button type="button" onclick="closeCapExpScreen()" class="btn-close-fancy" style="top: 15px; left: 15px;">✕</button>
+            <div class="modal-header" style="padding-top: 10px;">
+                <div class="modal-icon" style="background: linear-gradient(135deg, #fb923c, #f97316); box-shadow: 0 12px 30px rgba(251, 146, 60, 0.4);">🏗️</div>
+                <div>
+                    <div class="modal-title">پانګیز مصارف</div>
+                    <p class="modal-subtitle">د شتمنیو او دایمي وسایلو مصارف</p>
+                </div>
+            </div>
+            <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 20px;">
+                <form onsubmit="handleCapExpSubmit(event)" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <input type="number" id="capExpAmount" required placeholder="مقدار (افغانۍ)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
+                        <input type="date" id="capExpDate" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
+                    </div>
+                    <input type="text" id="capExpDesc" required placeholder="تفصیل (مثلا: موټر اخیستل، ودانۍ...)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
+                    <button type="submit" class="submit-btn" style="background: #fb923c;">ذخیره کول</button>
+                </form>
+                <div id="capExpList" style="display: flex; flex-direction: column; gap: 10px;"></div>
             </div>
         </div>
     </div>
@@ -1941,9 +2426,7 @@
                 </div>
                 
                 <div style="display: flex; align-items: center; gap: 30px;">
-                     <button type="button" class="camera-btn" onclick="extractText()">📝<span style="font-size: 8px; position:absolute; bottom:2px;">OCR</span></button>
                      <button type="button" class="shutter-btn" id="shutterBtn" onclick="takePicture()"></button>
-                     <button type="button" class="camera-btn" style="opacity: 0;">.</button> <!-- Spacer -->
                 </div>
             </div>
         </div>
@@ -1998,6 +2481,417 @@
         let videoStream = null;
         let currentMode = 'photo';
         let html5QrCode = null;
+
+        /* Currency Helper Functions */
+        function openOpExpScreen() {
+            document.getElementById('opExpScreen').classList.add('active');
+            renderExpList('opExp');
+        }
+        function closeOpExpScreen() {
+            document.getElementById('opExpScreen').classList.remove('active');
+        }
+        function openCapExpScreen() {
+            document.getElementById('capExpScreen').classList.add('active');
+            renderExpList('capExp');
+        }
+        function closeCapExpScreen() {
+            document.getElementById('capExpScreen').classList.remove('active');
+        }
+
+        function handleOpExpSubmit(e) {
+            e.preventDefault();
+            saveExp('opExp');
+        }
+        function handleCapExpSubmit(e) {
+            e.preventDefault();
+            saveExp('capExp');
+        }
+
+        function saveExp(type) {
+            const amount = document.getElementById(type + 'Amount').value;
+            const date = document.getElementById(type + 'Date').value;
+            const desc = document.getElementById(type + 'Desc').value;
+            if(!amount || !date || !desc) return;
+            
+            const list = JSON.parse(localStorage.getItem(type + '_list') || '[]');
+            list.push({ amount, date, desc, timestamp: Date.now() });
+            localStorage.setItem(type + '_list', JSON.stringify(list));
+            
+            document.getElementById(type + 'Amount').value = '';
+            document.getElementById(type + 'Desc').value = '';
+            renderExpList(type);
+            updateGeneralDashboard();
+            showToast('success', 'ریکارډ ذخیره شو');
+        }
+
+        function renderExpList(type) {
+            const list = JSON.parse(localStorage.getItem(type + '_list') || '[]');
+            const container = document.getElementById(type + 'List');
+            container.innerHTML = list.reverse().map(item => `
+                <div class="data-row" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                    <div>
+                        <div style="font-weight: bold;">${item.desc}</div>
+                        <div style="font-size: 11px; color: #94a3b8;">${item.date}</div>
+                    </div>
+                    <div style="font-weight: bold; color: ${type === 'opExp' ? '#f87171' : '#fb923c'}">${parseFloat(item.amount).toLocaleString()} ؋</div>
+                </div>
+            `).join('');
+        }
+
+        /* Expenses Helpers */
+        function openOpExpScreen() {
+            document.getElementById('opExpScreen').classList.add('active');
+            renderExpList('opExp');
+        }
+        function closeOpExpScreen() {
+            document.getElementById('opExpScreen').classList.remove('active');
+        }
+        function openCapExpScreen() {
+            document.getElementById('capExpScreen').classList.add('active');
+            renderExpList('capExp');
+        }
+        function closeCapExpScreen() {
+            document.getElementById('capExpScreen').classList.remove('active');
+        }
+
+        function handleOpExpSubmit(e) {
+            e.preventDefault();
+            saveExp('opExp');
+        }
+        function handleCapExpSubmit(e) {
+            e.preventDefault();
+            saveExp('capExp');
+        }
+
+        function saveExp(type) {
+            const amount = document.getElementById(type + 'Amount').value;
+            const date = document.getElementById(type + 'Date').value;
+            const desc = document.getElementById(type + 'Desc').value;
+            if(!amount || !date || !desc) return;
+            
+            const list = JSON.parse(localStorage.getItem(type + '_list') || '[]');
+            list.push({ amount, date, desc, timestamp: Date.now() });
+            localStorage.setItem(type + '_list', JSON.stringify(list));
+            
+            document.getElementById(type + 'Amount').value = '';
+            document.getElementById(type + 'Desc').value = '';
+            renderExpList(type);
+            updateGeneralDashboard();
+            showToast('success', 'ریکارډ ذخیره شو');
+        }
+
+        function renderExpList(type) {
+            const list = JSON.parse(localStorage.getItem(type + '_list') || '[]');
+            const container = document.getElementById(type + 'List');
+            container.innerHTML = list.reverse().map(item => `
+                <div class="data-row" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 10px; margin-bottom: 5px;">
+                    <div>
+                        <div style="font-weight: bold;">${item.desc}</div>
+                        <div style="font-size: 11px; color: #94a3b8;">${item.date}</div>
+                    </div>
+                    <div style="font-weight: bold; color: ${type === 'opExp' ? '#f87171' : '#fb923c'}">${parseFloat(item.amount).toLocaleString()} ؋</div>
+                </div>
+            `).join('');
+        }
+
+        function getCurrencyLabel() {
+            if (currentJob && (currentJob.id === 'saudi' || currentJob.id.startsWith('saudi_'))) {
+                return 'ر.س';
+            }
+            return '؋';
+        }
+        
+        function getCurrencyCode() {
+            if (currentJob && (currentJob.id === 'saudi' || currentJob.id.startsWith('saudi_'))) {
+                return 'SAR';
+            }
+            return 'AFN';
+        }
+
+        // --- DELETION LOGIC ---
+        function deleteTransaction(timestamp) {
+            if (!confirm('آیا غواړئ دا ریکارډ حذف کړئ؟')) return;
+
+            let targetAccountId = currentJob.id;
+            const accountSelector = document.getElementById('reportAccountSelector');
+            const adminSelectContainer = document.getElementById('adminAccountSelectContainer');
+            
+            if (adminSelectContainer && adminSelectContainer.style.display !== 'none' && accountSelector && accountSelector.value !== 'current') {
+                targetAccountId = accountSelector.value;
+            }
+
+            let history = JSON.parse(localStorage.getItem('history_' + targetAccountId) || '[]');
+            const initialLength = history.length;
+            
+            // Filter out the item with the matching timestamp
+            // Note: Old data might not have timestamp, but new ones do.
+            // If no timestamp, we might need another strategy, but for now assuming timestamp exists as per line 2569
+            history = history.filter(item => {
+                // Handle legacy data without timestamp if necessary (though difficult without unique ID)
+                if (item.timestamp) {
+                    return item.timestamp != timestamp;
+                }
+                return true; // Keep items without timestamp to be safe or delete by index? Timestamp is safer.
+            });
+            
+            if (history.length < initialLength) {
+                localStorage.setItem('history_' + targetAccountId, JSON.stringify(history));
+                
+                // Recalculate Stats from scratch
+                recalculateStats(targetAccountId);
+                
+                showToast('success', 'ریکارډ حذف شو');
+                filterReportByDuration(); // Refresh list
+                
+                // If dashboard is open, update it too
+                if(document.getElementById('dashboardScreen').classList.contains('active')) {
+                    updateDashboardStats(targetAccountId);
+                }
+            } else {
+                showToast('error', 'تېروتنه', 'ریکارډ ونه موندل شو');
+            }
+        }
+
+        function clearAllData() {
+            if (!confirm('⚠️ خطر: آیا تاسو ډاډه یاست چې د دې حساب ټول ریکارډونه حذف کول غواړئ؟\n\nدا عمل د بېرته راګرځولو وړ نه دی!')) return;
+            
+            const userInput = prompt('د تایید لپاره "delete" ولیکئ:');
+            if (userInput !== 'delete') {
+                if (userInput !== null) showToast('error', 'تېروتنه', 'تایید ناکام شو');
+                return;
+            }
+
+            let targetAccountId = currentJob.id;
+            const accountSelector = document.getElementById('reportAccountSelector');
+            const adminSelectContainer = document.getElementById('adminAccountSelectContainer');
+            
+            if (adminSelectContainer && adminSelectContainer.style.display !== 'none' && accountSelector && accountSelector.value !== 'current') {
+                targetAccountId = accountSelector.value;
+            }
+
+            // Clear History
+            localStorage.setItem('history_' + targetAccountId, '[]');
+            
+            // Reset Stats
+            localStorage.setItem('stats_' + targetAccountId, JSON.stringify({income: 0, expense: 0}));
+            
+            // Reset Balance (Only for Home Accounts if needed, or generally)
+            if (targetAccountId.startsWith('home_')) {
+                 // For shared balance, we might want to keep it or reset it? 
+                 // User asked to delete "written data". Usually implies transactions history.
+                 // Balance is separate in localStorage 'home_shared_balance'.
+                 // I will leave shared balance alone as it is "Shared".
+            }
+
+            showToast('success', '✨ ټول ریکارډونه پاک شول');
+            filterReportByDuration();
+            
+            if(document.getElementById('dashboardScreen').classList.contains('active')) {
+                updateDashboardStats(targetAccountId);
+            }
+        }
+
+        function recalculateStats(accountId) {
+            let history = JSON.parse(localStorage.getItem('history_' + accountId) || '[]');
+            let income = 0;
+            let expense = 0;
+            
+            history.forEach(item => {
+                income += parseFloat(item.income || 0);
+                expense += parseFloat(item.expense || 0);
+            });
+            
+            localStorage.setItem('stats_' + accountId, JSON.stringify({income, expense}));
+        }
+
+        // --- GENERAL DASHBOARD LOGIC ---
+        
+        function openGeneralDashboardAuth() {
+            // Set a special job context for General Dashboard
+            currentJob = { 
+                id: 'general_dashboard_admin', 
+                name: 'عمومي مالي ډشبورډ', 
+                icon: '📊' 
+            };
+            
+            // We don't set a single 'currentPassword' because we accept multiple.
+            // The checkPassword function will handle this special ID.
+            
+            document.getElementById('jobSelectionScreen').classList.add('hidden');
+            document.getElementById('passwordScreen').classList.remove('hidden');
+            
+            // Update password screen title for this context
+            document.querySelector('#passwordScreen .password-title').textContent = 'عمومي مالي ډشبورډ';
+            document.querySelector('#passwordScreen .password-subtitle').textContent = '🔐 د ننوتلو لپاره پاسورډ ولیکئ';
+            
+            setTimeout(() => document.getElementById('passwordInput').focus(), 100);
+        }
+
+        function openGeneralDashboard() {
+            document.getElementById('jobSelectionScreen').classList.add('hidden');
+            document.getElementById('passwordScreen').classList.add('hidden'); // Ensure password screen is closed
+            document.getElementById('generalDashboardScreen').classList.remove('hidden');
+            updateGeneralDashboard();
+        }
+
+        function closeGeneralDashboard() {
+            document.getElementById('generalDashboardScreen').classList.add('hidden');
+            document.getElementById('jobSelectionScreen').classList.remove('hidden');
+        }
+
+        let dashboardChart = null;
+        function initDashboardChart() {
+            const ctx = document.getElementById('dashboardChart');
+            if (!ctx) return;
+            if (dashboardChart) dashboardChart.destroy();
+            dashboardChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['جدي', 'دلو', 'حوت', 'حمل', 'ثور', 'جوزا'],
+                    datasets: [{
+                        label: 'عاید',
+                        data: [12000, 19000, 3000, 5000, 2000, 3000],
+                        borderColor: '#6ee7b7',
+                        backgroundColor: 'rgba(110, 231, 183, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'مصرف',
+                        data: [8000, 15000, 5000, 2000, 8000, 4000],
+                        borderColor: '#fca5a5',
+                        backgroundColor: 'rgba(252, 165, 165, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#94a3b8', font: { family: 'Noto Naskh Arabic' } }
+                        }
+                    },
+                    scales: {
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function updateGeneralDashboard() {
+            initDashboardChart();
+            // 1. Calculate Account Balances
+                const SAR_TO_AFN = 18.5;
+                const USD_TO_AFN = 75;
+                const PKR_TO_AFN = 0.3;
+
+                const accounts = [
+                    { id: 'boklyn', type: 'usd' },
+                    { id: 'mobile', type: 'afn' }
+                ];
+
+                let totalIncome = 0;
+                let totalExpense = 0;
+                let totalCashCombined = 0;
+
+                // Add all specific accounts
+                JOBS.forEach(job => {
+                    if (job.id === 'home' || job.id === 'saudi') return;
+                    const stats = JSON.parse(localStorage.getItem('stats_' + job.id) || '{"income": 0, "expense": 0}');
+                    const history = JSON.parse(localStorage.getItem('history_' + job.id) || '[]');
+                    
+                    history.forEach(t => {
+                        let rate = 1;
+                        if (t.currency === 'USD') rate = USD_TO_AFN;
+                        else if (t.currency === 'SAR') rate = SAR_TO_AFN;
+                        else if (t.currency === 'PKR') rate = PKR_TO_AFN;
+
+                        totalIncome += (parseFloat(t.income) || 0) * rate;
+                        totalExpense += (parseFloat(t.expense) || 0) * rate;
+                    });
+                });
+
+                // Add Saudi Sub-accounts
+                SAUDI_SUB_ACCOUNTS.forEach(acc => {
+                    const stats = JSON.parse(localStorage.getItem('stats_' + acc.id) || '{"income": 0, "expense": 0}');
+                    const history = JSON.parse(localStorage.getItem('history_' + acc.id) || '[]');
+                    history.forEach(t => {
+                        totalIncome += (parseFloat(t.income) || 0) * SAR_TO_AFN;
+                        totalExpense += (parseFloat(t.expense) || 0) * SAR_TO_AFN;
+                    });
+                });
+
+                totalCashCombined = totalIncome - totalExpense;
+            const totalWorth = totalCashCombined + receivable + inventory - liability;
+
+            // 4. Precise Zakat Calculation
+            // Zakat is 2.5% of net assets if they exceed the Nisab (approx. 85g of gold)
+            // Current estimate for Nisab in AFN is around 350,000 AFN (Adjust as needed)
+            const NISAB_AFN = 350000; 
+            const zakat = (totalWorth >= NISAB_AFN) ? (totalWorth * 0.025) : 0;
+            
+            // Monthly Growth Logic (Precise Comparison)
+            const lastMonthWorth = parseFloat(localStorage.getItem('gen_dash_last_month_worth') || totalWorth.toString());
+            const growth = lastMonthWorth > 0 ? ((totalWorth - lastMonthWorth) / lastMonthWorth * 100) : 0;
+
+            // 5. Update UI with Precision
+            // OpExp & CapExp totals
+            const opExpList = JSON.parse(localStorage.getItem('opExp_list') || '[]');
+            const totalOpExp = opExpList.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0);
+            const capExpList = JSON.parse(localStorage.getItem('capExp_list') || '[]');
+            const totalCapExp = capExpList.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0);
+
+            document.getElementById('dashTotalWorth').textContent = (totalWorth - totalOpExp - totalCapExp || 0).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            document.getElementById('dashTotalCash').textContent = (totalCashCombined || 0).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            document.getElementById('dashLiability').textContent = (liability || 0).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            document.getElementById('dashReceivable').textContent = (receivable || 0).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            
+            // New Dashboard Stats
+            if(document.getElementById('dashInventory')) document.getElementById('dashInventory').textContent = (inventory || 0).toLocaleString();
+            if(document.getElementById('dashZakat')) document.getElementById('dashZakat').textContent = Math.floor(zakat || 0).toLocaleString();
+            if(document.getElementById('dashGrowth')) document.getElementById('dashGrowth').textContent = (growth || 0).toFixed(2);
+            if(document.getElementById('dashOpExp')) document.getElementById('dashOpExp').textContent = (totalOpExp || 0).toLocaleString();
+            if(document.getElementById('dashCapExp')) document.getElementById('dashCapExp').textContent = (totalCapExp || 0).toLocaleString();
+
+            if(document.getElementById('dashNetProfit')) {
+                const initialCapital = parseFloat(localStorage.getItem('gen_dash_initial_capital') || totalWorth.toString());
+                const netProfit = totalWorth - initialCapital - totalOpExp - totalCapExp;
+                document.getElementById('dashNetProfit').textContent = (netProfit || 0).toLocaleString();
+            }
+            
+            if(document.getElementById('dashCapitalInUse')) {
+                document.getElementById('dashCapitalInUse').textContent = ((inventory || 0) + (receivable || 0)).toLocaleString();
+            }
+    
+        }
+
+        function editDashValue(key) {
+            const current = localStorage.getItem('gen_dash_' + key) || '0';
+            let label = '';
+            
+            switch(key) {
+                case 'liability': label = 'پر مونږ قرضونه (باید ورکړل شي):'; break;
+                case 'receivable': label = 'پر خلکو قرضونه (باید راکړل شي):'; break;
+                case 'inventory': label = 'د ګدام د موجوده مال ارزښت:'; break;
+                case 'opExp': label = 'عملیاتي مصارف (کرایه، معاش، نور):'; break;
+                case 'capExp': label = 'پانګیز مصارف (ماشین، تجهیزات، نور):'; break;
+                case 'initial_capital': label = 'لومړنۍ سرمایه (د ګټې معلومولو لپاره):'; break;
+                case 'last_month_worth': label = 'د تیرې میاشتې ټوله سرمایه (د ودې لپاره):'; break;
+                default: label = 'مقدار وټاکئ:';
+            }
+            
+            const newVal = prompt(label + "\n\nاوسنۍ اندازه: " + current, current);
+            
+            if (newVal !== null && !isNaN(newVal) && newVal.trim() !== '') {
+                localStorage.setItem('gen_dash_' + key, newVal);
+                updateGeneralDashboard();
+                showToast('success', 'معلومات تازه شول');
+            }
+        }
 
         function initJobSelector() {
             const container = document.getElementById('jobGrid');
@@ -2082,6 +2976,16 @@
 
         function backToJobs() {
             document.getElementById('passwordScreen').classList.add('hidden');
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordError').style.display = 'none';
+
+             // Check if we were coming from General Dashboard Auth
+            if (currentJob && currentJob.id === 'general_dashboard_admin') {
+                 document.getElementById('jobSelectionScreen').classList.remove('hidden');
+                 currentJob = null;
+                 return;
+            }
+
             if (currentJob && currentJob.id.startsWith('saudi_')) {
                 document.getElementById('saudiSubAccountScreen').classList.remove('hidden');
             } else if (currentJob && currentJob.id.startsWith('home_')) {
@@ -2089,8 +2993,6 @@
             } else {
                 document.getElementById('jobSelectionScreen').classList.remove('hidden');
             }
-            document.getElementById('passwordInput').value = '';
-            document.getElementById('passwordError').style.display = 'none';
             currentJob = null;
         }
 
@@ -2310,32 +3212,6 @@
              });
         }
 
-        function extractText() {
-            document.getElementById('loadingOverlay').style.display = 'flex';
-            const video = document.getElementById('cameraView');
-            const canvas = document.getElementById('cameraCanvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-            const dataUrl = canvas.toDataURL('image/jpeg');
-
-            Tesseract.recognize(
-                dataUrl,
-                'eng', // English + maybe Pashto if available? Tesseract standard is usually eng
-                { logger: m => document.getElementById('loadingText').textContent = `OCR: ${Math.round(m.progress * 100)}%` }
-            ).then(({ data: { text } }) => {
-                document.getElementById('loadingOverlay').style.display = 'none';
-                document.getElementById('detail').value += `\n[OCR Text]: ${text}`;
-                showToast('success', 'متن استخراج شو', 'متن په تفصیل کې اضافه شو');
-            }).catch(err => {
-                document.getElementById('loadingOverlay').style.display = 'none';
-                console.error(err);
-                showToast('error', 'OCR ناکام شو', 'متن نشو لوستلی');
-            });
-        }
-
         function logout() {
             document.getElementById('formContainer').classList.add('hidden');
             
@@ -2366,6 +3242,23 @@
             const password = document.getElementById('passwordInput').value;
             const errorDiv = document.getElementById('passwordError');
 
+            // 1. General Dashboard Admin Check
+            if (currentJob && currentJob.id === 'general_dashboard_admin') {
+                const validAdmins = ['home123', 'saudi123', 'mobile123', 'boklyn123', 'admin'];
+                if (validAdmins.includes(password)) {
+                    errorDiv.style.display = 'none';
+                    document.getElementById('passwordInput').value = ''; // Clear input
+                    openGeneralDashboard();
+                } else {
+                    errorDiv.style.display = 'block';
+                    errorDiv.textContent = '❌ پاسورډ غلط دئ';
+                    document.getElementById('passwordInput').classList.add('shake');
+                    setTimeout(() => document.getElementById('passwordInput').classList.remove('shake'), 500);
+                }
+                return; // Stop here
+            }
+
+            // 2. Normal Job/Sub-Account Check
             if (password === currentPassword) {
                 document.getElementById('passwordScreen').classList.add('hidden');
                 document.getElementById('formContainer').classList.remove('hidden');
@@ -2375,6 +3268,14 @@
                 errorDiv.style.display = 'none';
                 
                 // Display the selected job/sub-account info
+                if (currentJob.id === 'saudi' || currentJob.id.startsWith('saudi_')) {
+                    document.getElementById('currency').value = 'SAR';
+                    document.getElementById('currency').disabled = true;
+                } else {
+                    document.getElementById('currency').value = 'AFN';
+                    document.getElementById('currency').disabled = false;
+                }
+
                 if (currentJob.image) {
                     document.getElementById('currentJobIcon').innerHTML = `<img src="${currentJob.image}" alt="${currentJob.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.3);">`;
                 } else {
@@ -2440,57 +3341,67 @@
             if (e.key === 'Enter') checkPassword();
         });
 
-        document.getElementById('trailerForm').addEventListener('submit', e => {
+        function saveTransaction(e) {
             e.preventDefault();
+            const rawIncome = document.getElementById('income').value;
+            const rawExpense = document.getElementById('expense').value;
+            
+            const income = parseFloat(rawIncome || 0);
+            const expense = parseFloat(rawExpense || 0);
             const date = document.getElementById('date').value;
-            const income = document.getElementById('income').value;
-            const expense = document.getElementById('expense').value;
-            const detail = document.getElementById('detail').value || '';
-            const note = document.getElementById('note').value || '';
+            const detail = document.getElementById('detail').value;
+            const note = document.getElementById('note').value;
             const category = document.getElementById('category').value;
+            const currency = document.getElementById('currency').value;
 
             const expenseError = document.getElementById('expenseError');
-            
+            const incomeError = document.getElementById('incomeError');
             let hasError = false;
 
-            if (!expense || expense.trim() === '') {
+            // Validation for Expense
+            if (rawExpense === '' || parseFloat(rawExpense) < 0) {
                 expenseError.classList.add('show');
                 hasError = true;
             } else {
                 expenseError.classList.remove('show');
             }
 
-            // Balance Check for Home Accounts
-            if (currentJob.id.startsWith('home_') && expense) {
-                const currentBal = parseFloat(localStorage.getItem('home_shared_balance') || '0');
-                // Removed blocking check for insufficient balance as per user request
-                /*
-                if (parseFloat(expense) > currentBal) {
-                    showToast('error', 'تېروتنه', 'ستاسو بیلانس د دې مصرف لپاره کافي نه دی!');
-                    return;
+            // Validation for Income (if visible)
+            const incomeGroup = document.getElementById('incomeGroup');
+            if (incomeGroup && incomeGroup.style.display !== 'none') {
+                if (rawIncome === '' || parseFloat(rawIncome) < 0) {
+                     incomeError.classList.add('show');
+                     hasError = true;
+                } else {
+                     incomeError.classList.remove('show');
                 }
-                */
             }
-            
-            if (hasError) {
-                return;
+
+            if (!date) {
+                showToast('error', 'نېټه وټاکئ');
+                hasError = true;
             }
+
+            if (hasError) return;
 
             const dateParts = date.split('-');
             const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
-            
-            // Logic for note/category
-            // Send category SEPARATELY, do not overwrite note
-            let finalNote = note;
-            let finalCategory = '';
-            
-            if (currentJob.id.startsWith('home_')) {
-                finalCategory = category; 
-            }
 
-            formDataToSubmit = { date, formattedDate, income, expense, detail, note: finalNote, category: finalCategory };
+            formDataToSubmit = {
+                income,
+                expense,
+                date,
+                formattedDate,
+                detail,
+                note,
+                category,
+                currency,
+                timestamp: Date.now()
+            };
             showModal();
-        });
+        }
+
+        document.getElementById('trailerForm').addEventListener('submit', saveTransaction);
 
         function showModal() {
             document.getElementById('confirmDate').textContent = formDataToSubmit.formattedDate;
@@ -2566,6 +3477,7 @@
                     detail: formDataToSubmit.detail || '',
                     note: formDataToSubmit.note || '',
                     category: formDataToSubmit.category || '',
+                    currency: formDataToSubmit.currency || 'AFN',
                     timestamp: new Date().getTime()
                 };
                 
@@ -2739,9 +3651,18 @@
             
             const adminIds = ['home_saifullah', 'home_lalak', 'home_saeedullah', 'home_siddiqullah'];
             const isAdmin = adminIds.includes(currentJob.id);
+            // Toggle Admin Features
+            const adminFeatures = document.getElementById("adminOnlyFeatures");
+            if (adminFeatures) {
+                adminFeatures.style.display = isAdmin ? "block" : "none";
+            }
             
             const dashboardBody = document.querySelector('#dashboardScreen .modal-body');
             
+            // Remove any existing selector first to avoid duplicates or stale state
+            const existingSelector = document.getElementById('dashboardAccountSelector');
+            if (existingSelector) existingSelector.closest('div').remove();
+
             // If Admin, inject a selector if it doesn't exist
             let selectorHtml = '';
             if (isAdmin) {
@@ -2801,30 +3722,28 @@
             // We look for the grid with 2 columns
             const summaryCardsContainer = Array.from(dashboardBody.children).find(child => child.style.display === 'grid');
             
-            if (summaryCardsContainer) {
-                 const summaryCards = summaryCardsContainer.children;
-                 if (summaryCards.length >= 2) {
-                    // Income Card
-                    summaryCards[0].querySelector('div:nth-child(2)').textContent = parseFloat(stats.income).toLocaleString();
-                    // Expense Card
-                    summaryCards[1].querySelector('div:nth-child(2)').textContent = parseFloat(stats.expense).toLocaleString();
-                 }
-            }
-
             // Update Net Balance
             const netBalance = parseFloat(stats.income) - parseFloat(stats.expense);
-            // We need to find the specific row for Net Balance. It has a specific class or structure.
-            // Based on previous code: balanceEl = dashboardBody.querySelector('.data-row .data-value');
-            // But since we might have multiple data-rows, let's be more specific or search all
-            const dataValues = dashboardBody.querySelectorAll('.data-value');
-            // The balance is usually the last one or distinct. Let's look for the one that holds the balance.
-            // In the HTML structure (which isn't fully visible here but inferred), there's a row for "خالص بیلانس"
             
-            // Let's traverse to find the one with "خالص بیلانس" label if possible, or assume position.
-            // Assuming it's the one in the .data-row
+            // Update specific IDs directly - much safer than index
+            if (document.getElementById('dashTotalIncome')) {
+                document.getElementById('dashTotalIncome').textContent = parseFloat(stats.income).toLocaleString();
+            }
+            if (document.getElementById('dashTotalExpense')) {
+                // This is the new field for Total Business Expenses
+                document.getElementById('dashTotalExpense').textContent = parseFloat(stats.expense).toLocaleString();
+            }
+            if (document.getElementById('dashNetProfit')) {
+                document.getElementById('dashNetProfit').textContent = netBalance.toLocaleString();
+                document.getElementById('dashNetProfit').style.color = netBalance >= 0 ? '#6ee7b7' : '#ef4444';
+            }
+            
+            // The rest of the logic for Worth, Cash etc might be handled elsewhere or via other IDs
+            // Existing logic for balance in data-row:
             const balanceEl = dashboardBody.querySelector('.data-row .data-value');
             if (balanceEl) {
-                balanceEl.textContent = netBalance.toLocaleString() + ' ؋';
+                const currencyLabel = getCurrencyLabel();
+                balanceEl.textContent = netBalance.toLocaleString() + ' ' + currencyLabel;
                 balanceEl.style.color = netBalance >= 0 ? '#6ee7b7' : '#ef4444';
             }
         }
@@ -2949,6 +3868,8 @@
             const data = getFilteredData();
             const container = document.querySelector('.report-list');
             
+            const currencyLabel = getCurrencyLabel();
+            
             if (data.length === 0) {
                  container.innerHTML = '<div style="text-align: center; padding: 20px; color: #94a3b8; font-size: 14px;">په دې وخت کې هیڅ معلومات نشته</div>';
                  return;
@@ -2960,13 +3881,22 @@
                 const sign = amount > 0 ? '+' : '';
                 const desc = item.detail || item.category || 'بی تفصیله';
                 
+                // Delete Button for Saifullah
+                let deleteAction = '';
+                if (currentJob.name === 'سیف الله' && item.timestamp) {
+                    deleteAction = `<button onclick="deleteTransaction(${item.timestamp})" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); cursor: pointer; color: #ef4444; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; margin-left: 10px;">🗑️</button>`;
+                }
+
                 return `
                     <div class="data-row" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
-                        <div style="display: flex; flex-direction: column; gap: 4px;">
-                            <span style="font-size: 14px; font-weight: 700; color: #f8fafc;">${desc}</span>
-                            <span style="font-size: 11px; color: #94a3b8;">${item.date}</span>
+                        <div style="display: flex; align-items: center;">
+                            ${deleteAction}
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <span style="font-size: 14px; font-weight: 700; color: #f8fafc;">${desc}</span>
+                                <span style="font-size: 11px; color: #94a3b8;">${item.date}</span>
+                            </div>
                         </div>
-                        <span style="color: ${color}; font-weight: 700;">${sign}${Math.abs(amount).toLocaleString()} ؋</span>
+                        <span style="color: ${color}; font-weight: 700;">${sign}${Math.abs(amount).toLocaleString()} ${currencyLabel}</span>
                     </div>
                 `;
             }).join('');
@@ -2990,6 +3920,8 @@
 
             const printWindow = window.open('', '_blank');
             const durationText = document.getElementById('reportDuration').options[document.getElementById('reportDuration').selectedIndex].text;
+            
+            const currencyCode = getCurrencyCode();
             
             // Professional/Literary Pashto Date formatting
             const today = new Date();
@@ -3161,8 +4093,8 @@
                                 <tr>
                                     <th style="width: 15%;">نېټه</th>
                                     <th style="width: 35%;">تفصیل / کټګوري</th>
-                                    <th style="width: 15%;">عاید (AFN)</th>
-                                    <th style="width: 15%;">لګښت (AFN)</th>
+                                    <th style="width: 15%;">عاید (${currencyCode})</th>
+                                    <th style="width: 15%;">لګښت (${currencyCode})</th>
                                     <th style="width: 20%;">یاداښت</th>
                                 </tr>
                             </thead>
@@ -3319,6 +4251,474 @@
                 }
             } 
         }
+
+        // --- BACKUP & RESTORE ---
+        function downloadBackup() {
+            const data = JSON.stringify(localStorage);
+            const blob = new Blob([data], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `Sherzad_Backup_${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('success', 'بیک اپ', 'فایل ډاونلوډ شو!');
+        }
+
+        function restoreBackup(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    // Clear current data mostly or just overwrite? Overwrite is safer for restore.
+                    // But we should probably ask confirmation
+                    if(!confirm("آیا غواړئ دا بیک اپ فایل پورته کړئ؟ اوسنۍ ډیټا به له دې سره بدله شي.")) return;
+
+                    Object.keys(data).forEach(key => {
+                        localStorage.setItem(key, data[key]);
+                    });
+                    
+                    showToast('success', 'رییسټور', 'ډیټا په بریالیتوب پورته شوه!');
+                    setTimeout(() => location.reload(), 1500); // Reload to apply changes
+                } catch (err) {
+                    console.error(err);
+                    showToast('error', 'تېروتنه', 'فایل خراب دی یا سم فارمیټ نلري');
+                }
+            };
+            reader.readAsText(file);
+            input.value = ''; // Reset input
+        }
+
+        // --- DEBT TRACKER LOGIC ---
+        let debtData = JSON.parse(localStorage.getItem('debt_data') || '[]');
+
+        function loadDebtData() {
+            debtData = JSON.parse(localStorage.getItem('debt_data') || '[]');
+        }
+
+        function saveDebtData() {
+            localStorage.setItem('debt_data', JSON.stringify(debtData));
+            updateGeneralDashboard(); // Update main dashboard stats immediately
+        }
+
+        function openDebtScreen() {
+            document.getElementById('debtScreen').classList.add('active');
+            loadDebtData();
+            renderDebtList();
+        }
+
+        function closeDebtScreen() {
+            document.getElementById('debtScreen').classList.remove('active');
+        }
+
+        function renderDebtList() {
+            const list = document.getElementById('debtList');
+            list.innerHTML = '';
+
+            let totalRec = 0;
+            let totalLiab = 0;
+
+            // Sort by date desc
+            const sorted = [...debtData].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            if (sorted.length === 0) {
+                list.innerHTML = '<div style="text-align:center; padding: 20px; color: #94a3b8;">هیڅ معلومات نشته</div>';
+            } else {
+                sorted.forEach(item => {
+                    const amount = parseFloat(item.amount);
+                    if (item.type === 'receivable') totalRec += amount;
+                    else totalLiab += amount;
+
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'data-row';
+                    itemDiv.style.marginBottom = '0';
+                    itemDiv.style.display = 'flex';
+                    itemDiv.style.justifyContent = 'space-between';
+                    itemDiv.style.alignItems = 'center';
+                    
+                    const isRec = item.type === 'receivable';
+                    const color = isRec ? '#10b981' : '#ef4444';
+                    const icon = isRec ? '↗️' : '↘️';
+
+                    itemDiv.innerHTML = `
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; font-size: 14px;">${icon}</div>
+                            <div style="display: flex; flex-direction: column; gap: 2px;">
+                                <span style="font-size: 14px; font-weight: 700; color: #f8fafc;">${item.name}</span>
+                                <span style="font-size: 11px; color: #94a3b8;">${item.date} | ${item.desc || '---'}</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                            <span style="color: ${color}; font-weight: 700;">${amount.toLocaleString()} ؋</span>
+                            <button onclick="deleteDebtRecord('${item.id}')" style="background: none; border: none; color: #64748b; cursor: pointer; font-size: 12px;">🗑️</button>
+                        </div>
+                    `;
+                    list.appendChild(itemDiv);
+                });
+            }
+
+            document.getElementById('debtTotalReceivable').textContent = totalRec.toLocaleString();
+            document.getElementById('debtTotalLiability').textContent = totalLiab.toLocaleString();
+        }
+
+        function openDebtForm() {
+            document.getElementById('debtForm').reset();
+            document.getElementById('debtId').value = ''; // New record
+            document.getElementById('debtDate').valueAsDate = new Date();
+            updateDebtTypeStyles();
+            document.getElementById('debtFormModal').classList.add('active');
+        }
+
+        function closeDebtForm() {
+            document.getElementById('debtFormModal').classList.remove('active');
+        }
+
+        function updateDebtTypeStyles() {
+            const type = document.querySelector('input[name="debtType"]:checked').value;
+            const btnRec = document.getElementById('btnReceivable');
+            const btnLiab = document.getElementById('btnLiability');
+
+            if (type === 'receivable') {
+                btnRec.style.border = '1px solid #10b981';
+                btnRec.style.background = 'rgba(16, 185, 129, 0.2)';
+                btnRec.style.color = '#6ee7b7';
+                
+                btnLiab.style.border = '1px solid #334155';
+                btnLiab.style.background = 'rgba(30, 41, 59, 0.5)';
+                btnLiab.style.color = '#94a3b8';
+            } else {
+                btnRec.style.border = '1px solid #334155';
+                btnRec.style.background = 'rgba(30, 41, 59, 0.5)';
+                btnRec.style.color = '#94a3b8';
+
+                btnLiab.style.border = '1px solid #ef4444';
+                btnLiab.style.background = 'rgba(239, 68, 68, 0.2)';
+                btnLiab.style.color = '#fca5a5';
+            }
+        }
+
+        function handleDebtSubmit(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('debtName').value;
+            const amount = parseFloat(document.getElementById('debtAmount').value);
+            const date = document.getElementById('debtDate').value;
+            const desc = document.getElementById('debtDesc').value;
+            const type = document.querySelector('input[name="debtType"]:checked').value;
+            const id = document.getElementById('debtId').value;
+
+            if (name && amount && date) {
+                if (id) {
+                    // Edit existing (not implemented fully in UI but good to have logic)
+                    // We need to find index
+                } else {
+                    // New
+                    const newRecord = {
+                        id: Date.now().toString(),
+                        name,
+                        amount,
+                        date,
+                        desc,
+                        type
+                    };
+                    debtData.push(newRecord);
+                }
+
+                saveDebtData();
+                renderDebtList();
+                closeDebtForm();
+                showToast('success', 'ثبت شو', 'د قرض ریکارډ اضافه شو');
+            }
+        }
+
+        function deleteDebtRecord(id) {
+            if(confirm('آیا غواړئ دا ریکارډ حذف کړئ؟')) {
+                debtData = debtData.filter(d => d.id !== id);
+                saveDebtData();
+                renderDebtList();
+                showToast('info', 'حذف شو');
+            }
+        }
+
+        // OVERRIDE: Update General Dashboard to use Debt Data
+        function updateGeneralDashboard() {
+            // 1. Calculate Account Balances
+            const accounts = [
+                { id: 'boklyn', type: 'afn' },
+                { id: 'mobile', type: 'afn' },
+                { id: 'saudi_12module', type: 'sar' }, // SAR
+                { id: 'saudi_14module', type: 'sar' }  // SAR
+            ];
+            
+            let totalCashAFN = 0;
+            let boklynTotal = 0;
+            let mobileTotal = 0;
+            let saudiTotals = [];
+
+            // Helper to get balance
+            const getBal = (id) => {
+                const stats = JSON.parse(localStorage.getItem('stats_' + id) || '{"income": 0, "expense": 0}');
+                return parseFloat(stats.income) - parseFloat(stats.expense);
+            };
+
+            // Boklyn
+            boklynTotal = getBal('boklyn');
+            totalCashAFN += boklynTotal;
+
+            // Mobile
+            mobileTotal = getBal('mobile');
+            totalCashAFN += mobileTotal;
+
+            // Saudi Accounts
+            const SAR_TO_AFN = 18.5; 
+            let totalSaudiSAR = 0;
+            
+            SAUDI_SUB_ACCOUNTS.forEach(acc => {
+                const bal = getBal(acc.id);
+                saudiTotals.push({ name: acc.name, balance: bal, icon: acc.icon });
+                totalSaudiSAR += bal;
+            });
+            
+            const saudiInAFN = totalSaudiSAR * SAR_TO_AFN;
+
+            // 2. Loans (FROM DEBT BOOK)
+            // Load debt data afresh to ensure accuracy
+            const debts = JSON.parse(localStorage.getItem('debt_data') || '[]');
+            let liability = 0;
+            let receivable = 0;
+
+            debts.forEach(d => {
+                if(d.type === 'receivable') receivable += parseFloat(d.amount);
+                else liability += parseFloat(d.amount);
+            });
+
+            // 3. Total Worth Calculation
+            const totalCashCombined = totalCashAFN + saudiInAFN;
+            const totalWorth = totalCashCombined + receivable - liability;
+
+            // 4. Update UI
+            document.getElementById('dashTotalWorth').textContent = totalWorth.toLocaleString();
+            document.getElementById('dashTotalCash').textContent = totalCashCombined.toLocaleString();
+            document.getElementById('dashLiability').textContent = liability.toLocaleString();
+            document.getElementById('dashReceivable').textContent = receivable.toLocaleString();
+            
+            
+            // New Dashboard Stats Update (Placeholders)
+            if(document.getElementById('dashTotalWorth')) document.getElementById('dashTotalWorth').textContent = (totalWorth || 0).toLocaleString();
+            if(document.getElementById('dashNetProfit')) document.getElementById('dashNetProfit').textContent = "0";
+            if(document.getElementById('dashTotalCash')) document.getElementById('dashTotalCash').textContent = (totalCashCombined || 0).toLocaleString();
+            if(document.getElementById('dashCapitalInUse')) document.getElementById('dashCapitalInUse').textContent = "0";
+            if(document.getElementById('dashInventory')) document.getElementById('dashInventory').textContent = (inventory || 0).toLocaleString();
+            if(document.getElementById('dashZakat')) document.getElementById('dashZakat').textContent = Math.floor(zakat || 0).toLocaleString();
+            if(document.getElementById('dashGrowth')) document.getElementById('dashGrowth').textContent = (growth || 0).toFixed(1);
+            if(document.getElementById('dashOpExp')) document.getElementById('dashOpExp').textContent = (opExp || 0).toLocaleString();
+            if(document.getElementById('dashCapExp')) document.getElementById('dashCapExp').textContent = (capExp || 0).toLocaleString();
+            if(document.getElementById('dashTotalIncome')) document.getElementById('dashTotalIncome').textContent = "0";
+            if(document.getElementById('dashPersonalExpense')) document.getElementById('dashPersonalExpense').textContent = "0";
+    
+        }
+
+        // OVERRIDE: Redirect edit to Debt Screen
+        function editDashValue(key) {
+             openDebtScreen(); 
+             showToast('info', 'د قرضونو کتابچه', 'مهرباني وکړئ پورونه دلته ثبت کړئ');
+        }
+    </script>
+    <script>
+        // --- 1. PIE CHART LOGIC ---
+        let expenseChartInstance = null;
+
+        function renderChart(history) {
+            const ctx = document.getElementById('expensePieChart');
+            if (!ctx) return;
+
+            // Aggregate expenses by category
+            const categories = {};
+            history.forEach(item => {
+                if (parseFloat(item.expense) > 0) {
+                    const cat = item.category || 'نور'; // Default to "Other"
+                    categories[cat] = (categories[cat] || 0) + parseFloat(item.expense);
+                }
+            });
+
+            const labels = Object.keys(categories);
+            const data = Object.values(categories);
+            const colors = ['#f87171', '#fbbf24', '#34d399', '#60a5fa', '#a78bfa', '#f472b6', '#9ca3af'];
+
+            if (expenseChartInstance) {
+                expenseChartInstance.destroy();
+            }
+
+            expenseChartInstance = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#cbd5e1', font: { family: 'inherit' } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- 2. SEARCH LOGIC ---
+        document.getElementById('reportSearchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('.report-list .data-row');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(term)) {
+                    row.style.display = 'flex';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // --- 3. CURRENCY CONVERTER LOGIC ---
+        let currentRates = {
+            SAR: 18.5,
+            USD: 70.0,
+            PKR: 0.25
+        };
+
+        async function fetchRates() {
+            try {
+                // Using open.er-api.com which is free and supports CORS
+                const response = await fetch('https://open.er-api.com/v6/latest/USD');
+                const data = await response.json();
+                
+                if (data && data.rates) {
+                    const usdToAfn = data.rates.AFN;
+                    
+                    // Calculate cross rates relative to AFN
+                    currentRates.USD = parseFloat(usdToAfn.toFixed(2));
+                    currentRates.SAR = parseFloat((usdToAfn / data.rates.SAR).toFixed(2));
+                    currentRates.PKR = parseFloat((usdToAfn / data.rates.PKR).toFixed(2));
+
+                    // Update UI
+                    if (document.getElementById('rateUSD')) document.getElementById('rateUSD').textContent = currentRates.USD;
+                    if (document.getElementById('rateSAR')) document.getElementById('rateSAR').textContent = currentRates.SAR;
+                    if (document.getElementById('ratePKR')) document.getElementById('ratePKR').textContent = currentRates.PKR;
+                    
+                    const now = new Date();
+                    if (document.getElementById('rateLastUpdated')) {
+                        document.getElementById('rateLastUpdated').textContent = `وروستی تازه: ${now.toLocaleTimeString()}`;
+                    }
+                    
+                    // Update UI based on currently selected currency
+                    updateRatePlaceholder();
+                    convertCurrency();
+                }
+            } catch (error) {
+                console.error('Error fetching rates:', error);
+                if (document.getElementById('rateLastUpdated')) {
+                    document.getElementById('rateLastUpdated').textContent = 'د تازه کولو پرمهال ستونزه';
+                }
+            }
+        }
+
+        // Auto update every 30 seconds
+        setInterval(fetchRates, 30000);
+        // Initial fetch
+        fetchRates();
+
+        function updateRatePlaceholder() {
+            const currency = document.getElementById('currencySelect').value;
+            const rateInput = document.getElementById('exchangeRate');
+            
+            // Set the rate input to the current rate for the selected currency
+            if (currentRates[currency]) {
+                rateInput.value = currentRates[currency].toFixed(2);
+            }
+        }
+
+        function convertCurrency() {
+            const rate = parseFloat(document.getElementById('exchangeRate').value) || 0;
+            const amount = parseFloat(document.getElementById('currencyInput').value) || 0;
+            
+            if (rate > 0 && amount > 0) {
+                const total = amount * rate;
+                document.getElementById('afnResult').textContent = total.toLocaleString(undefined, {maximumFractionDigits: 0}) + ' AFN';
+            } else {
+                document.getElementById('afnResult').textContent = '0 AFN';
+            }
+        }
+        
+        // Initial call to set placeholder correctly
+        updateRatePlaceholder();
+
+        // --- 4. BUDGET LIMIT WARNING LOGIC ---
+        function checkBudgetLimit(totalExpense) {
+            const limit = 50000;
+            const warningThreshold = 45000;
+            const warningBox = document.getElementById('budgetWarning');
+            
+            if (totalExpense >= warningThreshold) {
+                warningBox.style.display = 'flex';
+                warningBox.innerHTML = `⚠️ پام وکړئ! مصارف ${totalExpense.toLocaleString()} ته ورسیدل. (حد: ${limit.toLocaleString()})`;
+            } else {
+                warningBox.style.display = 'none';
+            }
+        }
+
+        // --- HOOKS INTO EXISTING FUNCTIONS ---
+
+        // Hook into openReport (if it exists) or filterReportByDuration (which populates the list)
+        // Since filterReportByDuration is called by onchange, and presumably initially, we should hook there.
+        // Wait, looking at the code, filterReportByDuration() is the main render function for report list.
+        // I need to intercept it.
+        
+        // Save original reference
+        const originalFilterReportByDuration = window.filterReportByDuration || filterReportByDuration;
+
+        // Override
+        window.filterReportByDuration = function() {
+            // Call original
+            originalFilterReportByDuration();
+            
+            // After original runs, it presumably updates the DOM or gets data.
+            // Let's get the data again to render the chart.
+            // Note: The original function likely gets data from localStorage.
+            // We'll wait a tick to ensure DOM is updated if needed, or just fetch data directly.
+            
+            setTimeout(() => {
+                // Ensure getFilteredData exists, otherwise fallback or error handle
+                if (typeof getFilteredData === 'function') {
+                    const data = getFilteredData(); 
+                    renderChart(data);
+                }
+            }, 50);
+        };
+
+        // Hook into updateDashboardStats for Budget Warning
+        const originalUpdateDashboardStats = window.updateDashboardStats || updateDashboardStats;
+
+        window.updateDashboardStats = function(accountId) {
+            originalUpdateDashboardStats(accountId);
+            
+            // Fetch stats to check limit
+            let stats = JSON.parse(localStorage.getItem('stats_' + accountId) || '{"income": 0, "expense": 0}');
+            checkBudgetLimit(stats.expense);
+        };
+
     </script>
 </body>
 </html>

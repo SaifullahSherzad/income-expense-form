@@ -2957,25 +2957,41 @@
         let currentReportData = [];
 
         function openReport() {
+            if (!currentJob) return;
+
             document.getElementById('formContainer').classList.add('hidden');
             document.getElementById('reportScreen').classList.remove('hidden');
 
-            document.getElementById('reportTitle').textContent = `د ${currentJob.name} راپور`;
+            const reportTitle = document.getElementById('reportTitle');
+            if (reportTitle) reportTitle.textContent = `د ${currentJob.name} راپور`;
 
             // Reset filters
-            document.getElementById('reportSearchText').value = '';
-            document.getElementById('reportStartDate').value = '';
-            document.getElementById('reportEndDate').value = '';
+            const searchInput = document.getElementById('reportSearchText');
+            if (searchInput) searchInput.value = '';
+            
+            const startDateInput = document.getElementById('reportStartDate');
+            if (startDateInput) startDateInput.value = '';
+            
+            const endDateInput = document.getElementById('reportEndDate');
+            if (endDateInput) endDateInput.value = '';
 
             // Load Data
             const storageKey = 'history_' + currentJob.id;
-            let rawData = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            let rawData = [];
+            try {
+                rawData = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            } catch (e) {
+                console.error("Error loading data", e);
+                rawData = [];
+            }
 
             // Legacy Fallback
             if (rawData.length === 0) {
-                 const legacyTrans = JSON.parse(localStorage.getItem('transactions') || '[]');
-                 const filteredLegacy = legacyTrans.filter(t => t.workType === currentJob.id);
-                 if (filteredLegacy.length > 0) rawData = filteredLegacy;
+                 try {
+                     const legacyTrans = JSON.parse(localStorage.getItem('transactions') || '[]');
+                     const filteredLegacy = legacyTrans.filter(t => t.workType === currentJob.id);
+                     if (filteredLegacy.length > 0) rawData = filteredLegacy;
+                 } catch (e) { console.error(e); }
             }
 
             currentReportData = rawData;
@@ -3152,7 +3168,12 @@
                 } else {
                     if (document.getElementById('dashboardBtn')) document.getElementById('dashboardBtn').style.display = 'inline-flex';
                     if (allowedReportIds.includes(currentJob.id) || isSaudiSub) {
-                        if (document.getElementById('reportNavBtn')) document.getElementById('reportNavBtn').style.display = 'inline-flex';
+                        const btn = document.getElementById('reportNavBtn');
+                        if (btn) {
+                            btn.style.display = 'inline-flex';
+                            // Ensure onclick is bound
+                            btn.onclick = openReport;
+                        }
                     } else {
                         if (document.getElementById('reportNavBtn')) document.getElementById('reportNavBtn').style.display = 'none';
                     }

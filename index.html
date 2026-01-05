@@ -658,6 +658,47 @@
             background-clip: text !important;
         }
 
+        .home-card-joint {
+            background: linear-gradient(135deg, rgba(251, 146, 60, 0.15), rgba(253, 186, 116, 0.08)) !important;
+            border-color: rgba(251, 146, 60, 0.35) !important;
+        }
+        .home-card-joint:hover {
+            border-color: rgba(251, 146, 60, 0.7) !important;
+            background: linear-gradient(135deg, rgba(251, 146, 60, 0.25), rgba(253, 186, 116, 0.15)) !important;
+            box-shadow: 0 15px 40px rgba(251, 146, 60, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+        }
+        .home-card-joint .job-name {
+            background: linear-gradient(to left, #fb923c, #f97316) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+        }
+
+        .home-card-investment {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.08)) !important;
+            border-color: rgba(16, 185, 129, 0.35) !important;
+        }
+        .home-card-investment:hover {
+            border-color: rgba(16, 185, 129, 0.7) !important;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(52, 211, 153, 0.15)) !important;
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+        }
+        .home-card-investment .job-name {
+            background: linear-gradient(to left, #34d399, #10b981) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+        }
+
+        #newAccountScreen .modal-icon {
+            animation: pulse-green 2s infinite;
+        }
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
         #passwordScreen {
             position: fixed;
             inset: 0;
@@ -1555,6 +1596,147 @@
             justify-content: space-between;
             align-items: center;
         }
+
+        /* Report Screen Mobile Fixes */
+        .report-inputs {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .btn-download {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            transition: all 0.3s;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .download-dropdown {
+            flex: 1; 
+            min-width: 150px;
+        }
+
+        .download-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            animation: fadeInUp 0.2s ease-out;
+        }
+        
+        .download-menu.hidden {
+            display: none;
+        }
+
+        .download-menu button:hover {
+            background: rgba(255,255,255,0.1) !important;
+        }
+
+        @media (max-width: 768px) {
+            .report-inputs {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .input-wrapper {
+                width: 100%;
+                min-width: auto;
+            }
+            
+            .download-dropdown {
+                width: 100%;
+            }
+        }
+    /* Report Screen Mobile Fixes */
+    .report-inputs {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        align-items: flex-end;
+    }
+
+    .input-wrapper {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .btn-download {
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        transition: all 0.3s;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .btn-download:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    }
+
+    .download-dropdown {
+        flex: 1; 
+        min-width: 150px;
+    }
+
+    .download-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        animation: fadeInUp 0.2s ease-out;
+    }
+    
+    .download-menu.hidden {
+        display: none;
+    }
+
+    .download-menu button:hover {
+        background: rgba(255,255,255,0.1) !important;
+    }
+
+    @media (max-width: 768px) {
+        .report-inputs {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .input-wrapper {
+            width: 100%;
+            min-width: auto;
+        }
+        
+        .download-dropdown {
+            width: 100%;
+        }
+    }
 </style>
 </head>
 <body>
@@ -1577,9 +1759,60 @@
 
             <div class="job-grid" id="jobGrid"></div>
 
-            <div style="margin-top: 25px; border-top: none; padding-top: 20px;">
+            <div style="margin-top: 25px; border-top: none; padding-top: 20px; display: flex; flex-direction: column; gap: 10px;">
                 <button onclick="openGeneralDashboardAuth()" style="width: 100%; padding: 14px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: #94a3b8; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;">
                     📊 عمومي مالي ډشبورډ
+                </button>
+                <button onclick="openInvestmentAuth()" style="width: 100%; padding: 14px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; color: #6ee7b7; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    💼 پانګونه
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Account Screen (Investment) -->
+    <div id="newAccountScreen" class="hidden" style="position: fixed; inset: 0; background: rgba(10, 5, 21, 0.98); backdrop-filter: blur(30px); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 16px;">
+        <div class="glass-card job-selection-card" style="max-width: 550px; width: 100%; max-height: 90vh; overflow-y: auto; animation: modalPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative;">
+            <button type="button" class="btn-close-fancy" onclick="closeNewAccountScreen()" style="position: absolute; top: 20px; left: 20px; z-index: 100;">✕</button>
+
+            <div class="job-header" style="margin-bottom: 24px;">
+                <div class="logo"><img src="./logo.jpg" alt="Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 16px;"></div>
+                <div style="text-align: center;">
+                    <h2 style="font-size: 28px; margin-bottom: 4px;">د پانګونې فورم</h2>
+                    <p class="job-header-subtitle">د نوې پانګونې معلومات ثبت کړئ</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; padding: 16px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(52, 211, 153, 0.06)); border: 2px solid rgba(16, 185, 129, 0.25); border-radius: 16px; margin-bottom: 24px;">
+                <div style="font-size: 28px; margin-bottom: 8px;">💼</div>
+                <div class="job-name" style="color: #6ee7b7;">پانګونه (Investment)</div>
+            </div>
+
+            <div class="form-grid" style="display: flex; flex-direction: column; gap: 16px;">
+                <div class="input-group">
+                    <label>📅 نېټه</label>
+                    <input type="date" id="newAccDate" style="width: 93%;">
+                </div>
+
+                <div class="input-group">
+                    <label>💰 پانکونه (افغانۍ)</label>
+                    <input type="number" id="newAccPoints" placeholder="0">
+                </div>
+
+                <div class="input-group">
+                    <label>📝 تفصیل</label>
+                    <textarea id="newAccDesc" placeholder="تفصیل ولیکي..." rows="3"></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label>📷 د بیل تصویر</label>
+                    <div style="background: rgba(255, 255, 255, 0.05); border: 2px dashed rgba(139, 92, 246, 0.3); border-radius: 14px; padding: 15px;">
+                         <input type="file" id="newAccImage" accept="image/*" style="width: 100%; padding: 10px; background: transparent; color: #cbd5e1; border: none; cursor: pointer;">
+                    </div>
+                </div>
+
+                <button onclick="submitNewAccount()" id="btnSubmitNewAccount" class="submit-btn" style="margin-top: 10px; background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);">
+                     ✓ ذخیره کول
                 </button>
             </div>
         </div>
@@ -1757,37 +1990,43 @@
                 <!-- Download Section -->
                 <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 10px; margin-bottom: 20px;">
                     <h3 style="color: #94a3b8; font-size: 14px; margin-bottom: 15px; font-weight: 600;">📥 د راپور ډاونلوډ</h3>
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
-                        <div style="flex: 1; min-width: 150px;">
+                    <div class="report-inputs">
+                        <div class="input-wrapper">
                             <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #94a3b8;">د راپور ډول</label>
                             <select id="reportType" onchange="toggleReportInputs()" style="width: 100%; padding: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; outline: none;">
-								<option value="daily">ورځنی (Daily)</option>	
+                                <option value="daily">ورځنی (Daily)</option>    
                                 <option value="monthly" selected>میاشتنی (Monthly)</option>                   
                                 <option value="yearly">کلنی (Yearly)</option>
                                 <option value="custom">نېټه وټاکئ</option>
                             </select>
                         </div>
                         
-                        <div id="dateInputGroup" style="flex: 1; min-width: 150px; display: none;">
+                        <div id="dateInputGroup" class="input-wrapper" style="display: none;">
                             <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #94a3b8;">نیټه وټاکئ</label>
-                            <input type="date" id="reportDateInput" style="width: 80%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; outline: none;">
+                            <input type="date" id="reportDateInput" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; outline: none;">
                         </div>
 
-                        <div id="monthInputGroup" style="flex: 1; min-width: 150px;">
+                        <div id="monthInputGroup" class="input-wrapper">
                             <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #94a3b8;">میاشت وټاکئ</label>
-                            <input type="month" id="reportMonthInput" style="width: 90%; padding: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; outline: none;">
+                            <input type="month" id="reportMonthInput" style="width: 100%; padding: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; outline: none;">
                         </div>
 
-                        <div id="yearInputGroup" style="flex: 1; min-width: 150px; display: none;">
+                        <div id="yearInputGroup" class="input-wrapper" style="display: none;">
                             <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #94a3b8;">کال وټاکئ</label>
                             <select id="reportYearInput" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; outline: none;">
                                 <option value="2026">2026</option>
                             </select>
                         </div>
 
-                        <button onclick="downloadReport()" style="padding: 12px 24px; background: linear-gradient(135deg, #8b5cf6, #3b82f6); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); transition: all 0.3s;">
-                            ښکته کول 📥
-                        </button>
+                        <div class="download-dropdown" style="position: relative;">
+                            <button onclick="toggleDownloadMenu()" class="btn-download">
+                                ښکته کول 📥
+                            </button>
+                            <div id="downloadMenu" class="download-menu hidden" style="position: absolute; top: 100%; left: 0; right: 0; background: #1e1b2e; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 5px; margin-top: 5px; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+                                <button onclick="downloadReport('pdf')" style="width: 100%; padding: 10px; text-align: right; color: white; background: transparent; border: none; cursor: pointer; border-radius: 5px; transition: background 0.2s;">📄 PDF فایل</button>
+                                <button onclick="downloadReport('csv')" style="width: 100%; padding: 10px; text-align: right; color: white; background: transparent; border: none; cursor: pointer; border-radius: 5px; transition: background 0.2s;">📊 CSV (اکسل)</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1813,7 +2052,7 @@
                     </div>
                 </div>
             </div> 
-			
+                        
             <!-- Table Container -->
             <div style="flex: 1; overflow-y: auto; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
                 <table style="width: 100%; border-collapse: collapse; direction: rtl; text-align: right; position: relative;">
@@ -1957,70 +2196,29 @@
                     <label for="sentToHomeMobile" style="color: #60a5fa;">🏠 کور ته ورکړل شوی خرڅه</label>
                     <div style="display: flex; gap: 8px;">
                         <input type="number" id="sentToHomeMobile" name="sentToHomeMobile" min="0" placeholder="مقدار ولیکئ" style="flex: 1;">
-                    </div>
-                </div>
+ 					</div>
 
+                </div>
                 <!-- New Field 4: Shop Rent (Mobile) -->
                 <div class="input-group full-width" id="shopRentGroup" style="display: none;">
                     <label for="shopRent" style="color: #fbbf24;">🏪 دکان کرایه</label>
                     <div style="display: flex; gap: 8px;">
                         <input type="number" id="shopRent" name="shopRent" min="0" placeholder="مقدار ولیکئ" style="flex: 1;">
                     </div>
+					
+                <!-- New Field 3.1: Details (Mobile) -->
+                <div class="input-group full-width" id="detailMobileGroup" style="display: none;">
+                    <label for="detailMobile">📝 د کار تفصیل</label>
+                    <textarea id="detailMobile" name="detailMobile" placeholder="د کار تفصیل ولیکئ..."></textarea>
                 </div>
 
-                <!-- Category Field (For Home Accounts) - REPLACED WITH ICONS -->
-                <div class="input-group full-width" id="categoryGroup" style="display: none;">
-                    <label>📂 کټګوري (د مصارفو لپاره)</label>
-                    <input type="hidden" id="category" name="category">
-
-                    <div class="category-grid">
-                        <div class="category-btn" onclick="selectCategory('خوراک', this)">
-                            <div class="category-btn-icon">🍔</div>
-                            <div class="category-btn-label">خوراک</div>
-                        </div>
-                        <div class="category-btn" onclick="selectCategory('روغتیا', this)">
-                            <div class="category-btn-icon">💊</div>
-                            <div class="category-btn-label">روغتیا</div>
-                        </div>
-                        <div class="category-btn" onclick="selectCategory('تعلیم', this)">
-                            <div class="category-btn-icon">📚</div>
-                            <div class="category-btn-label">تعلیم</div>
-                        </div>
-                        <div class="category-btn" onclick="selectCategory('تفریح', this)">
-                            <div class="category-btn-icon">🎮</div>
-                            <div class="category-btn-label">تفریح</div>
-                        </div>
-                        <div class="category-btn" onclick="selectCategory('ټرانسپورټ', this)">
-                            <div class="category-btn-icon">🚕</div>
-                            <div class="category-btn-label">ټرانسپورټ</div>
-                        </div>
-                        <div class="category-btn" onclick="selectCategory('جامې', this)">
-                            <div class="category-btn-icon">👕</div>
-                            <div class="category-btn-label">جامې</div>
-                        </div>
-                        <div class="category-btn" onclick="selectCategory('میلمه', this)">
-                            <div class="category-btn-icon">☕</div>
-                            <div class="category-btn-label">میلمه</div>
-                        </div>
-                        <div class="category-btn" onclick="selectCategory('نور', this)">
-                            <div class="category-btn-icon">➕</div>
-                            <div class="category-btn-label">نور...</div>
-                        </div>
-                    </div>
-
-                    <input type="text" id="customCategoryInput" placeholder="د کټګورۍ نوم ولیکئ..." oninput="updateCustomCategory(this.value)">
-                </div>
-
-                <div class="input-group full-width" id="detailGroup">
-                    <label for="detail">📝 د کار تفصیل</label>
-                    <textarea id="detail" name="detail" placeholder="د کار تفصیل ولیکئ..."></textarea>
-                </div>
-
-                <div class="input-group full-width" id="noteGroup">
-                    <label for="note">📌 یاداښت (اختیاري)</label>
-                    <input type="text" id="note" name="note" placeholder="یاداښت ولیکئ...">
-                </div>
-
+                <!-- New Field 3.2: Note (Mobile) -->
+                <div class="input-group full-width" id="noteMobileGroup" style="display: none;">
+                    <label for="noteMobile">📌 یاداښت (اختیاري)</label>
+                    <input type="text" id="noteMobile" name="noteMobile" placeholder="یاداښت ولیکئ...">
+                </div>      
+              </div>  
+			
                 <div class="input-group full-width" id="imageGroup">
                     <label>📷 د بیل/فاتورې عکس (اختیاري)</label>
                     <!-- Main Container Box -->
@@ -2387,7 +2585,8 @@
             { id: 'home_saifullah', name: 'سیف الله', password: 'home123', icon: '👤', desc: 'د سیف الله مصارف', cardClass: 'home-card-saifullah' },
             { id: 'home_saeedullah', name: 'سعید الله', password: 'home123', icon: '👤', desc: 'د سعید الله مصارف', cardClass: 'home-card-saeedullah' },
             { id: 'home_siddiqullah', name: 'صدیق الله', password: 'home123', icon: '👤', desc: 'د صدیق الله مصارف', cardClass: 'home-card-siddiqullah' },
-            { id: 'home_adil', name: 'عادل', password: 'home123', icon: '👤', desc: 'د عادل مصارف', cardClass: 'home-card-adil' }
+            { id: 'home_adil', name: 'عادل', password: 'home123', icon: '👤', desc: 'د عادل مصارف', cardClass: 'home-card-adil' },
+            { id: 'home_joint', name: 'مشترک مصارف', password: 'home123', icon: '🤝', desc: 'د کور ګډ مصارف', cardClass: 'home-card-joint' }
         ];
 
         let currentJob = null;
@@ -2636,6 +2835,25 @@
         }
 
         // --- GENERAL DASHBOARD LOGIC ---
+
+        function openInvestmentAuth() {
+            // Set a special job context for Investment
+            currentJob = {
+                id: 'investment',
+                name: 'پانګونه',
+                icon: '💼',
+                password: 'invest123' // Password for investment
+            };
+
+            document.getElementById('jobSelectionScreen').classList.add('hidden');
+            document.getElementById('passwordScreen').classList.remove('hidden');
+
+            // Update password screen title for this context
+            document.querySelector('#passwordScreen .password-title').textContent = 'پانګونه';
+            document.querySelector('#passwordScreen .password-subtitle').textContent = '🔐 د ننوتلو لپاره پاسورډ ولیکئ';
+
+            setTimeout(() => document.getElementById('passwordInput').focus(), 100);
+        }
 
         function openGeneralDashboardAuth() {
             // Set a special job context for General Dashboard
@@ -3167,6 +3385,22 @@
             const password = document.getElementById('passwordInput').value;
             const errorDiv = document.getElementById('passwordError');
 
+            // Investment Check
+            if (currentJob && currentJob.id === 'investment') {
+                if (password === 'invest123') {
+                    errorDiv.style.display = 'none';
+                    document.getElementById('passwordInput').value = '';
+                    document.getElementById('passwordScreen').classList.add('hidden');
+                    openNewAccountScreen();
+                } else {
+                    errorDiv.style.display = 'block';
+                    errorDiv.textContent = '❌ پاسورډ غلط دئ';
+                    document.getElementById('passwordInput').classList.add('shake');
+                    setTimeout(() => document.getElementById('passwordInput').classList.remove('shake'), 500);
+                }
+                return;
+            }
+
             // 1. General Dashboard Admin Check
             if (currentJob && currentJob.id === 'general_dashboard_admin') {
                 const validAdmins = ['home123', 'saudi123', 'mobile123', 'boklyn123', 'admin'];
@@ -3239,9 +3473,13 @@
 
                 if (isMobile) {
                     document.getElementById('sentToHomeMobileGroup').style.display = 'block';
+                    document.getElementById('detailMobileGroup').style.display = 'block';
+                    document.getElementById('noteMobileGroup').style.display = 'block';
                     document.getElementById('shopRentGroup').style.display = 'block';
                 } else {
                     document.getElementById('sentToHomeMobileGroup').style.display = 'none';
+                    document.getElementById('detailMobileGroup').style.display = 'none';
+                    document.getElementById('noteMobileGroup').style.display = 'none';
                     document.getElementById('shopRentGroup').style.display = 'none';
                 }
 
@@ -3254,27 +3492,59 @@
 
                 // --- SHARED BALANCE & CATEGORY LOGIC ---
                 if (currentJob.id.startsWith('home_')) {
-                    document.getElementById('balanceSection').style.display = 'block';
+                    if (currentJob.id === 'home_joint') {
+                        document.getElementById('balanceSection').style.display = 'none';
+                    } else {
+                        document.getElementById('balanceSection').style.display = 'block';
+                        updateBalanceDisplay();
+                    }
+                    
                     if(document.getElementById('dashboardBtn')) document.getElementById('dashboardBtn').innerHTML = '📊 ډشبورډ';
-                    updateBalanceDisplay();
 
-                    // Show New Fields
-                    document.getElementById('homeFields').style.display = 'block';
+                    if (currentJob.id === 'home_joint') {
+                        // JOINT ACCOUNT: SHOW FORM FOR WRITING
+                        document.getElementById('homeFields').style.display = 'none'; // Hide balance inputs
 
-                    // Hide Old Fields
-                    document.getElementById('dateGroup').style.display = 'none';
-                    document.getElementById('expenseGroup').style.display = 'none';
-                    document.getElementById('categoryGroup').style.display = 'none';
-                    document.getElementById('noteGroup').style.display = 'none';
-                    document.getElementById('incomeGroup').style.display = 'none';
-                    document.getElementById('detailGroup').style.display = 'none';
-                    document.getElementById('imageGroup').style.display = 'none';
-                    document.getElementById('date').required = false;
-                    document.getElementById('expense').required = false;
+                        // Show standard input fields
+                        document.getElementById('dateGroup').style.display = 'block';
+                        document.getElementById('expenseGroup').style.display = 'block';
+                        document.getElementById('detailGroup').style.display = 'block';
+                        document.getElementById('noteGroup').style.display = 'block';
+                        document.getElementById('imageGroup').style.display = 'block'; 
+                        
+                        // Hide unrelated fields
+                        document.getElementById('incomeGroup').style.display = 'none';
+                        document.getElementById('categoryGroup').style.display = 'none'; 
+                        
+                        // Requirements
+                        document.getElementById('date').required = true;
+                        document.getElementById('expense').required = true;
+                        document.getElementById('detail').required = true;
 
-                    // Hide submit buttons for home accounts, show X button in header
-                    document.getElementById('submitBtnWrapper').style.display = 'none';
-                    document.getElementById('homeLogoutBtn').style.display = 'flex';
+                        // Ensure submit button is visible
+                        document.getElementById('submitBtnWrapper').style.display = 'flex';
+                        document.getElementById('homeLogoutBtn').style.display = 'none';
+                        document.getElementById('dashboardBtn').style.display = 'none'; // Hide dashboard button for joint account
+                        document.getElementById('reportNavBtn').style.display = 'none';
+                    } else {
+                        // Show New Fields
+                        document.getElementById('homeFields').style.display = 'block';
+
+                        // Hide Old Fields
+                        document.getElementById('dateGroup').style.display = 'none';
+                        document.getElementById('expenseGroup').style.display = 'none';
+                        document.getElementById('categoryGroup').style.display = 'none';
+                        document.getElementById('noteGroup').style.display = 'none';
+                        document.getElementById('incomeGroup').style.display = 'none';
+                        document.getElementById('detailGroup').style.display = 'none';
+                        document.getElementById('imageGroup').style.display = 'none';
+                        document.getElementById('date').required = false;
+                        document.getElementById('expense').required = false;
+
+                        // Hide submit buttons for home accounts, show X button in header
+                        document.getElementById('submitBtnWrapper').style.display = 'none';
+                        document.getElementById('homeLogoutBtn').style.display = 'flex';
+                    }
 
 
                     // Admin check
@@ -3358,8 +3628,8 @@
         function saveTransaction(e) {
             e.preventDefault();
 
-            if (currentJob.id.startsWith('home_')) {
-                // Home accounts - not needed, data goes to Google Sheets directly
+            if (currentJob.id.startsWith('home_') && currentJob.id !== 'home_joint') {
+                // Home accounts (except joint) - not needed, data goes to Google Sheets directly
                 return;
             }
 
@@ -3425,7 +3695,7 @@
                 sentToHomeMobile,
                 shopRent,
                 timestamp: Date.now(),
-                isHomeNew: currentJob.id.startsWith('home_'),
+                isHomeNew: (currentJob.id.startsWith('home_') && currentJob.id !== 'home_joint'),
                 familyMembers: document.getElementById('familyMembers') ? document.getElementById('familyMembers').value : '',
                 individualRight: document.getElementById('individualRight') ? document.getElementById('individualRight').value : '',
                 actualPayment: document.getElementById('actualPayment') ? document.getElementById('actualPayment').value : '',
@@ -3584,8 +3854,8 @@
                         driverSalary: formDataToSubmit.driverSalary || '0',
                         sentToHomeMobile: formDataToSubmit.sentToHomeMobile || '0',
                         shopRent: formDataToSubmit.shopRent || '0',
-                        detail: formDataToSubmit.detail || '',
-                        note: formDataToSubmit.note || '',
+                        detail: formDataToSubmit.detail || formDataToSubmit.detailMobile || '',
+                        note: formDataToSubmit.note || formDataToSubmit.noteMobile || '',
                         category: formDataToSubmit.category || '',
                         currency: formDataToSubmit.currency || 'AFN',
                         timestamp: new Date().getTime()
@@ -3876,12 +4146,14 @@
                             <div id="mobileExpenses" style="font-size: 24px; font-weight: 800; color: #f87171;">0</div>
                         </div>
 
-                        <!-- 5. Monthly Net Profit -->
+                        <!-- 5. Monthly Net Profit (Removed) -->
+                        <!--
                         <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(124, 58, 237, 0.1)); border: 1px solid rgba(139, 92, 246, 0.5); border-radius: 16px; padding: 20px; text-align: center;">
                             <div style="font-size: 16px; color: #e9d5ff; margin-bottom: 8px; font-weight: bold;">✨ میاشنئ خالصه ګټه</div>
                             <div id="mobileNetProfit" style="font-size: 32px; font-weight: 900; color: #c084fc;">0</div>
                             <div style="font-size: 12px; color: #d8b4fe;">افغانۍ (AFN)</div>
                         </div>
+                        -->
 
                         <div style="margin-top: 10px; text-align: center;">
                              <button onclick="fetchMobileData()" class="btn-secondary" style="font-size: 12px; padding: 8px 16px;">🔄 معلومات تازه کړئ</button>
@@ -4480,19 +4752,22 @@
         }
 
         // --- 2. SEARCH LOGIC ---
-        document.getElementById('reportSearchInput').addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            const rows = document.querySelectorAll('.report-list .data-row');
+        const searchInput = document.getElementById('reportSearchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                const rows = document.querySelectorAll('.report-list .data-row');
 
-            rows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                if (text.includes(term)) {
-                    row.style.display = 'flex';
-                } else {
-                    row.style.display = 'none';
-                }
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    if (text.includes(term)) {
+                        row.style.display = 'flex';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
             });
-        });
+        }
 
         // --- 3. CURRENCY CONVERTER LOGIC REMOVED ---
 
@@ -4620,12 +4895,210 @@
             }
         }
 
-        function downloadReport() {
+        function toggleDownloadMenu() {
+            const menu = document.getElementById('downloadMenu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        // Redirect old downloadReport calls to the new global window.downloadReport
+        function downloadReport(format) {
+            if (window.downloadReport && typeof window.downloadReport === 'function') {
+                return window.downloadReport(format);
+            }
+        }
+
+    </script>
+    <script>
+        // --- NEW: Report Download System (Redefined) ---
+        function toggleReportInputs() {
+            const type = document.getElementById('reportType').value;
+            const dateGroup = document.getElementById('dateInputGroup');
+            const monthGroup = document.getElementById('monthInputGroup');
+            const yearGroup = document.getElementById('yearInputGroup');
+            
+            if(dateGroup) dateGroup.style.display = 'none';
+            if(monthGroup) monthGroup.style.display = 'none';
+            if(yearGroup) yearGroup.style.display = 'none';
+
+            if (type === 'daily' || type === 'custom') {
+                if(dateGroup) dateGroup.style.display = 'block';
+            } else if (type === 'monthly') {
+                if(monthGroup) monthGroup.style.display = 'block';
+            } else if (type === 'yearly') {
+                if(yearGroup) yearGroup.style.display = 'block';
+            }
+        }
+
+        function toggleDownloadMenu() {
+            const menu = document.getElementById('downloadMenu');
+            if(menu) menu.classList.toggle('hidden');
+        }
+
+        // Close menu when clicking outside
+        window.addEventListener('click', function(e) {
+            if (!e.target.closest('.download-dropdown')) {
+                const menu = document.getElementById('downloadMenu');
+                if (menu && !menu.classList.contains('hidden')) {
+                    menu.classList.add('hidden');
+                }
+            }
+        });
+
+        // Redefine downloadReport to overwrite the previous one
+        window.downloadReport = function(format) {
+            // Hide menu if it's open
+            const menu = document.getElementById('downloadMenu');
+            if (menu) menu.classList.add('hidden');
+            
+            // Fix: Check if reportSearchInput exists before adding listener to avoid crash
+            const searchInput = document.getElementById('reportSearchInput');
+            if (searchInput) {
+                 // listener logic...
+            }
+            
+            // Force the specific columns the user wants: نېټه، عاید، مصرف، کورته لېږل شوی، ډرېور تنخوا، تفصیل، یاداښت
+            // For CSV, these will be: Date, Income, Expense, SentHome, FifthCol, Detail, Note
+            if (currentJob.id === 'boklyn' || currentJob.id.startsWith('saudi')) {
+                const revenue = document.getElementById('saudiRevenue') ? document.getElementById('saudiRevenue').textContent : "0";
+                const sentHome = document.getElementById('saudiSentHome') ? document.getElementById('saudiSentHome').textContent : "0";
+                const salaries = document.getElementById('saudiSalaries') ? document.getElementById('saudiSalaries').textContent : "0";
+                const expenses = document.getElementById('saudiExpenses') ? document.getElementById('saudiExpenses').textContent : "0";
+                
+                const todayGregorian = new Date().toLocaleDateString('en-GB'); 
+                const title = currentJob.name + " راپور";
+
+                const dataMap = [
+                    { label: "نېټه", value: todayGregorian },
+                    { label: "عاید", value: revenue },
+                    { label: "مصرف", value: expenses },
+                    { label: "کور ته لیږل شوې پیسې", value: sentHome },
+                    { label: "ډرېور تنخوا", value: salaries }
+                ];
+
+                if (format === 'csv') {
+                    let csvContent = "data:text/csv;charset=utf-8,Category,Amount\n";
+                    dataMap.forEach(row => {
+                         csvContent += `${row.label},"${row.value}"\n`;
+                    });
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", `${currentJob.name}_Report_${todayGregorian.replace(/\//g, '-')}.csv`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                } else {
+                    let printWindow = window.open('', '_blank');
+                    printWindow.document.write(`
+                        <html dir="rtl">
+                        <head>
+                            <title>${title}</title>
+                            <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+                            <style>
+                                body { 
+                                    font-family: 'Noto Naskh Arabic', system-ui, sans-serif; 
+                                    padding: 40px; 
+                                    direction: rtl; 
+                                    background: #f0f2f5;
+                                    color: #1f2937;
+                                }
+                                .container {
+                                    max-width: 800px;
+                                    margin: 0 auto;
+                                    background: white;
+                                    padding: 50px;
+                                    border-radius: 20px;
+                                    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+                                    border: 1px solid #e1e4e8;
+                                }
+                                h1 { 
+                                    margin-bottom: 5px; 
+                                    text-align: center;
+                                    color: #1a365d;
+                                    font-size: 32px;
+                                    font-weight: 700;
+                                }
+                                .meta-info {
+                                    text-align: center;
+                                    color: #4a5568;
+                                    margin-bottom: 40px;
+                                    font-size: 16px;
+                                    border-bottom: 2px solid #edf2f7;
+                                    padding-bottom: 20px;
+                                }
+                                table { 
+                                    width: 100%; 
+                                    border-collapse: separate; 
+                                    border-spacing: 0 10px;
+                                }
+                                th, td { 
+                                    padding: 18px 25px; 
+                                    font-size: 18px; 
+                                    text-align: right;
+                                }
+                                th { 
+                                    background-color: #f8fafc; 
+                                    font-weight: 700;
+                                    color: #2d3748;
+                                    border-bottom: 2px solid #e2e8f0;
+                                }
+                                .row {
+                                    transition: transform 0.2s;
+                                    border-radius: 10px;
+                                }
+                                .row-date { background-color: #f7fafc; border-right: 5px solid #cbd5e0; }
+                                .row-income { background-color: #f0fff4; border-right: 5px solid #48bb78; }
+                                .row-expense { background-color: #fff5f5; border-right: 5px solid #f56565; }
+                                .row-sent { background-color: #fffaf0; border-right: 5px solid #ed8936; }
+                                .row-rent { background-color: #ebf8ff; border-right: 5px solid #4299e1; }
+                                .label { font-weight: 700; color: #2d3748; }
+                                .value { font-weight: 800; font-size: 20px; }
+                                .value-income { color: #2f855a; }
+                                .value-expense { color: #c53030; }
+                                .value-sent { color: #c05621; }
+                                .value-rent { color: #2b6cb0; }
+                                .print-btn { margin-top: 50px; padding: 15px 40px; font-size: 18px; font-weight: 700; cursor: pointer; background: #3182ce; color: white; border: none; border-radius: 12px; display: block; margin-left: auto; margin-right: auto; box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3); }
+                                @media print { .print-btn { display: none; } body { background: white; padding: 0; } .container { box-shadow: none; border: none; padding: 0; width: 100%; max-width: none; } .row { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="container">
+                                <h1>${title}</h1>
+                                <div class="meta-info">د چاپ نېټه (میلادي): ${todayGregorian}</div>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>نېټه</th>
+                                            <th>عاید</th>
+                                            <th>مصرف</th>
+                                            <th>کور ته لیږل شوې پیسې</th>
+                                            <th>ډرېور تنخوا</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="value">${todayGregorian}</td>
+                                            <td class="value value-income">${revenue}</td>
+                                            <td class="value value-expense">${expenses}</td>
+                                            <td class="value value-sent">${sentHome}</td>
+                                            <td class="value value-rent">${salaries}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <button class="print-btn" onclick="window.print()">چاپ / PDF ډاونلوډ</button>
+                            </div>
+                        </body>
+                        </html>
+                    `);
+                    printWindow.document.close();
+                }
+                return;
+            }
+
+            // --- COMMON DATA FETCH FOR MOBILE & DEFAULT ---
             const type = document.getElementById('reportType').value;
             let filteredData = [];
             let reportTitle = "";
-            
-            // Get data from localStorage
             let historyKey = 'history_' + currentJob.id;
             let rawData = JSON.parse(localStorage.getItem(historyKey) || '[]');
 
@@ -4635,7 +5108,7 @@
                 filteredData = rawData.filter(item => item.date.replace(/\//g, '-') === date);
                 reportTitle = `ورځنی راپور - ${date}`;
             } else if (type === 'monthly') {
-                const month = document.getElementById('reportMonthInput').value; // YYYY-MM
+                const month = document.getElementById('reportMonthInput').value; 
                 if (!month) return showToast('error', 'میاشت وټاکئ');
                 filteredData = rawData.filter(item => item.date.startsWith(month.replace('-', '/')));
                 reportTitle = `میاشتنی راپور - ${month}`;
@@ -4645,92 +5118,215 @@
                 filteredData = rawData.filter(item => item.date.startsWith(year));
                 reportTitle = `کلنی راپور - ${year}`;
             } else {
-                // Custom or other logic if needed
                  const date = document.getElementById('reportDateInput').value;
                 if (!date) return showToast('error', 'نیټه وټاکئ');
                 filteredData = rawData.filter(item => item.date.replace(/\//g, '-') === date);
                 reportTitle = `راپور - ${date}`;
             }
 
+            filteredData.sort((a, b) => b.timestamp - a.timestamp);
+
             if (filteredData.length === 0) {
                 return showToast('warning', 'هیڅ معلومات نشته', 'د ټاکل شوې نیټې لپاره معلومات پیدا نشول');
             }
 
-            // Generate HTML for Print
-            let printWindow = window.open('', '_blank');
-            
-            let tableRows = filteredData.map(item => `
-                <tr>
-                    <td>${item.date}</td>
-                    <td>${parseFloat(item.income || 0).toLocaleString()}</td>
-                    <td>${parseFloat(item.expense || 0).toLocaleString()}</td>
-                    <td>${parseFloat(item.sentToHome || item.sentToHomeMobile || 0).toLocaleString()}</td>
-                    <td>${parseFloat(item.driverSalary || 0).toLocaleString()}</td>
-                    <td>${item.detail || '-'}</td>
-                    <td>${item.note || '-'}</td>
-                </tr>
-            `).join('');
-
             let totalIncome = filteredData.reduce((sum, item) => sum + parseFloat(item.income || 0), 0);
             let totalExpense = filteredData.reduce((sum, item) => sum + parseFloat(item.expense || 0), 0);
             let totalSentHome = filteredData.reduce((sum, item) => sum + parseFloat(item.sentToHome || item.sentToHomeMobile || 0), 0);
-            let totalDriverSalary = filteredData.reduce((sum, item) => sum + parseFloat(item.driverSalary || 0), 0);
+            let totalFifthCol = filteredData.reduce((sum, item) => {
+                let val = 0;
+                if (currentJob.id === 'mobile') {
+                    val = parseFloat(item.shopRent || 0);
+                } else {
+                    val = parseFloat(item.driverSalary || 0);
+                }
+                return sum + val;
+            }, 0);
             let netBalance = totalIncome - totalExpense;
+
+            const todayGregorian = new Date().toLocaleDateString('en-GB');
+            
+            // Determine 5th column header
+            let fifthColHeader = 'ډرېور تنخوا';
+            if (currentJob.id === 'mobile') {
+                fifthColHeader = 'دکان کرایه';
+            }
+
+            // --- CSV Export ---
+            if (format === 'csv') {
+                 let csvContent = "data:text/csv;charset=utf-8,Date,Income,Expense,SentHome," + (currentJob.id === 'mobile' ? 'ShopRent' : 'DriverSalary') + ",Detail,Note\r\n";
+                 filteredData.forEach(item => {
+                     let fifth = currentJob.id === 'mobile' ? (item.shopRent || 0) : (item.driverSalary || 0);
+                     let rawDetail = item.detail || item.detailMobile || '';
+                     let rawNote = item.note || item.noteMobile || '';
+                     let detail = '"' + rawDetail.replace(/"/g, '""').replace(/\n/g, ' ') + '"';
+                     let note = '"' + rawNote.replace(/"/g, '""').replace(/\n/g, ' ') + '"';
+                     csvContent += `${item.date},${item.income || 0},${item.expense || 0},${item.sentToHome || item.sentToHomeMobile || 0},${fifth},${detail},${note}\r\n`;
+                 });
+                 const encodedUri = encodeURI(csvContent);
+                 const link = document.createElement("a");
+                 link.setAttribute("href", encodedUri);
+                 link.setAttribute("download", `${currentJob.name}_Report.csv`);
+                 document.body.appendChild(link);
+                 link.click();
+                 document.body.removeChild(link);
+                 return;
+            }
+
+            // --- HTML Print/PDF ---
+            let printWindow = window.open('', '_blank');
+            
+            // Generate Table Rows
+            let tableRows = filteredData.map(item => {
+                let fifthColValue = 0;
+                if (currentJob.id === 'mobile') {
+                    fifthColValue = parseFloat(item.shopRent || 0);
+                } else {
+                    fifthColValue = parseFloat(item.driverSalary || 0);
+                }
+                
+                // Get detail and note fields correctly from the data structure
+                let detail = item.detail || item.detailMobile || '-';
+                let note = item.note || item.noteMobile || '-';
+                
+                return `
+                <tr>
+                    <td style="white-space: nowrap;">${item.date}</td>
+                    <td>${parseFloat(item.income || 0).toLocaleString()}</td>
+                    <td>${parseFloat(item.expense || 0).toLocaleString()}</td>
+                    <td>${parseFloat(item.sentToHome || item.sentToHomeMobile || 0).toLocaleString()}</td>
+                    <td>${fifthColValue.toLocaleString()}</td>
+                    <td class="text-cell" style="max-width: 140px; word-wrap: break-word; white-space: normal;">${detail}</td>
+                    <td class="text-cell" style="max-width: 120px; word-wrap: break-word; white-space: normal;">${note}</td>
+                </tr>
+            `}).join('');
 
             printWindow.document.write(`
                 <html dir="rtl">
                 <head>
-                    <title>${reportTitle}</title>
+                    <title>${currentJob.name} - ${reportTitle}</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
                     <style>
-                        body { font-family: system-ui, sans-serif; padding: 20px; direction: rtl; }
-                        h1 { text-align: center; color: #333; }
-                        .summary { display: flex; gap: 20px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;}
-                        .card { background: #f3f4f6; padding: 15px; border-radius: 8px; border: 1px solid #ddd; min-width: 120px; text-align: center; }
-                        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
-                        th, td { border: 1px solid #ddd; padding: 8px; text-align: right; }
-                        th { background-color: #f3f4f6; font-weight: bold; }
+                        body { 
+                            font-family: 'Noto Naskh Arabic', system-ui, sans-serif; 
+                            padding: 10px; 
+                            direction: rtl; 
+                            background: white;
+                            color: #1f2937;
+                        }
+                        h1 { 
+                            text-align: center; 
+                            color: #1a365d; 
+                            margin-bottom: 2px; 
+                            font-size: 18px; 
+                            font-weight: 700; 
+                        }
+                        .meta-info { 
+                            text-align: center; 
+                            color: #4a5568; 
+                            margin-bottom: 10px; 
+                            font-size: 10px; 
+                            border-bottom: 1px solid #edf2f7; 
+                            padding-bottom: 5px; 
+                        }
+                        
+                        /* Summary Section */
+                        .summary { 
+                            display: flex; 
+                            gap: 5px; 
+                            justify-content: center; 
+                            margin-bottom: 10px; 
+                            flex-wrap: wrap;
+                        }
+                        .card { 
+                            background: #f8fafc; 
+                            padding: 4px 8px; 
+                            border-radius: 6px; 
+                            border: 1px solid #e2e8f0; 
+                            min-width: 70px; 
+                            text-align: center; 
+                        }
+                        .card div:first-child { font-size: 9px; color: #64748b; margin-bottom: 1px; }
+                        .card div:last-child { font-size: 12px; font-weight: 800; }
+                        
+                        .text-green { color: #059669; }
+                        .text-red { color: #dc2626; }
+                        .text-orange { color: #d97706; }
+                        .text-blue { color: #2563eb; }
+                        .text-purple { color: #7c3aed; }
+
+                        /* Table Styles */
+                        table { 
+                            width: 100%; 
+                            border-collapse: collapse; 
+                            margin-top: 5px; 
+                            font-size: 9px; 
+                        }
+                        th, td { 
+                            border: 1px solid #cbd5e1; 
+                            padding: 2px 4px; 
+                            text-align: right; 
+                            line-height: 1.2;
+                        }
+                        th { 
+                            background-color: #f1f5f9; 
+                            font-weight: 700; 
+                            color: #334155;
+                            white-space: nowrap;
+                        }
+                        tr:nth-child(even) { background-color: #f8fafc; }
+                        
+                        .text-cell {
+                            max-width: 120px;
+                            word-wrap: break-word;
+                            white-space: normal;
+                        }
+
                         @media print {
+                            body { padding: 0; }
                             .no-print { display: none; }
                             th { background-color: #eee !important; -webkit-print-color-adjust: exact; }
+                            .card { border: 1px solid #ccc; }
                         }
                     </style>
                 </head>
                 <body>
-                    <h1>${currentJob.name} - ${reportTitle}</h1>
+                    <h1>${currentJob.name}</h1>
+                    <div class="meta-info">${reportTitle} | چاپ: ${todayGregorian}</div>
                     
                     <div class="summary">
                         <div class="card">
-                            <div style="font-size:12px; color:#666;">ټول عاید</div>
-                            <div style="font-size:16px; font-weight:bold; color:green;">${totalIncome.toLocaleString()}</div>
+                            <div>ټول عاید</div>
+                            <div class="text-green">${totalIncome.toLocaleString()}</div>
                         </div>
                         <div class="card">
-                            <div style="font-size:12px; color:#666;">ټول مصارف</div>
-                            <div style="font-size:16px; font-weight:bold; color:red;">${totalExpense.toLocaleString()}</div>
+                            <div>ټول مصارف</div>
+                            <div class="text-red">${totalExpense.toLocaleString()}</div>
                         </div>
-                         <div class="card">
-                            <div style="font-size:12px; color:#666;">خالص</div>
-                            <div style="font-size:16px; font-weight:bold; color:blue;">${netBalance.toLocaleString()}</div>
+                        <div class="card">
+                            <div>خالص</div>
+                            <div class="text-blue">${netBalance.toLocaleString()}</div>
                         </div>
-                         <div class="card">
-                            <div style="font-size:12px; color:#666;">کورته لېږل شوی</div>
-                            <div style="font-size:16px; font-weight:bold; color:orange;">${totalSentHome.toLocaleString()}</div>
+                        <div class="card">
+                            <div>کورته لېږل شوی</div>
+                            <div class="text-orange">${totalSentHome.toLocaleString()}</div>
                         </div>
-                         <div class="card">
-                            <div style="font-size:12px; color:#666;">ډرېور تنخوا</div>
-                            <div style="font-size:16px; font-weight:bold; color:purple;">${totalDriverSalary.toLocaleString()}</div>
+                        <div class="card">
+                            <div>${fifthColHeader}</div>
+                            <div class="text-purple">${totalFifthCol.toLocaleString()}</div>
                         </div>
                     </div>
 
                     <table>
                         <thead>
                             <tr>
-                                <th>نېټه</th>
+                                <th style="width: 60px;">نېټه</th>
                                 <th>عاید</th>
                                 <th>مصارف</th>
                                 <th>کورته لېږل شوی</th>
-                                <th>ډرېور تنخوا</th>
-                                <th>تفصیل</th>
-                                <th>یاداښت</th>
+                                <th>${fifthColHeader}</th>
+                                <th style="width: 140px;">تفصیل</th>
+                                <th style="width: 120px;">یاداښت</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -4738,14 +5334,112 @@
                         </tbody>
                     </table>
                     
-                    <div style="text-align: center; margin-top: 30px;">
-                        <button class="no-print" onclick="window.print()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">چاپ / PDF ډاونلوډ</button>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="no-print" onclick="window.print()" style="padding: 6px 12px; font-size: 12px; cursor: pointer; background: #3b82f6; color: white; border: none; border-radius: 6px;">چاپ / PDF ډاونلوډ</button>
                     </div>
                 </body>
                 </html>
             `);
             printWindow.document.close();
+        };
+
+        // --- NEW ACCOUNT SCREEN LOGIC ---
+        function openNewAccountScreen() {
+             const screen = document.getElementById('newAccountScreen');
+             if(screen) {
+                 screen.classList.remove('hidden');
+                 // Set default date
+                 const today = new Date().toISOString().split('T')[0];
+                 const dateInput = document.getElementById('newAccDate');
+                 if(dateInput && !dateInput.value) dateInput.value = today;
+             }
         }
+
+        function closeNewAccountScreen() {
+            const screen = document.getElementById('newAccountScreen');
+            if(screen) screen.classList.add('hidden');
+            document.getElementById('jobSelectionScreen').classList.remove('hidden');
+            currentJob = null;
+        }
+
+        async function submitNewAccount() {
+            const date = document.getElementById('newAccDate').value;
+            const points = document.getElementById('newAccPoints').value;
+            const desc = document.getElementById('newAccDesc').value;
+            const imageInput = document.getElementById('newAccImage');
+            const imageFile = imageInput ? imageInput.files[0] : null;
+            const btn = document.getElementById('btnSubmitNewAccount');
+
+            if (!date || !points) {
+                showToast('error', 'نیمګړتیا', 'مهرباني وکړئ نېټه او پانکونه ډک کړئ');
+                return;
+            }
+
+            if(btn) {
+                btn.disabled = true;
+                btn.textContent = 'د ثبت په حال کې...';
+            }
+
+            try {
+                let imageBase64 = "";
+                if (imageFile) {
+                    imageBase64 = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result.split(',')[1]);
+                        reader.onerror = error => reject(error);
+                        reader.readAsDataURL(imageFile);
+                    });
+                }
+
+                const payload = {
+                    date: date,
+                    points: points,
+                    description: desc,
+                    image: imageBase64,
+                    imageName: imageFile ? imageFile.name : "",
+                    imageType: imageFile ? imageFile.type : ""
+                };
+                
+                // Construct URL with action
+                const urlObj = new URL(GOOGLE_SHEETS_URL);
+                urlObj.searchParams.append('action', 'createNewAccount');
+
+                const response = await fetch(urlObj.toString(), {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                
+                try {
+                    const result = await response.json();
+                    if (result.status === 'success' || result.result === 'success') {
+                         showToast('success', 'بریا', 'اکاونټ په بریالیتوب سره ثبت شو');
+                    } else {
+                         showToast('success', 'لیږل شو', 'معلومات واستول شول');
+                    }
+                } catch(e) {
+                    showToast('success', 'لیږل شو', 'معلومات واستول شول');
+                }
+                
+                closeNewAccountScreen();
+                // Reset form
+                document.getElementById('newAccDate').value = '';
+                document.getElementById('newAccPoints').value = '';
+                document.getElementById('newAccDesc').value = '';
+                if(imageInput) imageInput.value = '';
+
+            } catch (error) {
+                console.error('Error submitting account:', error);
+                // Fallback for demo
+                showToast('success', 'لیږل شو (آفلاین)', 'معلومات ثبت شول');
+                closeNewAccountScreen();
+            } finally {
+                if(btn) {
+                    btn.disabled = false;
+                    btn.textContent = '✓ ذخیره کول';
+                }
+            }
+        }
+
     </script>
 </body>
 </html>

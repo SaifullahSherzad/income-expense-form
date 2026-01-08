@@ -23,6 +23,7 @@
 
     <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- QR Library -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -2125,69 +2126,92 @@
             <!-- Search & Stats Container -->
             <div style="flex-shrink: 0;">
                 <!-- Download Section -->
-                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 10px; margin-bottom: 20px;">
-                    <h3 style="color: #94a3b8; font-size: 14px; margin-bottom: 15px; font-weight: 600;">📥 د راپور ډاونلوډ</h3>
-                    <div class="report-inputs">
-                        <div class="input-wrapper">
-                            <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #94a3b8;">د راپور ډول</label>
-                            <select id="reportType" onchange="toggleReportInputs()" style="width: 100%; padding: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; outline: none;">
-                                <option value="daily">ورځنی (Daily)</option>    
-                                <option value="monthly" selected>میاشتنی (Monthly)</option>                   
-                                <option value="yearly">کلنی (Yearly)</option>
-                                <option value="custom">نېټه وټاکئ</option>
-                            </select>
-                        </div>
-                        
-                        <div id="dateInputGroup" class="input-wrapper" style="display: none;">
-                            <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #94a3b8;">نیټه وټاکئ</label>
-                            <input type="date" id="reportDateInput" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; outline: none;">
-                        </div>
-
-                        <div id="monthInputGroup" class="input-wrapper">
-                            <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #94a3b8;">میاشت وټاکئ</label>
-                            <input type="month" id="reportMonthInput" style="width: 100%; padding: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; outline: none;">
-                        </div>
-
-                        <div id="yearInputGroup" class="input-wrapper" style="display: none;">
-                            <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #94a3b8;">کال وټاکئ</label>
-                            <select id="reportYearInput" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; outline: none;">
-                                <option value="2026">2026</option>
-                            </select>
-                        </div>
-
-                        <div class="download-dropdown" style="position: relative;">
-                            <button onclick="toggleDownloadMenu()" class="btn-download">
-                                ښکته کول 📥
-                            </button>
-                            <div id="downloadMenu" class="download-menu hidden" style="position: absolute; top: 100%; left: 0; right: 0; background: #1e1b2e; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 5px; margin-top: 5px; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-                                <button onclick="downloadReport('pdf')" style="width: 100%; padding: 10px; text-align: right; color: white; background: transparent; border: none; cursor: pointer; border-radius: 5px; transition: background 0.2s;">📄 PDF فایل</button>
-                                <button onclick="downloadReport('csv')" style="width: 100%; padding: 10px; text-align: right; color: white; background: transparent; border: none; cursor: pointer; border-radius: 5px; transition: background 0.2s;">📊 CSV (اکسل)</button>
-                            </div>
-                        </div>
+            <!-- Compact Combined Report Toolbar -->
+            <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 15px; margin-bottom: 20px; backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+                
+                <!-- Top Row: Tabs & Main Controls -->
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;">
+                    <!-- Report Type Tabs -->
+                    <div style="display: flex; gap: 5px; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 10px; flex: 1; min-width: 280px;">
+                        <button onclick="setReportType('daily')" class="report-tab active-tab" id="tab-daily" style="flex: 1; padding: 8px; border-radius: 8px; border: none; color: white; background: rgba(255,255,255,0.1); cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s;">ورځنی</button>
+                        <button onclick="setReportType('monthly')" class="report-tab" id="tab-monthly" style="flex: 1; padding: 8px; border-radius: 8px; border: none; color: #94a3b8; background: transparent; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s;">میاشتنی</button>
+                        <button onclick="setReportType('yearly')" class="report-tab" id="tab-yearly" style="flex: 1; padding: 8px; border-radius: 8px; border: none; color: #94a3b8; background: transparent; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s;">کلنی</button>
+                        <button onclick="setReportType('custom')" class="report-tab" id="tab-custom" style="flex: 1; padding: 8px; border-radius: 8px; border: none; color: #94a3b8; background: transparent; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s;">انتخابي</button>
                     </div>
-                </div>
 
-                <!-- Filter Section -->
-                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 10px; margin-bottom: 20px;">
-                    <h3 style="color: #94a3b8; font-size: 14px; margin-bottom: 15px; font-weight: 600;">🔍 لټون</h3>
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
-                        <div style="flex: 2; min-width: 250px;">
-                            <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #94a3b8;">لټون (تفصیل، یاداښت...)</label>
-                            <input type="text" id="tableFilterSearch" oninput="applyTableFilter()" placeholder="څه شی لټوئ؟" style="width: 90%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; outline: none;">
-                        </div>
-                        <div style="flex: 1; min-width: 150px;">
-                            <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #94a3b8;">له نیټې</label>
-                            <input type="date" id="tableFilterStart" onchange="applyTableFilter()" style="width: 90%; padding: 5px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; outline: none;">
-                        </div>
-                        <div style="flex: 1; min-width: 150px;">
-                            <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #94a3b8;">تر نیټې</label>
-                            <input type="date" id="tableFilterEnd" onchange="applyTableFilter()" style="width: 90%; padding: 5px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; outline: none;">
-                        </div>
-                        <button onclick="clearTableFilters()" style="padding: 12px 24px; background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 10px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
-                            پاکول ✕
+                    <!-- Hidden Select -->
+                    <select id="reportType" onchange="toggleReportInputs()" style="display: none;">
+                        <option value="daily">ورځنی (Daily)</option>    
+                        <option value="monthly">میاشتنی (Monthly)</option>                   
+                        <option value="yearly">کلنی (Yearly)</option>
+                        <option value="custom">نېټه وټاکئ</option>
+                    </select>
+
+                    <!-- Download Buttons (Compact) -->
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="downloadReport('pdf')" title="PDF ډاونلوډ" style="width: 40px; height: 40px; border: none; border-radius: 10px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); transition: transform 0.2s;">
+                            <span style="font-size: 20px;">📄</span>
+                        </button>
+                        <button onclick="downloadReport('csv')" title="Excel ډاونلوډ" style="width: 40px; height: 40px; border: none; border-radius: 10px; background: linear-gradient(135deg, #10b981, #059669); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); transition: transform 0.2s;">
+                            <span style="font-size: 20px;">📊</span>
                         </button>
                     </div>
                 </div>
+
+                <!-- Bottom Row: Filters & Inputs -->
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    
+                    <!-- Date Inputs (Dynamic) -->
+                    <div style="flex: 1; min-width: 150px;">
+                        <div id="dateInputGroup" style="display: block;">
+                            <input type="date" id="reportDateInput" class="compact-input" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 13px; outline: none;">
+                        </div>
+                        <div id="monthInputGroup" style="display: none;">
+                            <input type="month" id="reportMonthInput" class="compact-input" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 13px; outline: none;">
+                        </div>
+                        <div id="yearInputGroup" style="display: none;">
+                            <select id="reportYearInput" class="compact-input" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 13px; outline: none;">
+                                <option value="2026">2026</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Search Filter -->
+                    <div style="flex: 2; min-width: 200px; position: relative;">
+                        <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8;">🔍</span>
+                        <input type="text" id="tableFilterSearch" oninput="applyTableFilter()" placeholder="په راپور کې لټون..." style="width: 100%; padding: 8px 35px 8px 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 13px; outline: none;">
+                    </div>
+
+                    <!-- Date Range Filter (Hidden by default, shown if needed or for custom) -->
+                    <div id="customDateRange" style="display: none; gap: 5px; flex: 2;">
+                        <input type="date" id="tableFilterStart" onchange="applyTableFilter()" style="flex: 1; padding: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 12px;">
+                        <input type="date" id="tableFilterEnd" onchange="applyTableFilter()" style="flex: 1; padding: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 12px;">
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                function setReportType(type) {
+                    const select = document.getElementById('reportType');
+                    if(select) {
+                        select.value = type;
+                        toggleReportInputs();
+                        
+                        // Tab Styling
+                        document.querySelectorAll('.report-tab').forEach(tab => {
+                            tab.style.background = 'transparent';
+                            tab.style.color = '#94a3b8';
+                            tab.classList.remove('active-tab');
+                        });
+                        const activeTab = document.getElementById('tab-' + type);
+                        if(activeTab) {
+                            activeTab.style.background = 'rgba(255,255,255,0.1)';
+                            activeTab.style.color = 'white';
+                            activeTab.classList.add('active-tab');
+                        }
+                    }
+                }
+            </script>
             </div> 
                         
             <!-- Table Container -->
@@ -2570,129 +2594,7 @@
 
                         <button type="submit" class="submit-btn" style="margin-top: 10px;">✓ ذخیره کول</button>
                     </form>
-
-                <!-- Original Dashboard Content -->
-                <div id="dashboardContent">
-                    <!-- Data Management & Features -->
-                    <div id="adminOnlyFeatures" style="display:none;">
-                <div style="margin-bottom: 15px;">
-                     <button class="btn-primary" onclick="downloadBackup()" style="width: 100%; background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);">💾 بیک اپ (Backup)</button>
-                </div>
-                <div style="margin-bottom: 15px; display: flex; gap: 10px;">
-                    <input type="file" id="restoreFile" style="display: none;" onchange="restoreBackup(this)">
-                    <button class="btn-secondary" onclick="document.getElementById('restoreFile').click()" style="width: 100%; border: 1px dashed #6366f1; color: #818cf8;">📂 ډیټا بیرته پورته کول (Restore)</button>
-                </div>
-
-                <!-- Budget Warning -->
-                <div id="budgetWarning" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; padding: 12px; border-radius: 12px; margin-bottom: 15px; display: none; align-items: center; gap: 8px; font-size: 13px;">
-                    ⚠️ خبرتیا: ستاسو مصارف ټاکل شوي حد ته نږدې دي!
-                </div>
-
-                                </div>
-                </div> <!-- End dashboardContent -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Report Screen - REMOVED -->
-
-
-    <div id="opExpScreen" class="modal-overlay">
-        <div class="glass-card modal" style="max-width: 600px; height: 90vh; display: flex; flex-direction: column; position: relative;">
-            <button type="button" onclick="closeOpExpScreen()" class="btn-close-fancy" style="top: 15px; left: 15px;">✕</button>
-            <div class="modal-header" style="padding-top: 10px;">
-                <div class="modal-icon" style="background: linear-gradient(135deg, #f43f5e, #fb7185); box-shadow: 0 12px 30px rgba(244, 63, 94, 0.4);">💸</div>
-                <div>
-                    <div class="modal-title">عملیاتي مصارف</div>
-                    <p class="modal-subtitle">د ورځني فعالیت مصارف</p>
-                </div>
-            </div>
-            <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 20px;">
-                <form onsubmit="handleOpExpSubmit(event)" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                        <input type="number" id="opExpAmount" required placeholder="مقدار (افغانۍ)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
-                        <input type="date" id="opExpDate" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
-                    </div>
-                    <input type="text" id="opExpDesc" required placeholder="تفصیل (مثلا: تېل، ترمیم...)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
-                    <button type="submit" class="btn-primary" style="background: #10b981;">ذخیره کول</button>
-                </form>
-                <div id="opExpList" style="display: flex; flex-direction: column; gap: 10px;"></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="capExpScreen" class="modal-overlay">
-        <div class="glass-card modal" style="max-width: 600px; height: 90vh; display: flex; flex-direction: column; position: relative;">
-            <button type="button" onclick="closeCapExpScreen()" class="btn-close-fancy" style="top: 15px; left: 15px;">✕</button>
-            <div class="modal-header" style="padding-top: 10px;">
-                <div class="modal-icon" style="background: linear-gradient(135deg, #fb923c, #f97316); box-shadow: 0 12px 30px rgba(251, 146, 60, 0.4);">🏗️</div>
-                <div>
-                    <div class="modal-title">پانګیز مصارف</div>
-                    <p class="modal-subtitle">د شتمنیو او دایمي وسایلو مصارف</p>
-                </div>
-            </div>
-            <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 20px;">
-                <form onsubmit="handleCapExpSubmit(event)" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                        <input type="number" id="capExpAmount" required placeholder="مقدار (افغانۍ)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
-                        <input type="date" id="capExpDate" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
-                    </div>
-                    <input type="text" id="capExpDesc" required placeholder="تفصیل (مثلا: موټر اخیستل، ودانۍ...)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
-                    <button type="submit" class="btn-primary" style="background: #fb923c;">ذخیره کول</button>
-                </form>
-                <div id="capExpList" style="display: flex; flex-direction: column; gap: 10px;"></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="opExpScreen" class="modal-overlay">
-        <div class="glass-card modal" style="max-width: 600px; height: 90vh; display: flex; flex-direction: column; position: relative;">
-            <button type="button" onclick="closeOpExpScreen()" class="btn-close-fancy" style="top: 15px; left: 15px;">✕</button>
-            <div class="modal-header" style="padding-top: 10px;">
-                <div class="modal-icon" style="background: linear-gradient(135deg, #f43f5e, #fb7185); box-shadow: 0 12px 30px rgba(244, 63, 94, 0.4);">💸</div>
-                <div>
-                    <div class="modal-title">عملیاتي مصارف</div>
-                    <p class="modal-subtitle">د ورځني فعالیت مصارف</p>
-                </div>
-            </div>
-            <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 20px;">
-                <form onsubmit="handleOpExpSubmit(event)" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                        <input type="number" id="opExpAmount" required placeholder="مقدار (افغانۍ)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
-                        <input type="date" id="opExpDate" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
-                    </div>
-                    <input type="text" id="opExpDesc" required placeholder="تفصیل (مثلا: تېل، ترمیم...)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
-                    <button type="submit" class="submit-btn" style="background: #10b981;">ذخیره کول</button>
-                </form>
-                <div id="opExpList" style="display: flex; flex-direction: column; gap: 10px;"></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="capExpScreen" class="modal-overlay">
-        <div class="glass-card modal" style="max-width: 600px; height: 90vh; display: flex; flex-direction: column; position: relative;">
-            <button type="button" onclick="closeCapExpScreen()" class="btn-close-fancy" style="top: 15px; left: 15px;">✕</button>
-            <div class="modal-header" style="padding-top: 10px;">
-                <div class="modal-icon" style="background: linear-gradient(135deg, #fb923c, #f97316); box-shadow: 0 12px 30px rgba(251, 146, 60, 0.4);">🏗️</div>
-                <div>
-                    <div class="modal-title">پانګیز مصارف</div>
-                    <p class="modal-subtitle">د شتمنیو او دایمي وسایلو مصارف</p>
-                </div>
-            </div>
-            <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 20px;">
-                <form onsubmit="handleCapExpSubmit(event)" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                        <input type="number" id="capExpAmount" required placeholder="مقدار (افغانۍ)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
-                        <input type="date" id="capExpDate" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
-                    </div>
-                    <input type="text" id="capExpDesc" required placeholder="تفصیل (مثلا: موټر اخیستل، ودانۍ...)" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
-                    <button type="submit" class="submit-btn" style="background: #fb923c;">ذخیره کول</button>
-                </form>
-                <div id="capExpList" style="display: flex; flex-direction: column; gap: 10px;"></div>
-            </div>
-        </div>
-    </div>
-
+                                        
     <!-- Toast Notification -->
     <div id="toast" class="toast">
         <div class="toast-title" id="toastTitle"></div>
@@ -2980,17 +2882,19 @@
             currentJob = {
                 id: 'investment',
                 name: 'پانګونه',
-                icon: '💼',
-                password: 'invest123' // Password for investment
+                icon: '💼'
             };
+            currentPassword = 'invest123';
 
             document.getElementById('jobSelectionScreen').classList.add('hidden');
+            
+            // Show account name in password screen header
+            const titleEl = document.querySelector('#passwordScreen .password-title');
+            if (titleEl) titleEl.textContent = currentJob.name;
+            const subtitleEl = document.querySelector('#passwordScreen .password-subtitle');
+            if (subtitleEl) subtitleEl.textContent = '🔐 د ننوتلو لپاره پاسورډ ولیکئ';
+
             document.getElementById('passwordScreen').classList.remove('hidden');
-
-            // Update password screen title for this context
-            document.querySelector('#passwordScreen .password-title').textContent = 'پانګونه';
-            document.querySelector('#passwordScreen .password-subtitle').textContent = '🔐 د ننوتلو لپاره پاسورډ ولیکئ';
-
             setTimeout(() => document.getElementById('passwordInput').focus(), 100);
         }
 
@@ -2999,16 +2903,18 @@
             currentJob = {
                 id: 'loan_book',
                 name: 'د قرضونو کتابچه',
-                icon: '📔',
-                password: 'loan123' // You can change this
+                icon: '📔'
             };
+            currentPassword = 'loan123';
 
             document.getElementById('jobSelectionScreen').classList.add('hidden');
+            
+            const titleEl = document.querySelector('#passwordScreen .password-title');
+            if (titleEl) titleEl.textContent = currentJob.name;
+            const subtitleEl = document.querySelector('#passwordScreen .password-subtitle');
+            if (subtitleEl) subtitleEl.textContent = '🔐 د ننوتلو لپاره پاسورډ ولیکئ';
+
             document.getElementById('passwordScreen').classList.remove('hidden');
-
-            document.querySelector('#passwordScreen .password-title').textContent = 'د قرضونو کتابچه';
-            document.querySelector('#passwordScreen .password-subtitle').textContent = '🔐 د ننوتلو لپاره پاسورډ ولیکئ';
-
             setTimeout(() => document.getElementById('passwordInput').focus(), 100);
         }
 
@@ -3100,12 +3006,14 @@
             // The checkPassword function will handle this special ID.
 
             document.getElementById('jobSelectionScreen').classList.add('hidden');
-            document.getElementById('passwordScreen').classList.remove('hidden');
-
+            
             // Update password screen title for this context
-            document.querySelector('#passwordScreen .password-title').textContent = 'عمومي مالي ډشبورډ';
-            document.querySelector('#passwordScreen .password-subtitle').textContent = '🔐 د ننوتلو لپاره پاسورډ ولیکئ';
+            const titleEl = document.querySelector('#passwordScreen .password-title');
+            if (titleEl) titleEl.textContent = 'عمومي مالي ډشبورډ';
+            const subtitleEl = document.querySelector('#passwordScreen .password-subtitle');
+            if (subtitleEl) subtitleEl.textContent = '🔐 د ننوتلو لپاره پاسورډ ولیکئ';
 
+            document.getElementById('passwordScreen').classList.remove('hidden');
             setTimeout(() => document.getElementById('passwordInput').focus(), 100);
         }
 
@@ -3304,6 +3212,13 @@
                 currentJob = { id: jobId, name: jobName, icon: icon };
                 currentPassword = password;
                 document.getElementById('jobSelectionScreen').classList.add('hidden');
+                
+                // Set the correct name for the password screen header
+                const titleEl = document.querySelector('#passwordScreen .password-title');
+                if (titleEl) titleEl.textContent = jobName;
+                const subtitleEl = document.querySelector('#passwordScreen .password-subtitle');
+                if (subtitleEl) subtitleEl.textContent = '🔐 د ننوتلو لپاره پاسورډ ولیکئ';
+                
                 document.getElementById('passwordScreen').classList.remove('hidden');
                 setTimeout(() => document.getElementById('passwordInput').focus(), 100);
             }
@@ -3313,6 +3228,13 @@
             currentJob = { id: subId, name: subName, image: image, icon: '🚛' };
             currentPassword = password;
             document.getElementById('saudiSubAccountScreen').classList.add('hidden');
+            
+            // Show account name in password screen header
+            const titleEl = document.querySelector('#passwordScreen .password-title');
+            if (titleEl) titleEl.textContent = subName;
+            const subtitleEl = document.querySelector('#passwordScreen .password-subtitle');
+            if (subtitleEl) subtitleEl.textContent = '🔐 د ننوتلو لپاره پاسورډ ولیکئ';
+            
             document.getElementById('passwordScreen').classList.remove('hidden');
             setTimeout(() => document.getElementById('passwordInput').focus(), 100);
         }
@@ -3321,6 +3243,13 @@
             currentJob = { id: subId, name: subName, icon: icon };
             currentPassword = password;
             document.getElementById('homeSubAccountScreen').classList.add('hidden');
+            
+            // Show account name in password screen header
+            const titleEl = document.querySelector('#passwordScreen .password-title');
+            if (titleEl) titleEl.textContent = subName;
+            const subtitleEl = document.querySelector('#passwordScreen .password-subtitle');
+            if (subtitleEl) subtitleEl.textContent = '🔐 د ننوتلو لپاره پاسورډ ولیکئ';
+            
             document.getElementById('passwordScreen').classList.remove('hidden');
             setTimeout(() => document.getElementById('passwordInput').focus(), 100);
         }
@@ -3763,7 +3692,7 @@
                 if (el) el.style.display = 'none';
             });
 
-            const isSaudi = currentJob.id === 'saudi_12module' || currentJob.id === 'saudi_14module';
+            const isSaudi = currentJob.id === 'saudi_12module' || currentJob.id === 'saudi_14module' || currentJob.id === 'boklyn';
             const isMobile = currentJob.id === 'mobile';
             const isHomeJoint = currentJob.id === 'home_joint';
 
@@ -3851,18 +3780,18 @@
                         document.getElementById('editBalanceBtn').style.display = 'none';
                     }
 
-                    // Remove Report Function for specific Home Accounts
-                    // Fixed: 'سعیدالله' should be 'سعید الله'
-                    const restrictedHomeAccounts = ['للک', 'سیف الله', 'سعید الله', 'صدیق الله', 'عادل'];
-                    if (restrictedHomeAccounts.includes(currentJob.name)) {
-                        document.getElementById('imageGroup').style.setProperty('display', 'none', 'important');
-                        document.getElementById('incomeGroup').style.setProperty('display', 'none', 'important');
-                    } else if (currentJob.name === 'مشترک مصارف') {
-                        document.getElementById('imageGroup').style.setProperty('display', 'block', 'important');
-                        document.getElementById('incomeGroup').style.setProperty('display', 'none', 'important');
+                    // Hide Bill Attachment for specific Home Accounts
+                    const restrictedHomeIDs = ['home_lalak', 'home_saifullah', 'home_saeedullah', 'home_siddiqullah', 'home_adil'];
+                    const imgGrp = document.getElementById('imageGroup');
+                    
+                    if (restrictedHomeIDs.includes(currentJob.id)) {
+                        if (imgGrp) {
+                            imgGrp.style.setProperty('display', 'none', 'important');
+                        }
+                    } else if (currentJob.id === 'home_joint') {
+                        if (imgGrp) imgGrp.style.setProperty('display', 'block', 'important');
                     } else {
-                        document.getElementById('imageGroup').style.setProperty('display', 'block', 'important');
-                        document.getElementById('incomeGroup').style.setProperty('display', 'block', 'important');
+                        if (imgGrp) imgGrp.style.setProperty('display', 'block', 'important');
                     }
                 } else {
                     document.getElementById('balanceSection').style.display = 'none';
@@ -4404,6 +4333,20 @@
             const modal = document.querySelector('#dashboardScreen .modal');
             const isBrooklyn = currentJob.id === 'boklyn';
             const currencyLabel = isBrooklyn ? 'افغانۍ (AFN)' : 'ر.س (SAR)';
+            
+            // Get current month index (0-11) to set default selection
+            const currentMonthIndex = new Date().getMonth();
+            const pashtoMonths = [
+                "جنوري", "فبروري", "مارچ", "اپریل", "می", "جون",
+                "جولای", "اگست", "سپتمبر", "اکتوبر", "نومبر", "دیسمبر"
+            ];
+
+            // Generate options
+            let optionsHtml = '';
+            pashtoMonths.forEach((m, index) => {
+                const selected = index === currentMonthIndex ? 'selected' : '';
+                optionsHtml += `<option value="${m}" ${selected}>${m}</option>`;
+            });
 
             // Clear existing content and set new structure
             modal.innerHTML = `
@@ -4417,12 +4360,20 @@
                 </div>
 
                 <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 20px;">
+                    <!-- Month Selector -->
+                    <div style="margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                        <label style="color: #94a3b8; font-size: 12px; display: block; margin-bottom: 8px;">د میاشتې انتخاب:</label>
+                        <select id="saudiMonthSelect" onchange="fetchSaudiData()" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; outline: none; font-family: inherit;">
+                            ${optionsHtml}
+                        </select>
+                    </div>
+
                     <div id="saudiLoading" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px;">
                         <div class="spinner"></div>
                         <p style="margin-top: 15px; color: #94a3b8;">د معلوماتو راټولیږي...</p>
                     </div>
 
-                    <div id="saudiContent" style="display: none; display: flex; flex-direction: column; gap: 15px;">
+                    <div id="saudiContent" style="display: none; flex-direction: column; gap: 15px;">
 
                         <!-- 1. Monthly Total Revenue -->
                         <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 20px; position: relative; overflow: hidden;">
@@ -4473,6 +4424,20 @@
         function renderMobileDashboard() {
             const modal = document.querySelector('#dashboardScreen .modal');
 
+            // Get current month index
+            const currentMonthIndex = new Date().getMonth();
+            const pashtoMonths = [
+                "جنوري", "فبروري", "مارچ", "اپریل", "می", "جون",
+                "جولای", "اگست", "سپتمبر", "اکتوبر", "نومبر", "دیسمبر"
+            ];
+
+            // Generate options
+            let optionsHtml = '';
+            pashtoMonths.forEach((m, index) => {
+                const selected = index === currentMonthIndex ? 'selected' : '';
+                optionsHtml += `<option value="${m}" ${selected}>${m}</option>`;
+            });
+
             // Clear existing content and set new structure
             modal.innerHTML = `
                 <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;">
@@ -4485,12 +4450,20 @@
                 </div>
 
                 <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 20px;">
+                    <!-- Month Selector -->
+                    <div style="margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                        <label style="color: #94a3b8; font-size: 12px; display: block; margin-bottom: 8px;">د میاشتې انتخاب:</label>
+                        <select id="mobileMonthSelect" onchange="fetchMobileData()" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; outline: none; font-family: inherit;">
+                            ${optionsHtml}
+                        </select>
+                    </div>
+
                     <div id="mobileLoading" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px;">
                         <div class="spinner"></div>
                         <p style="margin-top: 15px; color: #94a3b8;">د معلوماتو راټولیږي...</p>
                     </div>
 
-                    <div id="mobileContent" style="display: none; display: flex; flex-direction: column; gap: 15px;">
+                    <div id="mobileContent" style="display: none; flex-direction: column; gap: 15px;">
 
                         <!-- 1. Monthly Total Income -->
                         <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 20px;">
@@ -4538,6 +4511,8 @@
         async function fetchMobileData() {
             const loading = document.getElementById('mobileLoading');
             const content = document.getElementById('mobileContent');
+            const monthSelect = document.getElementById('mobileMonthSelect');
+            const selectedMonth = monthSelect ? monthSelect.value : '';
 
             if(loading) loading.style.display = 'flex';
             if(content) content.style.display = 'none';
@@ -4546,6 +4521,9 @@
                 const url = new URL(GOOGLE_SHEETS_URL);
                 url.searchParams.append('action', 'getMobileStats');
                 url.searchParams.append('accountId', 'mobile');
+                if (selectedMonth) {
+                    url.searchParams.append('month', selectedMonth);
+                }
 
                 const response = await fetch(url.toString());
                 const data = await response.json();
@@ -4573,6 +4551,8 @@
         async function fetchSaudiData() {
             const loading = document.getElementById('saudiLoading');
             const content = document.getElementById('saudiContent');
+            const monthSelect = document.getElementById('saudiMonthSelect');
+            const selectedMonth = monthSelect ? monthSelect.value : '';
 
             if(loading) loading.style.display = 'flex';
             if(content) content.style.display = 'none';
@@ -4583,6 +4563,9 @@
                 const url = new URL(GOOGLE_SHEETS_URL);
                 url.searchParams.append('action', 'getSaudiStats');
                 url.searchParams.append('accountId', currentJob.id);
+                if (selectedMonth) {
+                    url.searchParams.append('month', selectedMonth);
+                }
 
                 // Fetch data from Google Sheets
                 const response = await fetch(url.toString());
@@ -5332,140 +5315,128 @@
             
             // Force the specific columns the user wants: نېټه، عاید، مصرف، کورته لېږل شوی، ډرېور تنخوا، تفصیل، یاداښت
             // For CSV, these will be: Date, Income, Expense, SentHome, FifthCol, Detail, Note
-            if (currentJob.id === 'boklyn' || currentJob.id.startsWith('saudi')) {
+            if ((currentJob.id === 'boklyn' || currentJob.id.startsWith('saudi')) && format === 'pdf' && !document.getElementById('reportScreen').classList.contains('active')) {
+                const revenueText = document.getElementById('saudiRevenue') ? document.getElementById('saudiRevenue').textContent : "0";
+                const sentHomeText = document.getElementById('saudiSentHome') ? document.getElementById('saudiSentHome').textContent : "0";
+                const salariesText = document.getElementById('saudiSalaries') ? document.getElementById('saudiSalaries').textContent : "0";
+                const expensesText = document.getElementById('saudiExpenses') ? document.getElementById('saudiExpenses').textContent : "0";
+                
+                // CORRECTED: Calculate Total All Expenses and Net Profit for Saudi Dashboard
+                const revNum = parseFloat(revenueText.replace(/,/g, '')) || 0;
+                const homeNum = parseFloat(sentHomeText.replace(/,/g, '')) || 0;
+                const salNum = parseFloat(salariesText.replace(/,/g, '')) || 0;
+                const expNum = parseFloat(expensesText.replace(/,/g, '')) || 0;
+                
+                const totalAllExpenses = expNum + homeNum + salNum;
+                const netProfitNum = revNum - totalAllExpenses;
+                
+                const todayGregorian = new Date().toLocaleDateString('en-GB'); 
+                const title = currentJob.name;
+
+                // Create a temporary container for the report (Summary only for Saudi Dashboard view)
+                const reportContainer = document.createElement('div');
+                reportContainer.style.padding = '20px';
+                reportContainer.style.direction = 'rtl';
+                reportContainer.style.fontFamily = "'Noto Naskh Arabic', sans-serif";
+                reportContainer.style.background = 'white';
+                reportContainer.style.color = '#1f2937';
+
+                reportContainer.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px;">
+                        <h1 style="color: #1a365d; margin: 0; font-size: 28px;">${title}</h1>
+                        <div style="color: #4a5568; font-size: 14px; margin-top: 8px;">مالي راپور - لنډیز</div>
+                        <div style="color: #94a3b8; font-size: 11px;">د چاپ نېټه: ${todayGregorian}</div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 30px;">
+                        <div style="border: 1px solid #cbd5e1; padding: 15px; border-radius: 12px; text-align: center; background: #f0fdf4;">
+                            <div style="font-size: 12px; color: #166534; margin-bottom: 5px;">ټول عواید</div>
+                            <div style="font-weight: 800; font-size: 18px; color: #15803d;">${revNum.toLocaleString()}</div>
+                        </div>
+                        <div style="border: 1px solid #cbd5e1; padding: 15px; border-radius: 12px; text-align: center; background: #fef2f2;">
+                            <div style="font-size: 12px; color: #991b1b; margin-bottom: 5px;">ټول مصارف</div>
+                            <div style="font-weight: 800; font-size: 18px; color: #b91c1c;">${totalAllExpenses.toLocaleString()}</div>
+                        </div>
+                        <div style="border: 1px solid #cbd5e1; padding: 15px; border-radius: 12px; text-align: center; background: #eff6ff;">
+                            <div style="font-size: 12px; color: #1e40af; margin-bottom: 5px;">خالصه ګټه</div>
+                            <div style="font-weight: 800; font-size: 18px; color: #1d4ed8;">${netProfitNum.toLocaleString()}</div>
+                        </div>
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                        <thead>
+                            <tr style="background-color: #f1f5f9; color: #1e293b;">
+                                <th style="border: 1px solid #cbd5e1; padding: 12px; text-align: right;">تفصیل</th>
+                                <th style="border: 1px solid #cbd5e1; padding: 12px; text-align: right;">مقدار</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border: 1px solid #cbd5e1; padding: 12px;">ټول عواید (Revenue)</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 12px; color: #059669; font-weight: bold; text-align: left; direction: ltr;">${revNum.toLocaleString()}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #cbd5e1; padding: 12px;">کور ته لیږل شوې پیسې</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 12px; color: #d97706; font-weight: bold; text-align: left; direction: ltr;">${homeNum.toLocaleString()}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #cbd5e1; padding: 12px;">ډرېور تنخوا</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 12px; color: #7c3aed; font-weight: bold; text-align: left; direction: ltr;">${salNum.toLocaleString()}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #cbd5e1; padding: 12px;">نور مصارف</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 12px; color: #dc2626; font-weight: bold; text-align: left; direction: ltr;">${expNum.toLocaleString()}</td>
+                            </tr>
+                            <tr style="background-color: #f8fafc;">
+                                <td style="border: 1px solid #cbd5e1; padding: 12px; font-weight: bold;">خالصه ګټه (Net Profit)</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 12px; color: #1d4ed8; font-weight: bold; text-align: left; direction: ltr;">${netProfitNum.toLocaleString()}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div style="margin-top: 50px; font-size: 11px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px;">
+                        Sherzad Accounts System | Professional Financial Report
+                    </div>
+                </div>
+                `;
+
+                const opt = {
+                    margin: 10,
+                    filename: `${currentJob.name}_Summary_${todayGregorian.replace(/\//g, '-')}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+
+                showToast('info', 'PDF جوړیږي...', 'مهرباني وکړئ انتظار وکړئ');
+                html2pdf().set(opt).from(reportContainer).save().then(() => {
+                    showToast('success', 'ډاونلوډ شو', 'PDF فایل په بریالیتوب ډاونلوډ شو');
+                });
+                return;
+            }
+
+            // CSV logic for direct dashboard view
+            if ((currentJob.id === 'boklyn' || currentJob.id.startsWith('saudi')) && format === 'csv' && !document.getElementById('reportScreen').classList.contains('active')) {
                 const revenue = document.getElementById('saudiRevenue') ? document.getElementById('saudiRevenue').textContent : "0";
                 const sentHome = document.getElementById('saudiSentHome') ? document.getElementById('saudiSentHome').textContent : "0";
                 const salaries = document.getElementById('saudiSalaries') ? document.getElementById('saudiSalaries').textContent : "0";
                 const expenses = document.getElementById('saudiExpenses') ? document.getElementById('saudiExpenses').textContent : "0";
-                
                 const todayGregorian = new Date().toLocaleDateString('en-GB'); 
-                const title = currentJob.name + " راپور";
+                
+                let csvContent = "data:text/csv;charset=utf-8,Category,Amount\n";
+                csvContent += `نېټه,${todayGregorian}\n`;
+                csvContent += `عاید,${revenue}\n`;
+                csvContent += `مصرف,${expenses}\n`;
+                csvContent += `کور ته لیږل شوې پیسې,${sentHome}\n`;
+                csvContent += `ډرېور تنخوا,${salaries}\n`;
 
-                const dataMap = [
-                    { label: "نېټه", value: todayGregorian },
-                    { label: "عاید", value: revenue },
-                    { label: "مصرف", value: expenses },
-                    { label: "کور ته لیږل شوې پیسې", value: sentHome },
-                    { label: "ډرېور تنخوا", value: salaries }
-                ];
-
-                if (format === 'csv') {
-                    let csvContent = "data:text/csv;charset=utf-8,Category,Amount\n";
-                    dataMap.forEach(row => {
-                         csvContent += `${row.label},"${row.value}"\n`;
-                    });
-                    const encodedUri = encodeURI(csvContent);
-                    const link = document.createElement("a");
-                    link.setAttribute("href", encodedUri);
-                    link.setAttribute("download", `${currentJob.name}_Report_${todayGregorian.replace(/\//g, '-')}.csv`);
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                } else {
-                    let printWindow = window.open('', '_blank');
-                    printWindow.document.write(`
-                        <html dir="rtl">
-                        <head>
-                            <title>${title}</title>
-                            <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
-                            <style>
-                                body { 
-                                    font-family: 'Noto Naskh Arabic', system-ui, sans-serif; 
-                                    padding: 40px; 
-                                    direction: rtl; 
-                                    background: #f0f2f5;
-                                    color: #1f2937;
-                                }
-                                .container {
-                                    max-width: 800px;
-                                    margin: 0 auto;
-                                    background: white;
-                                    padding: 50px;
-                                    border-radius: 20px;
-                                    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-                                    border: 1px solid #e1e4e8;
-                                }
-                                h1 { 
-                                    margin-bottom: 5px; 
-                                    text-align: center;
-                                    color: #1a365d;
-                                    font-size: 32px;
-                                    font-weight: 700;
-                                }
-                                .meta-info {
-                                    text-align: center;
-                                    color: #4a5568;
-                                    margin-bottom: 40px;
-                                    font-size: 16px;
-                                    border-bottom: 2px solid #edf2f7;
-                                    padding-bottom: 20px;
-                                }
-                                table { 
-                                    width: 100%; 
-                                    border-collapse: separate; 
-                                    border-spacing: 0 10px;
-                                }
-                                th, td { 
-                                    padding: 18px 25px; 
-                                    font-size: 18px; 
-                                    text-align: right;
-                                }
-                                th { 
-                                    background-color: #f8fafc; 
-                                    font-weight: 700;
-                                    color: #2d3748;
-                                    border-bottom: 2px solid #e2e8f0;
-                                }
-                                .row {
-                                    transition: transform 0.2s;
-                                    border-radius: 10px;
-                                }
-                                .row-date { background-color: #f7fafc; border-right: 5px solid #cbd5e0; }
-                                .row-income { background-color: #f0fff4; border-right: 5px solid #48bb78; }
-                                .row-expense { background-color: #fff5f5; border-right: 5px solid #f56565; }
-                                .row-sent { background-color: #fffaf0; border-right: 5px solid #ed8936; }
-                                .row-rent { background-color: #ebf8ff; border-right: 5px solid #4299e1; }
-                                .label { font-weight: 700; color: #2d3748; }
-                                .value { font-weight: 800; font-size: 20px; }
-                                .value-income { color: #2f855a; }
-                                .value-expense { color: #c53030; }
-                                .value-sent { color: #c05621; }
-                                .value-rent { color: #2b6cb0; }
-                                .print-btn { margin-top: 50px; padding: 15px 40px; font-size: 18px; font-weight: 700; cursor: pointer; background: #3182ce; color: white; border: none; border-radius: 12px; display: block; margin-left: auto; margin-right: auto; box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3); }
-                                @media print { .print-btn { display: none; } body { background: white; padding: 0; } .container { box-shadow: none; border: none; padding: 0; width: 100%; max-width: none; } .row { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
-                            </style>
-                        </head>
-                        <body>
-                            <div class="container">
-                                <h1>${title}</h1>
-                                <div class="meta-info">د چاپ نېټه (میلادي): ${todayGregorian}</div>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>نېټه</th>
-                                            <th>عاید</th>
-                                            <th>مصرف</th>
-                                            <th>کور ته لیږل شوې پیسې</th>
-                                            <th>ډرېور تنخوا</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="value">${todayGregorian}</td>
-                                            <td class="value value-income">${revenue}</td>
-                                            <td class="value value-expense">${expenses}</td>
-                                            <td class="value value-sent">${sentHome}</td>
-                                            <td class="value value-rent">${salaries}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <button class="print-btn" onclick="window.print()">چاپ / PDF ډاونلوډ</button>
-                            </div>
-                        </body>
-                        </html>
-                    `);
-                    printWindow.document.close();
-                }
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", `${currentJob.name}_Summary_${todayGregorian.replace(/\//g, '-')}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
                 return;
             }
 
@@ -5516,7 +5487,10 @@
                 }
                 return sum + val;
             }, 0);
-            let netBalance = totalIncome - totalExpense;
+
+            // CORRECTED: Grand Total Expense includes Sent Home + Driver Salary/Rent
+            let grandTotalExpense = totalExpense + totalSentHome + totalFifthCol;
+            let netBalance = totalIncome - grandTotalExpense;
 
             const todayGregorian = new Date().toLocaleDateString('en-GB');
             
@@ -5526,32 +5500,61 @@
                 fifthColHeader = 'دکان کرایه';
             }
 
-            // --- CSV Export ---
+            // --- CSV Export (Updated for Professional Output with BOM) ---
             if (format === 'csv') {
-                 let csvContent = "data:text/csv;charset=utf-8,Date,Income,Expense,SentHome," + (currentJob.id === 'mobile' ? 'ShopRent' : 'DriverSalary') + ",Detail,Note\r\n";
+                 // Add BOM for proper UTF-8 handling in Excel
+                 let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+                 
+                 // Add Metadata section
+                 csvContent += `د راپور نوم,${currentJob.name} - ${reportTitle}\n`;
+                 csvContent += `د چاپ نېټه,${todayGregorian}\n`;
+                 csvContent += `ټول عاید,${totalIncome}\n`;
+                 csvContent += `ټول مصارف,${grandTotalExpense}\n`;
+                 csvContent += `خالصه ګټه,${netBalance}\n\n`;
+
+                 // Headers
+                 const fifthCol = currentJob.id === 'mobile' ? 'دکان کرایه' : 'ډرېور تنخوا';
+                 csvContent += `نېټه,عاید (AFN),مصرف (AFN),کور ته لېږل (AFN),${fifthCol} (AFN),تفصیل,یاداښت\n`;
+                 
                  filteredData.forEach(item => {
                      let fifth = currentJob.id === 'mobile' ? (item.shopRent || 0) : (item.driverSalary || 0);
                      let rawDetail = item.detail || item.detailMobile || '';
                      let rawNote = item.note || item.noteMobile || '';
+                     
+                     // Escape special characters for CSV
                      let detail = '"' + rawDetail.replace(/"/g, '""').replace(/\n/g, ' ') + '"';
                      let note = '"' + rawNote.replace(/"/g, '""').replace(/\n/g, ' ') + '"';
+                     
                      csvContent += `${item.date},${item.income || 0},${item.expense || 0},${item.sentToHome || item.sentToHomeMobile || 0},${fifth},${detail},${note}\r\n`;
                  });
+                 
                  const encodedUri = encodeURI(csvContent);
                  const link = document.createElement("a");
                  link.setAttribute("href", encodedUri);
-                 link.setAttribute("download", `${currentJob.name}_Report.csv`);
+                 link.setAttribute("download", `${currentJob.name}_Report_${todayGregorian.replace(/\//g, '-')}.csv`);
                  document.body.appendChild(link);
                  link.click();
                  document.body.removeChild(link);
                  return;
             }
 
-            // --- HTML Print/PDF ---
-            let printWindow = window.open('', '_blank');
+            // --- HTML Print/PDF (Updated for Professional Financial Style) ---
             
-            // Generate Table Rows
-            let tableRows = filteredData.map(item => {
+            // Create a temporary container for the report
+            const reportContainer = document.createElement('div');
+            reportContainer.id = 'report-pdf-container';
+            reportContainer.style.position = 'absolute';
+            reportContainer.style.left = '-9999px';
+            reportContainer.style.top = '0';
+            reportContainer.style.width = '210mm'; // A4 width
+            reportContainer.style.background = 'white';
+            reportContainer.style.color = '#1f2937';
+            reportContainer.style.padding = '40px'; // Increased padding
+            reportContainer.style.direction = 'rtl';
+            reportContainer.style.fontFamily = "'Noto Naskh Arabic', sans-serif";
+            
+            // Generate Table Rows with improved styling
+            let tableRows = filteredData.map((item, index) => {
                 let fifthColValue = 0;
                 if (currentJob.id === 'mobile') {
                     fifthColValue = parseFloat(item.shopRent || 0);
@@ -5559,162 +5562,121 @@
                     fifthColValue = parseFloat(item.driverSalary || 0);
                 }
                 
-                // Get detail and note fields correctly from the data structure
                 let detail = item.detail || item.detailMobile || '-';
                 let note = item.note || item.noteMobile || '-';
                 
+                // Zebra striping with subtle borders
+                const bgClass = index % 2 === 0 ? '#f8fafc' : '#ffffff';
+                
                 return `
-                <tr>
-                    <td style="white-space: nowrap;">${item.date}</td>
-                    <td>${parseFloat(item.income || 0).toLocaleString()}</td>
-                    <td>${parseFloat(item.expense || 0).toLocaleString()}</td>
-                    <td>${parseFloat(item.sentToHome || item.sentToHomeMobile || 0).toLocaleString()}</td>
-                    <td>${fifthColValue.toLocaleString()}</td>
-                    <td class="text-cell" style="max-width: 140px; word-wrap: break-word; white-space: normal;">${detail}</td>
-                    <td class="text-cell" style="max-width: 120px; word-wrap: break-word; white-space: normal;">${note}</td>
+                <tr style="background-color: ${bgClass}; border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 10px 8px; font-size: 11px; color: #334155; border-right: 1px solid #f1f5f9;">${item.date}</td>
+                    <td style="padding: 10px 8px; color: #059669; font-weight: 600; font-size: 11px; text-align: left; direction: ltr;">${parseFloat(item.income || 0).toLocaleString()}</td>
+                    <td style="padding: 10px 8px; color: #dc2626; font-weight: 600; font-size: 11px; text-align: left; direction: ltr;">${parseFloat(item.expense || 0).toLocaleString()}</td>
+                    <td style="padding: 10px 8px; color: #d97706; font-weight: 600; font-size: 11px; text-align: left; direction: ltr;">${parseFloat(item.sentToHome || item.sentToHomeMobile || 0).toLocaleString()}</td>
+                    <td style="padding: 10px 8px; color: #7c3aed; font-weight: 600; font-size: 11px; text-align: left; direction: ltr;">${fifthColValue.toLocaleString()}</td>
+                    <td style="padding: 10px 8px; font-size: 11px; color: #475569; border-right: 1px solid #f1f5f9;">${detail}</td>
+                    <td style="padding: 10px 8px; font-size: 10px; color: #64748b;">${note}</td>
                 </tr>
             `}).join('');
 
-            printWindow.document.write(`
-                <html dir="rtl">
-                <head>
-                    <title>${currentJob.name} - ${reportTitle}</title>
-                    <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
-                    <style>
-                        body { 
-                            font-family: 'Noto Naskh Arabic', system-ui, sans-serif; 
-                            padding: 10px; 
-                            direction: rtl; 
-                            background: white;
-                            color: #1f2937;
-                        }
-                        h1 { 
-                            text-align: center; 
-                            color: #1a365d; 
-                            margin-bottom: 2px; 
-                            font-size: 18px; 
-                            font-weight: 700; 
-                        }
-                        .meta-info { 
-                            text-align: center; 
-                            color: #4a5568; 
-                            margin-bottom: 10px; 
-                            font-size: 10px; 
-                            border-bottom: 1px solid #edf2f7; 
-                            padding-bottom: 5px; 
-                        }
-                        
-                        /* Summary Section */
-                        .summary { 
-                            display: flex; 
-                            gap: 5px; 
-                            justify-content: center; 
-                            margin-bottom: 10px; 
-                            flex-wrap: wrap;
-                        }
-                        .card { 
-                            background: #f8fafc; 
-                            padding: 4px 8px; 
-                            border-radius: 6px; 
-                            border: 1px solid #e2e8f0; 
-                            min-width: 70px; 
-                            text-align: center; 
-                        }
-                        .card div:first-child { font-size: 9px; color: #64748b; margin-bottom: 1px; }
-                        .card div:last-child { font-size: 12px; font-weight: 800; }
-                        
-                        .text-green { color: #059669; }
-                        .text-red { color: #dc2626; }
-                        .text-orange { color: #d97706; }
-                        .text-blue { color: #2563eb; }
-                        .text-purple { color: #7c3aed; }
-
-                        /* Table Styles */
-                        table { 
-                            width: 100%; 
-                            border-collapse: collapse; 
-                            margin-top: 5px; 
-                            font-size: 9px; 
-                        }
-                        th, td { 
-                            border: 1px solid #cbd5e1; 
-                            padding: 2px 4px; 
-                            text-align: right; 
-                            line-height: 1.2;
-                        }
-                        th { 
-                            background-color: #f1f5f9; 
-                            font-weight: 700; 
-                            color: #334155;
-                            white-space: nowrap;
-                        }
-                        tr:nth-child(even) { background-color: #f8fafc; }
-                        
-                        .text-cell {
-                            max-width: 120px;
-                            word-wrap: break-word;
-                            white-space: normal;
-                        }
-
-                        @media print {
-                            body { padding: 0; }
-                            .no-print { display: none; }
-                            th { background-color: #eee !important; -webkit-print-color-adjust: exact; }
-                            .card { border: 1px solid #ccc; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <h1>${currentJob.name}</h1>
-                    <div class="meta-info">${reportTitle} | چاپ: ${todayGregorian}</div>
+            // Professional Header & Footer Structure
+            reportContainer.innerHTML = `
+                <div style="font-family: 'Noto Naskh Arabic', sans-serif; direction: rtl; position: relative;">
                     
-                    <div class="summary">
-                        <div class="card">
-                            <div>ټول عاید</div>
-                            <div class="text-green">${totalIncome.toLocaleString()}</div>
+                    <!-- Decorative Top Line -->
+                    <div style="height: 4px; background: linear-gradient(90deg, #8b5cf6, #3b82f6); width: 100%; margin-bottom: 30px; border-radius: 2px;"></div>
+
+                    <!-- Header Section -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 2px solid #f1f5f9;">
+                        <div style="text-align: right;">
+                            <h1 style="color: #1e293b; margin: 0; font-size: 28px; font-weight: 900; letter-spacing: -0.5px;">شېرزاد حسابونه</h1>
+                            <div style="color: #64748b; font-size: 12px; margin-top: 5px;">مسلکي مالي مدیریت سیستم</div>
                         </div>
-                        <div class="card">
-                            <div>ټول مصارف</div>
-                            <div class="text-red">${totalExpense.toLocaleString()}</div>
+                        <div style="text-align: left;">
+                            <div style="color: #1e293b; font-size: 18px; font-weight: 800;">${currentJob.name}</div>
+                            <div style="color: #64748b; font-size: 12px; margin-top: 5px;">${reportTitle}</div>
+                            <div style="color: #94a3b8; font-size: 10px; margin-top: 2px;">چاپ نېټه: ${todayGregorian}</div>
                         </div>
-                        <div class="card">
-                            <div>خالص</div>
-                            <div class="text-blue">${netBalance.toLocaleString()}</div>
+                    </div>
+                    
+                    <!-- Financial Summary Cards -->
+                    <div style="display: flex; gap: 15px; margin-bottom: 30px;">
+                        <div style="flex: 1; border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px; background: #fff;">
+                            <div style="font-size: 11px; color: #64748b; margin-bottom: 5px;">ټول عواید (Income)</div>
+                            <div style="color: #15803d; font-weight: 800; font-size: 16px; direction: ltr;">${totalIncome.toLocaleString()}</div>
                         </div>
-                        <div class="card">
-                            <div>کورته لېږل شوی</div>
-                            <div class="text-orange">${totalSentHome.toLocaleString()}</div>
+                        <div style="flex: 1; border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px; background: #fff;">
+                            <div style="font-size: 11px; color: #64748b; margin-bottom: 5px;">ټول مصارف (Expense)</div>
+                            <div style="color: #b91c1c; font-weight: 800; font-size: 16px; direction: ltr;">${grandTotalExpense.toLocaleString()}</div>
                         </div>
-                        <div class="card">
-                            <div>${fifthColHeader}</div>
-                            <div class="text-purple">${totalFifthCol.toLocaleString()}</div>
+                        <div style="flex: 1; border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px; background: #f8fafc;">
+                            <div style="font-size: 11px; color: #64748b; margin-bottom: 5px;">خالصه ګټه (Net)</div>
+                            <div style="color: #1d4ed8; font-weight: 800; font-size: 16px; direction: ltr;">${netBalance.toLocaleString()}</div>
                         </div>
                     </div>
 
-                    <table>
+                    <!-- Main Data Table -->
+                    <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; margin-bottom: 20px;">
                         <thead>
-                            <tr>
-                                <th style="width: 60px;">نېټه</th>
-                                <th>عاید</th>
-                                <th>مصارف</th>
-                                <th>کورته لېږل شوی</th>
-                                <th>${fifthColHeader}</th>
-                                <th style="width: 140px;">تفصیل</th>
-                                <th style="width: 120px;">یاداښت</th>
+                            <tr style="background-color: #f1f5f9;">
+                                <th style="padding: 12px 8px; text-align: right; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">نېټه</th>
+                                <th style="padding: 12px 8px; text-align: left; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">عاید</th>
+                                <th style="padding: 12px 8px; text-align: left; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">مصارف</th>
+                                <th style="padding: 12px 8px; text-align: left; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">کور ته لېږل</th>
+                                <th style="padding: 12px 8px; text-align: left; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">${fifthColHeader}</th>
+                                <th style="padding: 12px 8px; text-align: right; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">تفصیل</th>
+                                <th style="padding: 12px 8px; text-align: right; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">یاداښت</th>
                             </tr>
                         </thead>
                         <tbody>
                             ${tableRows}
                         </tbody>
+                        <tfoot>
+                            <tr style="background-color: #f8fafc; font-weight: bold;">
+                                <td style="padding: 12px 8px; border-top: 2px solid #cbd5e1; color: #1e293b;">ټوټل (مجموعه)</td>
+                                <td style="padding: 12px 8px; border-top: 2px solid #cbd5e1; color: #059669; text-align: left; direction: ltr;">${totalIncome.toLocaleString()}</td>
+                                <td style="padding: 12px 8px; border-top: 2px solid #cbd5e1; color: #dc2626; text-align: left; direction: ltr;">${grandTotalExpense.toLocaleString()}</td>
+                                <td style="padding: 12px 8px; border-top: 2px solid #cbd5e1; color: #d97706; text-align: left; direction: ltr;">${totalSentHome.toLocaleString()}</td>
+                                <td style="padding: 12px 8px; border-top: 2px solid #cbd5e1; color: #7c3aed; text-align: left; direction: ltr;">${totalFifthCol.toLocaleString()}</td>
+                                <td colspan="2" style="border-top: 2px solid #cbd5e1;"></td>
+                            </tr>
+                        </tfoot>
                     </table>
-                    
-                    <div style="text-align: center; margin-top: 20px;">
-                        <button class="no-print" onclick="window.print()" style="padding: 6px 12px; font-size: 12px; cursor: pointer; background: #3b82f6; color: white; border: none; border-radius: 6px;">چاپ / PDF ډاونلوډ</button>
+
+                    <!-- Footer -->
+                    <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="font-size: 9px; color: #94a3b8;">Sherzad Accounts System v2.0</div>
+                        <div style="font-size: 9px; color: #94a3b8;">Generated by Sherzad Accounts</div>
                     </div>
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
+                </div>
+            `;
+
+            document.body.appendChild(reportContainer);
+
+            // PDF Configuration
+            const opt = {
+                margin:       [10, 10, 10, 10],
+                filename:     `${currentJob.name}_Report_${todayGregorian.replace(/\//g, '-')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+            
+            showToast('info', 'PDF جوړیږي...', 'مهرباني وکړئ انتظار وکړئ (شاید یو څو ثانیې وخت ونیسي)');
+
+            // Generate and Download
+            html2pdf().set(opt).from(reportContainer).save().then(() => {
+                document.body.removeChild(reportContainer);
+                showToast('success', 'ډاونلوډ شو', 'PDF فایل په بریالیتوب ډاونلوډ شو');
+            }).catch(err => {
+                console.error("PDF Generation Error: ", err);
+                if(document.body.contains(reportContainer)) {
+                    document.body.removeChild(reportContainer);
+                }
+                showToast('error', 'تېروتنه', 'د PDF په جوړولو کې ستونزه راغله');
+            });
         };
 
         // --- NEW ACCOUNT SCREEN LOGIC ---
@@ -5813,6 +5775,244 @@
                 }
             }
         }
+
+        // --- PROFESSIONAL REPORT DOWNLOAD SYSTEM (Fixed) ---
+        window.downloadReport = function(format) {
+            const menu = document.getElementById('downloadMenu');
+            if (menu) menu.classList.add('hidden');
+            
+            // --- DATA FETCHING & FILTERING ---
+            const type = document.getElementById('reportType').value;
+            let filteredData = [];
+            let reportTitle = "";
+            let historyKey = 'history_' + currentJob.id;
+            let rawData = JSON.parse(localStorage.getItem(historyKey) || '[]');
+
+            // Check if we are on dashboard (report screen not active)
+            // If so, we default to today or all data to avoid errors
+            const isDashboard = !document.getElementById('reportScreen').classList.contains('active');
+            
+            if (isDashboard) {
+                // FIX: On dashboard, download ALL data by default to avoid "No Data" error for specific dates
+                filteredData = rawData;
+                reportTitle = `ټولیز راپور`;
+            } else {
+                // Report Menu Active - Strict Filtering
+                if (type === 'daily') {
+                    const date = document.getElementById('reportDateInput').value;
+                    if (!date) return showToast('error', 'نیټه وټاکئ');
+                    filteredData = rawData.filter(item => item.date.replace(/\//g, '-') === date);
+                    reportTitle = `ورځنی راپور - ${date}`;
+                } else if (type === 'monthly') {
+                    const month = document.getElementById('reportMonthInput').value; 
+                    if (!month) return showToast('error', 'میاشت وټاکئ');
+                    filteredData = rawData.filter(item => item.date.startsWith(month.replace('-', '/')));
+                    reportTitle = `میاشتنی راپور - ${month}`;
+                } else if (type === 'yearly') {
+                    const year = document.getElementById('reportYearInput').value;
+                    if (!year) return showToast('error', 'کال وټاکئ');
+                    filteredData = rawData.filter(item => item.date.startsWith(year));
+                    reportTitle = `کلنی راپور - ${year}`;
+                } else {
+                     const date = document.getElementById('reportDateInput').value;
+                     if (date) {
+                         filteredData = rawData.filter(item => item.date.replace(/\//g, '-') === date);
+                         reportTitle = `راپور - ${date}`;
+                     } else {
+                         if (!date && type !== 'custom') return showToast('error', 'نیټه وټاکئ');
+                         if (date) {
+                            filteredData = rawData.filter(item => item.date.replace(/\//g, '-') === date);
+                            reportTitle = `راپور - ${date}`;
+                         } else {
+                             // Custom with no date = All Data
+                             filteredData = rawData;
+                             reportTitle = `ټولیز راپور`;
+                         }
+                     }
+                }
+            }
+
+            filteredData.sort((a, b) => b.timestamp - a.timestamp);
+
+            if (filteredData.length === 0) {
+                return showToast('warning', 'هیڅ معلومات نشته', 'د ټاکل شوې نیټې لپاره معلومات پیدا نشول');
+            }
+
+            // Calculations
+            let totalIncome = filteredData.reduce((sum, item) => sum + parseFloat(item.income || 0), 0);
+            let totalExpense = filteredData.reduce((sum, item) => sum + parseFloat(item.expense || 0), 0);
+            let totalSentHome = filteredData.reduce((sum, item) => sum + parseFloat(item.sentToHome || item.sentToHomeMobile || 0), 0);
+            
+            let totalFifthCol = filteredData.reduce((sum, item) => {
+                let val = 0;
+                if (currentJob.id === 'mobile') {
+                    val = parseFloat(item.shopRent || 0);
+                } else {
+                    val = parseFloat(item.driverSalary || 0);
+                }
+                return sum + val;
+            }, 0);
+            
+            let netBalance = totalIncome - totalExpense;
+            const todayGregorian = new Date().toLocaleDateString('en-GB');
+            
+            let fifthColHeader = 'ډرېور تنخوا';
+            if (currentJob.id === 'mobile') {
+                fifthColHeader = 'دکان کرایه';
+            }
+
+            // --- CSV EXPORT (Fixed for Google Sheets & Excel) ---
+            if (format === 'csv') {
+                 // Add UTF-8 BOM for correct characters in all apps
+                 let csvContent = "\uFEFF"; 
+                 
+                 // Utility to handle CSV values correctly
+                 const clean = (val) => {
+                     if (val === undefined || val === null) return '""';
+                     let s = val.toString().replace(/"/g, '""');
+                     return `"${s}"`;
+                 };
+
+                 // Metadata Summary
+                 csvContent += `${clean('راپور')},${clean(currentJob.name + " - " + reportTitle)}\n`;
+                 csvContent += `${clean('نېټه')},${clean(todayGregorian)}\n`;
+                 csvContent += `${clean('عواید')},${clean(totalIncome)}\n`;
+                 csvContent += `${clean('مصارف')},${clean(totalExpense)}\n`;
+                 csvContent += `${clean('ګټه')},${clean(netBalance)}\n\n`;
+
+                 // Headers
+                 const fifthCol = currentJob.id === 'mobile' ? 'دکان کرایه' : 'ډرېور تنخوا';
+                 csvContent += `${clean('نېټه')},${clean('عاید')},${clean('مصرف')},${clean('کور')},${clean(fifthCol)},${clean('تفصیل')},${clean('یاداښت')}\n`;
+                 
+                 filteredData.forEach(item => {
+                     let fifthValue = currentJob.id === 'mobile' ? (item.shopRent || 0) : (item.driverSalary || 0);
+                     let income = item.income || 0;
+                     let expense = item.expense || 0;
+                     let sentHome = item.sentToHome || item.sentToHomeMobile || 0;
+                     let rawDetail = item.detail || item.detailMobile || '-';
+                     let rawNote = item.note || item.noteMobile || '-';
+                     
+                     csvContent += `${clean(item.date)},${clean(income)},${clean(expense)},${clean(sentHome)},${clean(fifthValue)},${clean(rawDetail)},${clean(rawNote)}\n`;
+                 });
+
+                 // Footer
+                 csvContent += `${clean('مجموعه')},${clean(totalIncome)},${clean(totalExpense)},${clean(totalSentHome)},${clean(totalFifthCol)},${clean('')},${clean('')}\n`;
+                 
+                 // Use Blob for better compatibility with mobile apps and Google Sheets
+                 const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                 const url = URL.createObjectURL(blob);
+                 const link = document.createElement("a");
+                 link.setAttribute("href", url);
+                 link.setAttribute("download", `${currentJob.name}_Report_${todayGregorian.replace(/\//g, '-')}.csv`);
+                 document.body.appendChild(link);
+                 link.click();
+                 document.body.removeChild(link);
+                 return;
+            }
+
+            // PDF GENERATION
+            const reportContainer = document.createElement('div');
+            reportContainer.style.width = '210mm';
+            reportContainer.style.background = '#ffffff';
+            reportContainer.style.color = '#000000';
+            reportContainer.style.padding = '10mm'; // Reduced padding to allow more content
+            reportContainer.style.boxSizing = 'border-box';
+            reportContainer.style.direction = 'rtl';
+            reportContainer.style.fontFamily = "'Noto Naskh Arabic', sans-serif";
+            
+            const bgEven = '#f8fafc';
+            const bgOdd = '#ffffff';
+
+            let tableRows = filteredData.map((item, index) => {
+                let fifthColValue = currentJob.id === 'mobile' ? parseFloat(item.shopRent || 0) : parseFloat(item.driverSalary || 0);
+                let detail = item.detail || item.detailMobile || '-';
+                let note = item.note || item.noteMobile || '-';
+                const bgClass = index % 2 === 0 ? bgEven : bgOdd;
+                
+                return `
+                <tr style="background-color: ${bgClass}; border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 6px; font-size: 10px; border-right: 1px solid #e2e8f0; width: 10%;">${item.date}</td>
+                    <td style="padding: 6px; font-size: 10px; color: #166534; direction: ltr; text-align: left; width: 12%; font-weight: bold;">${parseFloat(item.income || 0).toLocaleString()}</td>
+                    <td style="padding: 6px; font-size: 10px; color: #991b1b; direction: ltr; text-align: left; width: 12%; font-weight: bold;">${parseFloat(item.expense || 0).toLocaleString()}</td>
+                    <td style="padding: 6px; font-size: 10px; color: #b45309; direction: ltr; text-align: left; width: 12%;">${parseFloat(item.sentToHome || item.sentToHomeMobile || 0).toLocaleString()}</td>
+                    <td style="padding: 6px; font-size: 10px; color: #6d28d9; direction: ltr; text-align: left; width: 12%;">${fifthColValue.toLocaleString()}</td>
+                    <td style="padding: 6px; font-size: 10px; border-right: 1px solid #e2e8f0; width: 22%;">${detail}</td>
+                    <td style="padding: 6px; font-size: 9px; color: #64748b; width: 20%;">${note}</td>
+                </tr>
+            `}).join('');
+
+            reportContainer.innerHTML = `
+                <div style="width: 100%; font-family: 'Noto Naskh Arabic', sans-serif;">
+                    <!-- Header -->
+                    <div style="text-align: center; margin-bottom: 20px; border-bottom: 3px solid #3b82f6; padding-bottom: 15px;">
+                        <h1 style="margin: 0; font-size: 26px; color: #1e3a8a; font-family: 'Noto Naskh Arabic', sans-serif; font-weight: bold; line-height: 1.8; letter-spacing: 0; word-spacing: 2px;">شېرزاد حسابونه</h1>
+                        <h2 style="margin: 5px 0; font-size: 18px; color: #334155; font-family: 'Noto Naskh Arabic', sans-serif; font-weight: bold; line-height: 1.8; letter-spacing: 0; word-spacing: 1px;">${currentJob.name} - ${reportTitle}</h2>
+                        <p style="margin: 0; font-size: 10px; color: #94a3b8; font-family: 'Noto Naskh Arabic', sans-serif;">چاپ نېټه: ${todayGregorian}</p>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px; gap: 10px;">
+                        <div style="flex: 1; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 10px; color: #166534;">عاید</div>
+                            <div style="font-size: 14px; font-weight: bold; color: #15803d; direction: ltr;">${totalIncome.toLocaleString()}</div>
+                        </div>
+                        <div style="flex: 1; background: #fef2f2; border: 1px solid #fecaca; padding: 10px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 10px; color: #991b1b;">مصرف</div>
+                            <div style="font-size: 14px; font-weight: bold; color: #b91c1c; direction: ltr;">${totalExpense.toLocaleString()}</div>
+                        </div>
+                        <div style="flex: 1; background: #eff6ff; border: 1px solid #bfdbfe; padding: 10px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 10px; color: #1e40af;">خالصه ګټه</div>
+                            <div style="font-size: 14px; font-weight: bold; color: #1d4ed8; direction: ltr;">${netBalance.toLocaleString()}</div>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #e2e8f0;">
+                        <thead>
+                            <tr style="background-color: #f1f5f9; border-bottom: 2px solid #cbd5e1;">
+                                <th style="padding: 8px; font-size: 11px; text-align: right; color: #334155;">نېټه</th>
+                                <th style="padding: 8px; font-size: 11px; text-align: left; color: #334155;">عاید</th>
+                                <th style="padding: 8px; font-size: 11px; text-align: left; color: #334155;">مصرف</th>
+                                <th style="padding: 8px; font-size: 11px; text-align: left; color: #334155;">کور</th>
+                                <th style="padding: 8px; font-size: 11px; text-align: left; color: #334155;">${fifthColHeader}</th>
+                                <th style="padding: 8px; font-size: 11px; text-align: right; color: #334155;">تفصیل</th>
+                                <th style="padding: 8px; font-size: 11px; text-align: right; color: #334155;">یاداښت</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableRows}
+                        </tbody>
+                        <tfoot>
+                            <tr style="background-color: #e2e8f0; font-weight: bold;">
+                                <td style="padding: 8px; font-size: 11px;">مجموعه</td>
+                                <td style="padding: 8px; font-size: 11px; direction: ltr; text-align: left;">${totalIncome.toLocaleString()}</td>
+                                <td style="padding: 8px; font-size: 11px; direction: ltr; text-align: left;">${totalExpense.toLocaleString()}</td>
+                                <td style="padding: 8px; font-size: 11px; direction: ltr; text-align: left;">${totalSentHome.toLocaleString()}</td>
+                                <td style="padding: 8px; font-size: 11px; direction: ltr; text-align: left;">${totalFifthCol.toLocaleString()}</td>
+                                <td colspan="2"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    
+                    <div style="margin-top: 30px; text-align: center; font-size: 10px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 15px; margin-bottom: 10px;">
+                        Sherzad Accounts System | Professional Report
+                    </div>
+                </div>
+            `;
+
+            const opt = {
+                margin: 0, // Margin is handled by reportContainer padding
+                filename: `${currentJob.name}_Report_${todayGregorian.replace(/\//g, '-')}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, logging: false },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            showToast('info', 'PDF جوړیږي...', 'مهرباني وکړئ انتظار وکړئ');
+            html2pdf().set(opt).from(reportContainer).save().then(() => {
+                showToast('success', 'ډاونلوډ شو', 'PDF فایل په بریالیتوب ډاونلوډ شو');
+            });
+        };
 
     </script>
 </body>

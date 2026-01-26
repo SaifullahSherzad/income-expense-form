@@ -51,9 +51,10 @@
                         align-items: flex-start;
                         justify-content: center;
                         padding: 0;
-                        position: relative;
-                        min-height: 100vh;
-                        overflow: auto;
+                        position: fixed;
+                        width: 100%;
+                        height: 100%;
+                        overflow: hidden;
                 }
 
                 @media (min-width: 768px) {
@@ -279,15 +280,18 @@
                         z-index: 10;
                         animation: slideInDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
                         position: relative;
-                        max-height: calc(100vh - 10px);
+                        height: 100%;
+                        max-height: 100%;
                         overflow-y: auto;
                         overflow-x: hidden;
+                        -webkit-overflow-scrolling: touch;
                 }
 
                 @media (min-width: 768px) {
                         .container {
                                 padding: 10px 16px 16px 16px;
-                                max-height: calc(100vh - 10px);
+                                height: 100%;
+                                max-height: 100%;
                                 overflow-y: auto;
                                 overflow-x: hidden;
                         }
@@ -296,7 +300,8 @@
                 @media (min-width: 768px) and (max-height: 900px) {
                         .container {
                                 padding: 10px 16px 16px 16px;
-                                max-height: calc(100vh - 10px);
+                                height: 100%;
+                                max-height: 100%;
                                 overflow-y: auto;
                                 overflow-x: hidden;
                         }
@@ -1344,10 +1349,9 @@
                         padding: 20px 30px !important;
                         border-radius: 16px !important;
                         background: #1e1b4b !important;
-                        /* Deep Indigo */
                         border: 2px solid rgba(255, 255, 255, 0.2) !important;
                         color: white !important;
-                        z-index: 999999 !important;
+                        z-index: 2147483647 !important;
                         opacity: 0 !important;
                         visibility: hidden !important;
                         transform: translateY(20px) !important;
@@ -1355,7 +1359,7 @@
                         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
                         direction: rtl !important;
                         min-width: 320px !important;
-                        pointer-events: auto !important;
+                        pointer-events: none !important;
                         display: block !important;
                 }
 
@@ -2093,9 +2097,14 @@
 
                         <div class="job-header" style="flex-direction: row; margin-bottom: 25px; gap: 20px; flex-shrink: 0; align-items: center; padding-top: 20px;">
                                 <div class="logo" style="width: 100px; height: 100px; font-size: 40px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.1);"><img src="./logo.jpg" alt="Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 20px;"></div>
-                                <div style="text-align: right;">
+                                <div style="text-align: right; flex-grow: 1;">
                                         <h2 style="font-size: 28px; margin-bottom: 5px;">شېرزاد حسابونه</h2>
                                         <p class="job-header-subtitle" style="font-size: 16px;">عمومي مالي ډشبورډ</p>
+                                </div>
+                                <div style="display: flex; gap: 10px;">
+                                        <button onclick="updateGeneralDashboard()" style="width: 45px; height: 45px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'" title="تازه کول">
+                                                🔄
+                                        </button>
                                 </div>
                         </div>
 
@@ -2395,12 +2404,12 @@
                                 <div style="flex: 1;">
                                         <div class="balance-label" style="font-size: 14px; color: #94a3b8; margin-bottom: 4px;">موجوده ګډ بیلانس</div>
                                         <div class="balance-value" style="font-size: 24px; font-weight: 800; color: #c084fc;">
-                                                <span id="balanceValue">0</span>
+                                                <span id="balanceValue">-</span>
                                                 <span class="balance-currency">AFN</span>
                                         </div>
                                 </div>
                                 <div style="display: flex; gap: 8px;">
-                                        <button type="button" id="editBalanceBtn" class="balance-edit-btn" onclick="editBalance()" style="width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer; font-size: 20px;">✏️</button>
+                                        <button type="button" id="refreshBalanceBtn" class="balance-edit-btn" onclick="fetchHomeData()" style="width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer; font-size: 20px;">🔄</button>
                                 </div>
                         </div>
 
@@ -2408,21 +2417,21 @@
                                 <!-- New Home Fields - Grid Layout -->
                                 <!-- Home Month Selection (New) -->
                                 <div id="homeMonthGroup" style="width: 100%; margin-bottom: 15px; display: none; direction: rtl;">
-                                    <label style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #94a3b8;">📅 د میاشتې انتخاب</label>
-                                    <select id="homeMonthSelect" onchange="fetchHomeData()" style="width: 100%; padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; box-sizing: border-box; font-size: 16px; outline: none;">
-                                        <option value="جنوري">جنوري</option>
-                                        <option value="فبروري">فبروري</option>
-                                        <option value="مارچ">مارچ</option>
-                                        <option value="اپریل">اپریل</option>
-                                        <option value="می">می</option>
-                                        <option value="جون">جون</option>
-                                        <option value="جولای">جولای</option>
-                                        <option value="اگست">اگست</option>
-                                        <option value="سپتمبر">سپتمبر</option>
-                                        <option value="اکتوبر">اکتوبر</option>
-                                        <option value="نومبر">نومبر</option>
-                                        <option value="دیسمبر">دیسمبر</option>
-                                    </select>
+                                        <label style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #94a3b8;">📅 د میاشتې انتخاب</label>
+                                        <select id="homeMonthSelect" onchange="fetchHomeData()" style="width: 100%; padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; box-sizing: border-box; font-size: 16px; outline: none;">
+                                                <option value="جنوري">جنوري</option>
+                                                <option value="فبروري">فبروري</option>
+                                                <option value="مارچ">مارچ</option>
+                                                <option value="اپریل">اپریل</option>
+                                                <option value="می">می</option>
+                                                <option value="جون">جون</option>
+                                                <option value="جولای">جولای</option>
+                                                <option value="اگست">اگست</option>
+                                                <option value="سپتمبر">سپتمبر</option>
+                                                <option value="اکتوبر">اکتوبر</option>
+                                                <option value="نومبر">نومبر</option>
+                                                <option value="دیسمبر">دیسمبر</option>
+                                        </select>
                                 </div>
 
                                 <div id="homeFields" style="width: 100%; display: flex; flex-direction: column; gap: 15px; margin-bottom: 24px; direction: rtl;">
@@ -3895,7 +3904,7 @@
                                                                         } else {
                                                                                 document.getElementById('balanceSection').style.display = 'block';
                                                                                 updateBalanceDisplay();
-                                                                                
+
                                                                                 // Show Home Fields for personal home accounts
                                                                                 const homeFields = document.getElementById('homeFields');
                                                                                 if (homeFields) homeFields.style.display = 'flex';
@@ -3903,13 +3912,13 @@
                                                                                 // Show Month Selector
                                                                                 const monthGroup = document.getElementById('homeMonthGroup');
                                                                                 if (monthGroup) {
-                                                                                    monthGroup.style.display = 'block';
-                                                                                    const monthSelect = document.getElementById('homeMonthSelect');
-                                                                                    if (monthSelect) {
-                                                                                        const pashtoMonths = ["جنوري", "فبروري", "مارچ", "اپریل", "می", "جون", "جولای", "اگست", "سپتمبر", "اکتوبر", "نومبر", "دیسمبر"];
-                                                                                        monthSelect.value = pashtoMonths[new Date().getMonth()];
-                                                                                    }
-                                                                                    fetchHomeData();
+                                                                                        monthGroup.style.display = 'block';
+                                                                                        const monthSelect = document.getElementById('homeMonthSelect');
+                                                                                        if (monthSelect) {
+                                                                                                const pashtoMonths = ["جنوري", "فبروري", "مارچ", "اپریل", "می", "جون", "جولای", "اگست", "سپتمبر", "اکتوبر", "نومبر", "دیسمبر"];
+                                                                                                monthSelect.value = pashtoMonths[new Date().getMonth()];
+                                                                                        }
+                                                                                        fetchHomeData();
                                                                                 }
                                                                         }
 
@@ -4004,11 +4013,16 @@
                                                 }
 
                                                 function updateBalanceDisplay() {
-                                                        const bal = localStorage.getItem('home_shared_balance') || '25000';
-                                                        document.getElementById('balanceValue').textContent = parseInt(bal).toLocaleString();
+                                                        const bal = localStorage.getItem('home_shared_balance') || '-';
+                                                        const balValue = parseInt(bal);
+                                                        if (isNaN(balValue)) {
+                                                                document.getElementById('balanceValue').textContent = '-';
+                                                                return;
+                                                        }
+                                                        document.getElementById('balanceValue').textContent = balValue.toLocaleString();
 
                                                         // Changed from < 5000 to <= 5000 as per request "remains 5000"
-                                                        if (parseInt(bal) <= 5000) {
+                                                        if (balValue <= 5000) {
                                                                 showToast('warning', 'خبرتیا!', 'د کور ګډ بیلانس 5000 افغانی یا کم دی!');
                                                                 document.getElementById('balanceSection').style.border = '2px solid #ef4444';
                                                         } else {
@@ -4273,192 +4287,121 @@
                                                         const btn = document.getElementById('confirmButton');
                                                         btn.disabled = true;
                                                         btn.textContent = '✓ ذخیره کیږی...';
+                                                        
                                                         try {
-                                                                // Deduct Balance for Home Accounts
-                                                                if (currentJob.id.startsWith('home_')) {
-                                                                        const exp = parseFloat(formDataToSubmit.expense || '0');
-                                                                        if (exp > 0) {
-                                                                                let bal = parseFloat(localStorage.getItem('home_shared_balance') || '0');
-                                                                                bal -= exp;
-                                                                                localStorage.setItem('home_shared_balance', bal);
+                                                                // د فارم ډیټا جوړول
+                                                                const formData = new FormData();
+                                                                
+                                                                // اضافه کول: action پارامیټر
+                                                                formData.append('action', 'saveStandardAccount');
+                                                                formData.append('workType', currentJob.id);
+                                                                formData.append('date', formDataToSubmit.date);
+                                                                formData.append('income', formDataToSubmit.income || 0);
+                                                                formData.append('expense', formDataToSubmit.expense || 0);
+                                                                formData.append('detail', formDataToSubmit.detail || '');
+                                                                formData.append('note', formDataToSubmit.note || '');
+                                                                
+                                                                // د سعودي/بوکلین/موبایل ځانګړي فیلډونه
+                                                                if(formDataToSubmit.sentToHome) {
+                                                                        formData.append('sentToHome', formDataToSubmit.sentToHome);
+                                                                }
+                                                                if(formDataToSubmit.driverSalary) {
+                                                                        formData.append('driverSalary', formDataToSubmit.driverSalary);
+                                                                }
+                                                                if(formDataToSubmit.sentToHomeMobile) {
+                                                                        formData.append('sentToHomeMobile', formDataToSubmit.sentToHomeMobile);
+                                                                }
+                                                                if(formDataToSubmit.shopRent) {
+                                                                        formData.append('shopRent', formDataToSubmit.shopRent);
+                                                                }
+                                                                
+                                                                // د عکس اضافول
+                                                                if(compressedImageBlob) {
+                                                                        formData.append('imageData', await blobToBase64(compressedImageBlob));
+                                                                        formData.append('imageName', originalImageFile ? originalImageFile.name : 'image.jpg');
+                                                                        formData.append('imageMimeType', originalImageFile ? originalImageFile.type : 'image/jpeg');
+                                                                }
+
+                                                                const response = await fetch(GOOGLE_SHEETS_URL, {
+                                                                        method: 'POST',
+                                                                        body: formData
+                                                                });
+
+                                                                const result = await response.json();
+                                                                
+                                                                if(result.success) {
+                                                                        showToast('success', '✅ بریالی', result.message || 'معلومات ثبت شول');
+
+                                                                        // --- FIX: Save to LocalStorage for Report ---
+                                                                        try {
+                                                                                const storageKey = 'history_' + currentJob.id;
+                                                                                let history = JSON.parse(localStorage.getItem(storageKey) || '[]');
+                                                                                history.push(formDataToSubmit);
+                                                                                localStorage.setItem(storageKey, JSON.stringify(history));
+
+                                                                                // Save Last Data for Modal
+                                                                                localStorage.setItem('lastSaveData_' + currentJob.id, JSON.stringify(formDataToSubmit));
+
+                                                                                // Update Stats
+                                                                                recalculateStats(currentJob.id);
+                                                                        } catch (e) {
+                                                                                console.error("Local save error:", e);
+                                                                        }
+                                                                        // -------------------------------------------
+                                                                        
+                                                                        // د فارم پاکول
+                                                                        document.getElementById('trailerForm').reset();
+                                                                        const today = new Date().toISOString().split('T')[0];
+                                                                        document.getElementById('date').value = today;
+                                                                        removeImage();
+                                                                        
+                                                                        // د کور شریک بیلانس تازه کول
+                                                                        if(currentJob.id.startsWith('home_') && !currentJob.id.includes('joint')) {
                                                                                 updateBalanceDisplay();
                                                                         }
-                                                                }
-
-                                                                // *** NEW: Save to Local Storage for Dashboard & Report per Account ***
-                                                                // 1. Save Transaction to History
-                                                                let newTransaction = {};
-                                                                if (formDataToSubmit.isHomeNew) {
-                                                                        newTransaction = {
-                                                                                date: formDataToSubmit.formattedDate,
-                                                                                familyMembers: formDataToSubmit.familyMembers,
-                                                                                individualRight: formDataToSubmit.individualRight,
-                                                                                actualPayment: formDataToSubmit.actualPayment,
-                                                                                difference: formDataToSubmit.difference,
-                                                                                status: formDataToSubmit.status,
-                                                                                remainingCash: formDataToSubmit.remainingCash,
-                                                                                isHomeNew: true,
-                                                                                timestamp: new Date().getTime()
-                                                                        };
                                                                 } else {
-                                                                        newTransaction = {
-                                                                                date: formDataToSubmit.formattedDate,
-                                                                                income: formDataToSubmit.income || '0',
-                                                                                expense: formDataToSubmit.expense || '0',
-                                                                                sentToHome: formDataToSubmit.sentToHome || '0',
-                                                                                driverSalary: formDataToSubmit.driverSalary || '0',
-                                                                                sentToHomeMobile: formDataToSubmit.sentToHomeMobile || '0',
-                                                                                shopRent: formDataToSubmit.shopRent || '0',
-                                                                                detail: formDataToSubmit.detail || formDataToSubmit.detailMobile || formDataToSubmit.detailSaudi || '',
-                                                                                note: formDataToSubmit.note || formDataToSubmit.noteMobile || formDataToSubmit.noteSaudi || '',
-                                                                                category: formDataToSubmit.category || '',
-                                                                                currency: formDataToSubmit.currency || 'AFN',
-                                                                                timestamp: new Date().getTime()
-                                                                        };
+                                                                        showToast('error', '❌ تېروتنه', result.message || 'ذخیره ناکامه شوه');
                                                                 }
-
-                                                                let history = JSON.parse(localStorage.getItem('history_' + currentJob.id) || '[]');
-                                                                history.unshift(newTransaction);
-                                                                localStorage.setItem('history_' + currentJob.id, JSON.stringify(history));
-
-                                                                // 2. Update Stats
-                                                                let stats = JSON.parse(localStorage.getItem('stats_' + currentJob.id) || '{"income": 0, "expense": 0}');
-                                                                if (!formDataToSubmit.isHomeNew) {
-                                                                        stats.income = parseFloat(stats.income) + parseFloat(newTransaction.income);
-                                                                        stats.expense = parseFloat(stats.expense) + parseFloat(newTransaction.expense);
-                                                                }
-                                                                localStorage.setItem('stats_' + currentJob.id, JSON.stringify(stats));
-                                                                // ***************************************************************
-
-                                                                let url = new URL(GOOGLE_SHEETS_URL);
-                                                                let params = {};
-                                                                if (formDataToSubmit.isHomeNew) {
-                                                                        params = {
-                                                                                date: formDataToSubmit.formattedDate,
-                                                                                workType: currentJob.id,
-                                                                                familyMembers: formDataToSubmit.familyMembers,
-                                                                                individualRight: formDataToSubmit.individualRight,
-                                                                                actualPayment: formDataToSubmit.actualPayment,
-                                                                                difference: formDataToSubmit.difference,
-                                                                                status: formDataToSubmit.status,
-                                                                                remainingCash: formDataToSubmit.remainingCash,
-                                                                                isHomeNew: 'true'
-                                                                        };
-                                                                } else {
-                                                                        params = {
-                                                                                date: formDataToSubmit.formattedDate,
-                                                                                workType: currentJob.id,
-                                                                                income: formDataToSubmit.income || '0',
-                                                                                expense: formDataToSubmit.expense || '0',
-                                                                                detail: formDataToSubmit.detail || formDataToSubmit.detailMobile || formDataToSubmit.detailSaudi || '',
-                                                                                note: formDataToSubmit.note || formDataToSubmit.noteMobile || formDataToSubmit.noteSaudi || '',
-                                                                                category: formDataToSubmit.category || ''
-                                                                        };
-                                                                }
-
-                                                                let method = 'GET';
-                                                                let body = null;
-                                                                let fetchUrl = url.toString();
-                                                                let fetchOptions = {};
-
-                                                                // Use the compressed blob if available, otherwise original file (though we should always have compressed one if file selected)
-                                                                const fileToSend = compressedImageBlob;
-                                                                const originalName = originalImageFile ? originalImageFile.name : 'image.jpg';
-
-                                                                if (fileToSend) {
-                                                                        // Convert image to Base64
-                                                                        const base64Data = await new Promise((resolve, reject) => {
-                                                                                const reader = new FileReader();
-                                                                                reader.readAsDataURL(fileToSend);
-                                                                                reader.onload = () => resolve(reader.result.split(',')[1]);
-                                                                                reader.onerror = error => reject(error);
-                                                                        });
-
-                                                                        params.imageName = originalName;
-                                                                        params.imageMimeType = 'image/jpeg'; // We always convert to JPEG
-                                                                        params.imageData = base64Data;
-
-                                                                        method = 'POST';
-                                                                        fetchUrl = GOOGLE_SHEETS_URL;
-
-                                                                        // Build form body for POST
-                                                                        const formData = new URLSearchParams();
-                                                                        Object.keys(params).forEach(key => formData.append(key, params[key]));
-
-                                                                        fetchOptions = {
-                                                                                method: 'POST',
-                                                                                body: formData,
-                                                                                // 'no-cors' mode allows sending data to Google Script without CORS errors,
-                                                                                // but prevents reading the response text.
-                                                                                mode: 'no-cors'
-                                                                        };
-                                                                } else {
-                                                                        // Standard GET request for text-only (Legacy behavior preserved)
-                                                                        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-                                                                        fetchUrl = url.toString();
-                                                                        fetchOptions = { method: 'GET' };
-                                                                }
-
-                                                                const response = await fetch(fetchUrl, fetchOptions);
-
-                                                                // Handle no-cors specific success (POST requests with images)
-                                                                if (fileToSend) {
-                                                                        // In no-cors mode, we can't read the response, so we assume success if no error was thrown
-                                                                        console.log('Post request sent in no-cors mode');
-                                                                } else {
-                                                                        // For GET requests, we check the response
-                                                                        if (!response.ok) {
-                                                                                throw new Error('حساب ذخیره نه شو (Server Error)');
-                                                                        }
-                                                                        const text = await response.text();
-                                                                        if (text.includes("ERROR")) {
-                                                                                throw new Error('حساب ذخیره نه شو: ' + text);
-                                                                        }
-                                                                }
-
-                                                                const lastSaveData = {
-                                                                        date: formDataToSubmit.formattedDate,
-                                                                        income: formDataToSubmit.income || '0',
-                                                                        expense: formDataToSubmit.expense || '0',
-                                                                        sentToHome: formDataToSubmit.sentToHome || formDataToSubmit.sentToHomeMobile || '0',
-                                                                        driverSalary: formDataToSubmit.driverSalary || '0',
-                                                                        detail: formDataToSubmit.detail || formDataToSubmit.detailMobile || formDataToSubmit.detailSaudi || '',
-                                                                        note: formDataToSubmit.note || formDataToSubmit.noteMobile || formDataToSubmit.noteSaudi || '',
-                                                                        category: formDataToSubmit.category || ''
-                                                                };
-                                                                localStorage.setItem('lastSaveData_' + currentJob.id, JSON.stringify(lastSaveData));
-
-                                                                let successMsg = 'مننه حساب ذخیره شو';
-                                                                if (fileToSend) {
-                                                                        successMsg += ' او عکس ګوګل ډرایو ته ولیږل شو';
-                                                                }
-                                                                showToast('success', '✨ معلومات بریالي ولیکل شول', successMsg);
-
-                                                                // Reset Image
-                                                                removeImage();
-
-                                                                document.getElementById('trailerForm').reset();
-                                                                const today = new Date().toISOString().split('T')[0];
-                                                                document.getElementById('date').value = today;
+                                                                
                                                                 closeModal();
+                                                                
                                                         } catch (error) {
-                                                                console.error('Fetch error:', error);
-                                                                showToast('error', 'حساب ذخیره نه شو', error.message);
+                                                                console.error('Submit error:', error);
+                                                                showToast('error', '❌ ستونزه', 'د معلوماتو په لیږلو کې ستونزه راغله');
                                                         } finally {
                                                                 btn.disabled = false;
                                                                 btn.textContent = '✓ معلومات تایید او ذخیره کړئ';
                                                         }
                                                 }
 
+                                                // د Blob څخه Base64 ته بدلولو فانکشن
+                                                async function blobToBase64(blob) {
+                                                        return new Promise((resolve, reject) => {
+                                                                const reader = new FileReader();
+                                                                reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                                                                reader.onerror = reject;
+                                                                reader.readAsDataURL(blob);
+                                                        });
+                                                }
+
                                                 function showToast(type, title, desc = '') {
                                                         console.log(`Toasting: ${type} - ${title}`);
 
                                                         // 1. Try Custom Toast
-                                                        const t = document.getElementById('toast');
+                                                        let t = document.getElementById('toast');
                                                         if (t) {
+                                                                // Move to body immediately if not already there
+                                                                if (t.parentNode !== document.body) {
+                                                                        document.body.appendChild(t);
+                                                                }
+
                                                                 document.getElementById('toastTitle').textContent = title;
                                                                 document.getElementById('toastDescription').textContent = desc;
-                                                                t.style.borderRight = type === 'success' ? '8px solid #10b981' : '#ef4444';
+                                                                t.style.borderRight = type === 'success' ? '8px solid #10b981' : '8px solid #ef4444';
+
+                                                                // Force z-index again just in case
+                                                                t.style.zIndex = '2147483647';
+
                                                                 t.classList.add('show');
                                                                 setTimeout(() => t.classList.remove('show'), 4000);
                                                         }
@@ -4475,7 +4418,16 @@
                                                                         timer: 4000,
                                                                         timerProgressBar: true,
                                                                         background: '#1e1b4b',
-                                                                        color: '#fff'
+                                                                        color: '#fff',
+                                                                        customClass: {
+                                                                                container: 'swal2-top-layer'
+                                                                        },
+                                                                        didOpen: (toast) => {
+                                                                                toast.style.zIndex = '2147483647';
+                                                                                // Ensure swal container is also at top
+                                                                                const container = document.querySelector('.swal2-container');
+                                                                                if (container) container.style.zIndex = '2147483647';
+                                                                        }
                                                                 });
                                                         } else {
                                                                 alert(title + "\n" + desc);
@@ -4596,7 +4548,7 @@
                         </div>
 
                         <div style="margin-top: 10px; text-align: center;">
-                             <button onclick="fetchSaudiData()" class="btn-secondary" style="font-size: 12px; padding: 8px 16px;">🔄 معلومات تازه کړئ</button>
+                             <button id="saudiRefreshBtn" onclick="fetchSaudiDataFixed()" class="btn-secondary" style="font-size: 12px; padding: 8px 16px;">🔄 معلومات تازه کړئ</button>
                         </div>
                     </div>
                 </div>
@@ -4684,7 +4636,7 @@
                         </div>
 
                         <div style="margin-top: 10px; text-align: center;">
-                             <button onclick="fetchMobileData()" class="btn-secondary" style="font-size: 12px; padding: 8px 16px;">🔄 معلومات تازه کړئ</button>
+                             <button id="mobileRefreshBtn" onclick="fetchMobileDataFixed()" class="btn-secondary" style="font-size: 12px; padding: 8px 16px;">🔄 معلومات تازه کړئ</button>
                         </div>
                     </div>
                 </div>
@@ -4694,38 +4646,44 @@
                                                 }
 
                                                 async function fetchHomeData() {
-                                                    const monthSelect = document.getElementById('homeMonthSelect');
-                                                    const selectedMonth = monthSelect ? monthSelect.value : '';
-                                                    const currentId = currentJob.id;
-                                                    
-                                                    // Optional: Add simple loading state if desired
-                                                    const fieldsDiv = document.getElementById('homeFields');
-                                                    if (fieldsDiv) fieldsDiv.style.opacity = '0.5';
+                                                        const monthSelect = document.getElementById('homeMonthSelect');
+                                                        const selectedMonth = monthSelect ? monthSelect.value : '';
+                                                        const currentId = currentJob.id;
 
-                                                    try {
-                                                        const url = new URL(GOOGLE_SHEETS_URL);
-                                                        url.searchParams.append('action', 'getHomeStats');
-                                                        url.searchParams.append('accountId', currentId);
-                                                        if (selectedMonth) {
-                                                            url.searchParams.append('month', selectedMonth);
+                                                        // Optional: Add simple loading state if desired
+                                                        const fieldsDiv = document.getElementById('homeFields');
+                                                        if (fieldsDiv) fieldsDiv.style.opacity = '0.5';
+
+                                                        try {
+                                                                const url = new URL(GOOGLE_SHEETS_URL);
+                                                                url.searchParams.append('action', 'getHomeStats');
+                                                                url.searchParams.append('accountId', currentId);
+                                                                if (selectedMonth) {
+                                                                        url.searchParams.append('month', selectedMonth);
+                                                                }
+
+                                                                const response = await fetch(url.toString());
+                                                                const data = await response.json();
+
+                                                                // Update fields
+                                                                if (document.getElementById('familyMembers')) document.getElementById('familyMembers').value = data.familyMembers || '';
+                                                                if (document.getElementById('individualRight')) document.getElementById('individualRight').value = data.individualRight || '';
+                                                                if (document.getElementById('actualPayment')) document.getElementById('actualPayment').value = data.actualPayment || '';
+                                                                if (document.getElementById('difference')) document.getElementById('difference').value = data.difference || '';
+                                                                if (document.getElementById('status')) {
+                                                                        const statusValue = data.status !== undefined && data.status !== null ? String(data.status) : '';
+                                                                        document.getElementById('status').value = statusValue;
+                                                                }
+                                                                if (document.getElementById('remainingCash')) document.getElementById('remainingCash').value = data.remainingCash || '';
+
+                                                                // Update Joint Balance and Total
+                                                                if (document.getElementById('balanceValue')) document.getElementById('balanceValue').textContent = formatCurrency(data.balance || 0);
+
+                                                        } catch (error) {
+                                                                console.error("Error fetching Home stats:", error);
+                                                        } finally {
+                                                                if (fieldsDiv) fieldsDiv.style.opacity = '1';
                                                         }
-
-                                                        const response = await fetch(url.toString());
-                                                        const data = await response.json();
-
-                                                        // Update fields
-                                                        if (document.getElementById('familyMembers')) document.getElementById('familyMembers').value = data.familyMembers || '';
-                                                        if (document.getElementById('individualRight')) document.getElementById('individualRight').value = data.individualRight || '';
-                                                        if (document.getElementById('actualPayment')) document.getElementById('actualPayment').value = data.actualPayment || '';
-                                                        if (document.getElementById('difference')) document.getElementById('difference').value = data.difference || '';
-                                                        if (document.getElementById('status')) document.getElementById('status').value = data.status || '';
-                                                        if (document.getElementById('remainingCash')) document.getElementById('remainingCash').value = data.remainingCash || '';
-
-                                                    } catch (error) {
-                                                        console.error("Error fetching Home stats:", error);
-                                                    } finally {
-                                                        if (fieldsDiv) fieldsDiv.style.opacity = '1';
-                                                    }
                                                 }
 
                                                 async function fetchMobileData() {
@@ -4902,7 +4860,7 @@
                         </div>
 
                         <div style="margin-top: 10px; text-align: center;">
-                             <button onclick="fetchGeneralData()" class="btn-secondary" style="font-size: 12px; padding: 8px 16px;">🔄 معلومات تازه کړئ</button>
+                             <button id="refreshAllBtn" onclick="updateAllDashboards()" class="btn-secondary" style="font-size: 12px; padding: 8px 16px;">🔄 معلومات تازه کړئ</button>
                         </div>
                     </div>
                 </div>
@@ -4914,49 +4872,41 @@
                                                 async function fetchGeneralData() {
                                                         const loading = document.getElementById('generalLoading');
                                                         const content = document.getElementById('generalContent');
-
-                                                        if (loading) loading.style.display = 'flex';
-                                                        if (content) content.style.display = 'none';
-
+                                                        
+                                                        if(loading) loading.style.display = 'flex';
+                                                        if(content) content.style.display = 'none';
+                                                        
                                                         try {
                                                                 // Construct URL to fetch general stats
                                                                 const url = new URL(GOOGLE_SHEETS_URL);
-                                                                url.searchParams.append('action', 'getGeneralStats');
+                                                                url.searchParams.append('action', 'getGeneralDashboardData');
 
-                                                                // Fetch data from Google Sheets
                                                                 const response = await fetch(url.toString());
                                                                 const data = await response.json();
 
-                                                                // Check if API returned valid data, otherwise use 0
-                                                                const revenue = data.revenue || 0;
-                                                                const expenses = data.expenses || 0;
-                                                                const netProfit = data.netProfit || 0;
-                                                                const totalCapital = data.totalCapital || 0;
-                                                                const receivables = data.receivables || 0;
-                                                                const liabilities = data.liabilities || 0;
-
-                                                                // Update UI
-                                                                if (document.getElementById('generalRevenue')) document.getElementById('generalRevenue').textContent = formatCurrency(revenue);
-                                                                if (document.getElementById('generalExpenses')) document.getElementById('generalExpenses').textContent = formatCurrency(expenses);
-                                                                if (document.getElementById('generalNetProfit')) document.getElementById('generalNetProfit').textContent = formatCurrency(netProfit);
-                                                                if (document.getElementById('generalTotalCapital')) document.getElementById('generalTotalCapital').textContent = formatCurrency(totalCapital);
-                                                                if (document.getElementById('generalReceivables')) document.getElementById('generalReceivables').textContent = formatCurrency(receivables);
-                                                                if (document.getElementById('generalLiabilities')) document.getElementById('generalLiabilities').textContent = formatCurrency(liabilities);
-
+                                                                if(data.success) {
+                                                                        if(document.getElementById('dashTotalWorth')) document.getElementById('dashTotalWorth').textContent = Math.round(data.totalWorth || 0).toLocaleString();
+                                                                        if(document.getElementById('dashTotalCash')) document.getElementById('dashTotalCash').textContent = Math.round(data.totalCash || 0).toLocaleString();
+                                                                        if(document.getElementById('dashTotalCapital')) document.getElementById('dashTotalCapital').textContent = Math.round(data.totalCapital || 0).toLocaleString();
+                                                                        if(document.getElementById('dashTotalIncome')) document.getElementById('dashTotalIncome').textContent = Math.round(data.totalIncome || 0).toLocaleString();
+                                                                        if(document.getElementById('dashNetProfit')) document.getElementById('dashNetProfit').textContent = Math.round(data.netProfit || 0).toLocaleString();
+                                                                        if(document.getElementById('dashNetRemaining')) document.getElementById('dashNetRemaining').textContent = Math.round(data.netRemaining || 0).toLocaleString();
+                                                                        if(document.getElementById('dashTotalExpense')) document.getElementById('dashTotalExpense').textContent = Math.round(data.totalExpense || 0).toLocaleString();
+                                                                        if(document.getElementById('dashTotalHouseholdExpense')) document.getElementById('dashTotalHouseholdExpense').textContent = Math.round(data.totalHouseholdExpense || 0).toLocaleString();
+                                                                        if(document.getElementById('dashTotalInvestment')) document.getElementById('dashTotalInvestment').textContent = Math.round(data.totalInvestment || 0).toLocaleString();
+                                                                        if(document.getElementById('dashLoansToPeople')) document.getElementById('dashLoansToPeople').textContent = Math.round(data.receivables || 0).toLocaleString();
+                                                                        if(document.getElementById('dashLoansFromPeople')) document.getElementById('dashLoansFromPeople').textContent = Math.round(data.payables || 0).toLocaleString();
+                                                                        
+                                                                        showToast('success', '✅ تازه شو', 'ډیټا له ګوګل شیټ څخه په بریالیتوب تازه شوه');
+                                                                } else {
+                                                                        showToast('error', '❌ تېروتنه', data.message || 'ډیټا ترلاسه نشوه');
+                                                                }
                                                         } catch (error) {
-                                                                console.error("Error fetching General stats:", error);
-
-                                                                document.getElementById('generalRevenue').textContent = "0";
-                                                                document.getElementById('generalExpenses').textContent = "0";
-                                                                document.getElementById('generalNetProfit').textContent = "0";
-                                                                if (document.getElementById('generalTotalCapital')) document.getElementById('generalTotalCapital').textContent = "0";
-                                                                if (document.getElementById('generalReceivables')) document.getElementById('generalReceivables').textContent = "0";
-                                                                if (document.getElementById('generalLiabilities')) document.getElementById('generalLiabilities').textContent = "0";
-
-                                                                showToast('error', 'د ډیټا په راوړلو کې ستونزه', 'له ګوګل شیټ سره اړیکه ونشو نیولای');
+                                                                console.error("Error refreshing dashboard:", error);
+                                                                showToast('error', '❌ تېروتنه', 'د ډیټا په تازه کولو کې ستونزه راغله');
                                                         } finally {
-                                                                if (loading) loading.style.display = 'none';
-                                                                if (content) content.style.display = 'flex';
+                                                                if(loading) loading.style.display = 'none';
+                                                                if(content) content.style.display = 'flex';
                                                         }
                                                 }
 
@@ -5212,70 +5162,458 @@
 
 
                                                 // OVERRIDE: Update General Dashboard to use Debt Data
-                                                function updateGeneralDashboard() {
-                                                        // 1. Calculate Account Balances
-                                                        const accounts = [
-                                                                { id: 'boklyn', type: 'afn' },
-                                                                { id: 'mobile', type: 'afn' },
-                                                                { id: 'saudi_12module', type: 'sar' }, // SAR
-                                                                { id: 'saudi_14module', type: 'sar' } // SAR
-                                                        ];
+                                                async function updateGeneralDashboard() {
+                                                        const refreshBtn = event?.currentTarget;
+                                                        if (refreshBtn) {
+                                                                refreshBtn.style.animation = 'spin 1s linear infinite';
+                                                                refreshBtn.disabled = true;
+                                                        }
 
-                                                        let totalCashAFN = 0;
-                                                        let boklynTotal = 0;
-                                                        let mobileTotal = 0;
-                                                        let saudiTotals = [];
+                                                        try {
+                                                                const url = new URL(GOOGLE_SHEETS_URL);
+                                                                url.searchParams.append('action', 'getGeneralDashboardData');
 
-                                                        // Helper to get balance
-                                                        const getBal = (id) => {
-                                                                const stats = JSON.parse(localStorage.getItem('stats_' + id) || '{"income": 0, "expense": 0}');
-                                                                return parseFloat(stats.income) - parseFloat(stats.expense);
-                                                        };
+                                                                const response = await fetch(url.toString());
+                                                                const data = await response.json();
 
-                                                        // Boklyn
-                                                        boklynTotal = getBal('boklyn');
-                                                        totalCashAFN += boklynTotal;
+                                                                if (data) {
+                                                                        // Update UI with data from Google Sheets
+                                                                        if (document.getElementById('dashTotalWorth')) document.getElementById('dashTotalWorth').textContent = (data.totalWorth || 0).toLocaleString();
+                                                                        if (document.getElementById('dashTotalCash')) document.getElementById('dashTotalCash').textContent = (data.totalCash || 0).toLocaleString();
+                                                                        if (document.getElementById('dashTotalCapital')) document.getElementById('dashTotalCapital').textContent = (data.totalCapital || 0).toLocaleString();
+                                                                        if (document.getElementById('dashTotalIncome')) document.getElementById('dashTotalIncome').textContent = (data.totalIncome || 0).toLocaleString();
+                                                                        if (document.getElementById('dashNetProfit')) document.getElementById('dashNetProfit').textContent = (data.netProfit || 0).toLocaleString();
+                                                                        if (document.getElementById('dashNetRemaining')) document.getElementById('dashNetRemaining').textContent = (data.netRemaining || 0).toLocaleString();
+                                                                        if (document.getElementById('dashTotalExpense')) document.getElementById('dashTotalExpense').textContent = (data.totalExpense || 0).toLocaleString();
+                                                                        if (document.getElementById('dashTotalHouseholdExpense')) document.getElementById('dashTotalHouseholdExpense').textContent = (data.totalHouseholdExpense || 0).toLocaleString();
+                                                                        if (document.getElementById('dashTotalInvestment')) document.getElementById('dashTotalInvestment').textContent = (data.totalInvestment || 0).toLocaleString();
+                                                                        if (document.getElementById('dashLoansToPeople')) document.getElementById('dashLoansToPeople').textContent = (data.loansToPeople || 0).toLocaleString();
+                                                                        if (document.getElementById('dashLoansFromPeople')) document.getElementById('dashLoansFromPeople').textContent = (data.loansFromPeople || 0).toLocaleString();
 
-                                                        // Mobile
-                                                        mobileTotal = getBal('mobile');
-                                                        totalCashAFN += mobileTotal;
+                                                                        showToast('success', 'تازه شو', 'ډیټا له ګوګل شیټ څخه په بریالیتوب تازه شوه');
+                                                                }
+                                                        } catch (error) {
+                                                                console.error("Error refreshing dashboard:", error);
+                                                                showToast('error', 'تېروتنه', 'د ډیټا په تازه کولو کې ستونزه راغله');
+                                                        } finally {
+                                                                if (refreshBtn) {
+                                                                        refreshBtn.style.animation = '';
+                                                                        refreshBtn.disabled = false;
+                                                                }
+                                                        }
+                                                }
 
-                                                        // Saudi Accounts
-                                                        const SAR_TO_AFN = 18.5;
-                                                        let totalSaudiSAR = 0;
-
-                                                        SAUDI_SUB_ACCOUNTS.forEach(acc => {
-                                                                const bal = getBal(acc.id);
-                                                                saudiTotals.push({ name: acc.name, balance: bal, icon: acc.icon });
-                                                                totalSaudiSAR += bal;
+                                                // ===== نوي داشبورډ تازه کولو فنګشنونه =====
+                                                
+                                                // د ټولو ډشبورډونو د معلوماتو ترلاسه کولو فنګشن
+                                                async function updateAllDashboards() {
+                                                    showLoading('د معلوماتو راوBringلو...', 'مهرباني وکړئ انتظار وکړئ');
+                                                    try {
+                                                        const urlObj = new URL(GOOGLE_SHEETS_URL);
+                                                        urlObj.searchParams.append('action', 'getAllDashboardData');
+                                                        
+                                                        const response = await fetch(urlObj.toString());
+                                                        const data = await response.json();
+                                                        
+                                                        if (data.status === 'success') {
+                                                            // د عمومی ډشبورډ اپډیټ
+                                                            if (data.general) {
+                                                                updateGeneralDashboardDisplay(data.general);
+                                                            }
+                                                            
+                                                            // د سعودي 12 ماډل ډشبورډ
+                                                            if (data.saudi_12module) {
+                                                                updateSaudiDashboard('saudi_12module', data.saudi_12module);
+                                                            }
+                                                            
+                                                            // د سعودي 14 ماډل ډشبورډ
+                                                            if (data.saudi_14module) {
+                                                                updateSaudiDashboard('saudi_14module', data.saudi_14module);
+                                                            }
+                                                            
+                                                            // د کور لګښتونه ډشبورډ
+                                                            if (data.home) {
+                                                                updateHomeDashboard(data.home);
+                                                            }
+                                                            
+                                                            showToast('success', 'بریا', 'ټول معلومات په بریالیتوب سره تازه شول');
+                                                        } else {
+                                                            throw new Error(data.message || 'د معلوماتو ترلاسه کولو کې تېروتنه');
+                                                        }
+                                                    } catch (error) {
+                                                        console.error('Error updating all dashboards:', error);
+                                                        showToast('error', 'تېروتنه', 'د معلوماتو تازه کولو کې ستونزه راغله: ' + error.message);
+                                                        // Offline fallback
+                                                        loadFromLocalStorage();
+                                                    } finally {
+                                                        hideLoading();
+                                                    }
+                                                }
+                                                
+                                                // د عمومی ډشبورډ ښودلو فنګشن
+                                                function updateGeneralDashboardDisplay(data) {
+                                                    if (!data) return;
+                                                    
+                                                    // د عمومی عاید اپډیټ
+                                                    const totalRevenueEl = document.getElementById('totalRevenue');
+                                                    if (totalRevenueEl) totalRevenueEl.textContent = formatNumber(data.totalRevenue || 0);
+                                                    
+                                                    const totalExpensesEl = document.getElementById('totalExpenses');
+                                                    if (totalExpensesEl) totalExpensesEl.textContent = formatNumber(data.totalExpenses || 0);
+                                                    
+                                                    const totalProfitEl = document.getElementById('totalProfit');
+                                                    if (totalProfitEl) totalProfitEl.textContent = formatNumber(data.totalProfit || 0);
+                                                    
+                                                    // د کور لګښتونه ټولیز
+                                                    const homeExpensesEl = document.getElementById('homeExpensesTotal');
+                                                    if (homeExpensesEl) homeExpensesEl.textContent = formatNumber(data.homeExpenses || 0);
+                                                    
+                                                    // د سعودي 12 ماډل ډیټا
+                                                    const saudi12RevEl = document.getElementById('saudi12Revenue');
+                                                    if (saudi12RevEl) saudi12RevEl.textContent = formatNumber(data.saudi12Revenue || 0);
+                                                    
+                                                    const saudi12ProfitEl = document.getElementById('saudi12Profit');
+                                                    if (saudi12ProfitEl) saudi12ProfitEl.textContent = formatNumber(data.saudi12Profit || 0);
+                                                    
+                                                    // د سعودي 14 ماډل ډیټا
+                                                    const saudi14RevEl = document.getElementById('saudi14Revenue');
+                                                    if (saudi14RevEl) saudi14RevEl.textContent = formatNumber(data.saudi14Revenue || 0);
+                                                    
+                                                    const saudi14ProfitEl = document.getElementById('saudi14Profit');
+                                                    if (saudi14ProfitEl) saudi14ProfitEl.textContent = formatNumber(data.saudi14Profit || 0);
+                                                    
+                                                    // د بلیک ډریور ډیټا
+                                                    const driverRevEl = document.getElementById('driverRevenue');
+                                                    if (driverRevEl) driverRevEl.textContent = formatNumber(data.driverRevenue || 0);
+                                                    
+                                                    const driverProfitEl = document.getElementById('driverProfit');
+                                                    if (driverProfitEl) driverProfitEl.textContent = formatNumber(data.driverProfit || 0);
+                                                    
+                                                    // د ګرین ډریور ډیټا
+                                                    const driver2RevEl = document.getElementById('driver2Revenue');
+                                                    if (driver2RevEl) driver2RevEl.textContent = formatNumber(data.driver2Revenue || 0);
+                                                    
+                                                    const driver2ProfitEl = document.getElementById('driver2Profit');
+                                                    if (driver2ProfitEl) driver2ProfitEl.textContent = formatNumber(data.driver2Profit || 0);
+                                                    
+                                                    // د ټولو کورنیو اکاونټونو اپډیټ
+                                                    updateHomeAccounts(data.homeAccounts || {});
+                                                    
+                                                    // Local storage کې ذخیره کولو
+                                                    localStorage.setItem('generalDashboardData', JSON.stringify(data));
+                                                }
+                                                
+                                                // د سعودي ډشبورډ ښودلو فنګشن
+                                                function updateSaudiDashboard(accountType, data) {
+                                                    if (!data) return;
+                                                    
+                                                    // د عاید اپډیټ
+                                                    const revenueEl = document.getElementById(accountType + 'Revenue');
+                                                    if (revenueEl) revenueEl.textContent = formatNumber(data.revenue || 0);
+                                                    
+                                                    // د لګښت اپډیټ
+                                                    const expensesEl = document.getElementById(accountType + 'Expenses');
+                                                    if (expensesEl) expensesEl.textContent = formatNumber(data.expenses || 0);
+                                                    
+                                                    // د کورته لېږل شوې پیسې اپډیټ
+                                                    const sentHomeEl = document.getElementById(accountType + 'SentHome');
+                                                    if (sentHomeEl) sentHomeEl.textContent = formatNumber(data.sentHome || 0);
+                                                    
+                                                    // د ډرېور تنخوا اپډیټ
+                                                    const salariesEl = document.getElementById(accountType + 'Salaries');
+                                                    if (salariesEl) salariesEl.textContent = formatNumber(data.salaries || 0);
+                                                    
+                                                    // د خالصه ګټې اپډیټ
+                                                    const profitEl = document.getElementById(accountType + 'Profit');
+                                                    if (profitEl) profitEl.textContent = formatNumber(data.profit || 0);
+                                                    
+                                                    // د نېټې اپډیټ
+                                                    const lastUpdateEl = document.getElementById(accountType + 'LastUpdate');
+                                                    if (lastUpdateEl) lastUpdateEl.textContent = data.lastUpdate || new Date().toLocaleString('ps-AF');
+                                                    
+                                                    // Local storage کې ذخیره کولو
+                                                    localStorage.setItem(accountType + '_dashboard', JSON.stringify(data));
+                                                }
+                                                
+                                                // د کور لګښتونه ډشبورډ ښودلو فنګشن
+                                                function updateHomeDashboard(data) {
+                                                    if (!data) return;
+                                                    
+                                                    // د ټول کور لګښت اپډیټ
+                                                    const totalHomeEl = document.getElementById('totalHomeExpenses');
+                                                    if (totalHomeEl) totalHomeEl.textContent = formatNumber(data.total || 0);
+                                                    
+                                                    // د هر کورنی اکاونټ اپډیټ
+                                                    if (data.accounts) {
+                                                        Object.keys(data.accounts).forEach(accountId => {
+                                                            const accountEl = document.getElementById(accountId + 'Balance');
+                                                            if (accountEl) {
+                                                                accountEl.textContent = formatNumber(data.accounts[accountId] || 0);
+                                                            }
                                                         });
-
-                                                        const saudiInAFN = totalSaudiSAR * SAR_TO_AFN;
-
-                                                        // 3. Total Worth Calculation
-                                                        const totalCashCombined = totalCashAFN + saudiInAFN;
-                                                        const totalWorth = totalCashCombined;
-
-                                                        // 4. Update UI
-                                                        document.getElementById('dashTotalWorth').textContent = totalWorth.toLocaleString();
-                                                        document.getElementById('dashTotalCash').textContent = totalCashCombined.toLocaleString();
-                                                        if (document.getElementById('dashLiability')) document.getElementById('dashLiability').textContent = "0";
-                                                        if (document.getElementById('dashReceivable')) document.getElementById('dashReceivable').textContent = "0";
-
-
-                                                        // New Dashboard Stats Update (Placeholders)
-                                                        if (document.getElementById('dashTotalWorth')) document.getElementById('dashTotalWorth').textContent = (totalWorth || 0).toLocaleString();
-                                                        if (document.getElementById('dashNetProfit')) document.getElementById('dashNetProfit').textContent = "0";
-                                                        if (document.getElementById('dashTotalCash')) document.getElementById('dashTotalCash').textContent = (totalCashCombined || 0).toLocaleString();
-                                                        if (document.getElementById('dashCapitalInUse')) document.getElementById('dashCapitalInUse').textContent = "0";
-                                                        if (document.getElementById('dashInventory')) document.getElementById('dashInventory').textContent = (inventory || 0).toLocaleString();
-                                                        if (document.getElementById('dashZakat')) document.getElementById('dashZakat').textContent = Math.floor(zakat || 0).toLocaleString();
-                                                        if (document.getElementById('dashGrowth')) document.getElementById('dashGrowth').textContent = (growth || 0).toFixed(1);
-                                                        if (document.getElementById('dashOpExp')) document.getElementById('dashOpExp').textContent = (opExp || 0).toLocaleString();
-                                                        if (document.getElementById('dashCapExp')) document.getElementById('dashCapExp').textContent = (capExp || 0).toLocaleString();
-                                                        if (document.getElementById('dashTotalIncome')) document.getElementById('dashTotalIncome').textContent = "0";
-                                                        if (document.getElementById('dashPersonalExpense')) document.getElementById('dashPersonalExpense').textContent = "0";
-
+                                                    }
+                                                    
+                                                    // Local storage کې ذخیره کولو
+                                                    localStorage.setItem('homeDashboardData', JSON.stringify(data));
+                                                }
+                                                
+                                                // د کورنیو اکاونټونو اپډیټ فنګشن
+                                                function updateHomeAccounts(accounts) {
+                                                    const homeAccounts = {
+                                                        'lalak': 'لالک',
+                                                        'saifullah': 'سیف الله',
+                                                        'saeedullah': 'سعید الله',
+                                                        'siddiqullah': 'صدیق الله',
+                                                        'joint': 'مشترکه',
+                                                        'investment': 'investment'
+                                                    };
+                                                    
+                                                    Object.keys(homeAccounts).forEach(key => {
+                                                        const balanceEl = document.getElementById(key + 'Balance');
+                                                        if (balanceEl) {
+                                                            balanceEl.textContent = formatNumber(accounts[key] || 0);
+                                                        }
+                                                    });
+                                                }
+                                                
+                                                // د یو خاص اکاونټ د ټرانزکشنونو لیست ترلاسه کولو فنګشن
+                                                async function getAccountTransactions(accountType) {
+                                                    try {
+                                                        const urlObj = new URL(GOOGLE_SHEETS_URL);
+                                                        urlObj.searchParams.append('action', 'getAccountTransactions');
+                                                        urlObj.searchParams.append('accountType', accountType);
+                                                        
+                                                        const response = await fetch(urlObj.toString());
+                                                        const data = await response.json();
+                                                        
+                                                        if (data.status === 'success') {
+                                                            return data.transactions || [];
+                                                        } else {
+                                                            console.error('Error fetching transactions:', data.message);
+                                                            return [];
+                                                        }
+                                                    } catch (error) {
+                                                        console.error('Error fetching transactions:', error);
+                                                        return [];
+                                                    }
+                                                }
+                                                
+                                                // د عمومی ډشبورډ تازه کولو فنګشن (اصلاح شوی)
+                                                async function updateGeneralDashboardFixed() {
+                                                    try {
+                                                        showLoading('د عمومی ډشبورډ تازه کول...', 'مهرباني وکړئ انتظار وکړئ');
+                                                        
+                                                        const urlObj = new URL(GOOGLE_SHEETS_URL);
+                                                        urlObj.searchParams.append('action', 'getGeneralDashboardData');
+                                                        
+                                                        const response = await fetch(urlObj.toString());
+                                                        const result = await response.json();
+                                                        
+                                                        if (result.status === 'success') {
+                                                            const data = result.data;
+                                                            
+                                                            // د عاید اپډیټ
+                                                            if (document.getElementById('totalRevenue')) {
+                                                                document.getElementById('totalRevenue').textContent = formatNumber(data.totalRevenue || 0);
+                                                            }
+                                                            if (document.getElementById('totalExpenses')) {
+                                                                document.getElementById('totalExpenses').textContent = formatNumber(data.totalExpenses || 0);
+                                                            }
+                                                            if (document.getElementById('totalProfit')) {
+                                                                document.getElementById('totalProfit').textContent = formatNumber(data.totalProfit || 0);
+                                                            }
+                                                            
+                                                            // د کور لګښتونه اپډیټ
+                                                            if (document.getElementById('homeExpensesTotal')) {
+                                                                document.getElementById('homeExpensesTotal').textContent = formatNumber(data.homeExpenses || 0);
+                                                            }
+                                                            
+                                                            // د سعودي 12 ماډل اپډیټ
+                                                            if (document.getElementById('saudi12Revenue')) {
+                                                                document.getElementById('saudi12Revenue').textContent = formatNumber(data.saudi12Revenue || 0);
+                                                            }
+                                                            if (document.getElementById('saudi12Profit')) {
+                                                                document.getElementById('saudi12Profit').textContent = formatNumber(data.saudi12Profit || 0);
+                                                            }
+                                                            
+                                                            // د سعودي 14 ماډل اپډیټ
+                                                            if (document.getElementById('saudi14Revenue')) {
+                                                                document.getElementById('saudi14Revenue').textContent = formatNumber(data.saudi14Revenue || 0);
+                                                            }
+                                                            if (document.getElementById('saudi14Profit')) {
+                                                                document.getElementById('saudi14Profit').textContent = formatNumber(data.saudi14Profit || 0);
+                                                            }
+                                                            
+                                                            // د کورنیو اکاونټونو اپډیټ
+                                                            updateHomeAccounts(data.homeAccounts || {});
+                                                            
+                                                            // Local storage کې ذخیره کولو
+                                                            localStorage.setItem('generalDashboardData', JSON.stringify(data));
+                                                            
+                                                            showToast('success', 'بریا', 'عمومی ډشبورډ تازه شو');
+                                                        } else {
+                                                            throw new Error(result.message || 'تېروتنه');
+                                                        }
+                                                    } catch (error) {
+                                                        console.error('Error updating general dashboard:', error);
+                                                        showToast('error', 'تېروتنه', 'د تازه کولو کې ستونزه: ' + error.message);
+                                                        // Offline data load
+                                                        const offlineData = localStorage.getItem('generalDashboardData');
+                                                        if (offlineData) {
+                                                            updateGeneralDashboardDisplay(JSON.parse(offlineData));
+                                                        }
+                                                    } finally {
+                                                        hideLoading();
+                                                    }
+                                                }
+                                                
+                                                // د کور لګښتونو ډشبورډ تازه کولو فنګشن (اصلاح شوی)
+                                                async function fetchHomeDataFixed() {
+                                                    try {
+                                                        showLoading('د کور لګښتونو معلومات...', 'مهرباني وکړئ انتظار وکړئ');
+                                                        
+                                                        const urlObj = new URL(GOOGLE_SHEETS_URL);
+                                                        urlObj.searchParams.append('action', 'getHomeDashboardData');
+                                                        
+                                                        const response = await fetch(urlObj.toString());
+                                                        const result = await response.json();
+                                                        
+                                                        if (result.status === 'success') {
+                                                            const data = result.data;
+                                                            
+                                                            // د ټول کور لګښت اپډیټ
+                                                            if (document.getElementById('totalHomeExpenses')) {
+                                                                document.getElementById('totalHomeExpenses').textContent = formatNumber(data.total || 0);
+                                                            }
+                                                            
+                                                            // د هر کورنی اکاونټ اپډیټ
+                                                            const homeAccounts = ['lalak', 'saifullah', 'saeedullah', 'siddiqullah', 'joint', 'investment'];
+                                                            homeAccounts.forEach(account => {
+                                                                const el = document.getElementById(account + 'Balance');
+                                                                if (el) {
+                                                                    el.textContent = formatNumber(data[account] || 0);
+                                                                }
+                                                            });
+                                                            
+                                                            // Local storage کې ذخیره کولو
+                                                            localStorage.setItem('homeDashboardData', JSON.stringify(data));
+                                                            
+                                                            showToast('success', 'بریا', 'کور لګښتونه تازه شول');
+                                                        } else {
+                                                            throw new Error(result.message || 'تېروتنه');
+                                                        }
+                                                    } catch (error) {
+                                                        console.error('Error fetching home data:', error);
+                                                        showToast('error', 'تېروتنه', 'د کور لګښتونو تازه کولو کې ستونزه');
+                                                        // Offline fallback
+                                                        const offlineData = localStorage.getItem('homeDashboardData');
+                                                        if (offlineData) {
+                                                            updateHomeDashboard(JSON.parse(offlineData));
+                                                        }
+                                                    } finally {
+                                                        hideLoading();
+                                                    }
+                                                }
+                                                
+                                                // د سعودي ډیټا تازه کولو فنګشن (اصلاح شوی)
+                                                async function fetchSaudiDataFixed() {
+                                                    try {
+                                                        showLoading('د سعودي معلومات راوBringلو...', 'مهرباني وکړئ انتظار وکړئ');
+                                                        
+                                                        const urlObj = new URL(GOOGLE_SHEETS_URL);
+                                                        urlObj.searchParams.append('action', 'getSaudiDashboardData');
+                                                        urlObj.searchParams.append('accountId', currentJob.id);
+                                                        
+                                                        const response = await fetch(urlObj.toString());
+                                                        const result = await response.json();
+                                                        
+                                                        if (result.status === 'success') {
+                                                            const data = result.data;
+                                                            
+                                                            // د عاید اپډیټ
+                                                            if (document.getElementById('saudiRevenue')) {
+                                                                document.getElementById('saudiRevenue').textContent = formatNumber(data.revenue || 0);
+                                                            }
+                                                            // د لګښت اپډیټ
+                                                            if (document.getElementById('saudiExpenses')) {
+                                                                document.getElementById('saudiExpenses').textContent = formatNumber(data.expenses || 0);
+                                                            }
+                                                            // د کورته لېږل شوې اپډیټ
+                                                            if (document.getElementById('saudiSentHome')) {
+                                                                document.getElementById('saudiSentHome').textContent = formatNumber(data.sentHome || 0);
+                                                            }
+                                                            // د ډرېور تنخوا اپډیټ
+                                                            if (document.getElementById('saudiSalaries')) {
+                                                                document.getElementById('saudiSalaries').textContent = formatNumber(data.salaries || 0);
+                                                            }
+                                                            // د خالصه ګټې اپډیټ
+                                                            if (document.getElementById('saudiNetProfit')) {
+                                                                document.getElementById('saudiNetProfit').textContent = formatNumber(data.profit || 0);
+                                                            }
+                                                            
+                                                            showToast('success', 'بریا', 'سعودي ډیټا تازه شوه');
+                                                        } else {
+                                                            throw new Error(result.message || 'تېروتنه');
+                                                        }
+                                                    } catch (error) {
+                                                        console.error('Error fetching Saudi data:', error);
+                                                        showToast('error', 'تېروتنه', 'د سعودي ډیټا تازه کولو کې ستونزه');
+                                                    } finally {
+                                                        hideLoading();
+                                                    }
+                                                }
+                                                
+                                                // د موبایل ډیټا تازه کولو فنګشن (اصلاح شوی)
+                                                async function fetchMobileDataFixed() {
+                                                    try {
+                                                        showLoading('د موبایل معلومات راوBringلو...', 'مهرباني وکړئ انتظار وکړئ');
+                                                        
+                                                        const urlObj = new URL(GOOGLE_SHEETS_URL);
+                                                        urlObj.searchParams.append('action', 'getMobileDashboardData');
+                                                        
+                                                        const response = await fetch(urlObj.toString());
+                                                        const result = await response.json();
+                                                        
+                                                        if (result.status === 'success') {
+                                                            const data = result.data;
+                                                            
+                                                            // د عاید اپډیټ
+                                                            if (document.getElementById('mobileRevenue')) {
+                                                                document.getElementById('mobileRevenue').textContent = formatNumber(data.revenue || 0);
+                                                            }
+                                                            // د لګښت اپډیټ
+                                                            if (document.getElementById('mobileExpenses')) {
+                                                                document.getElementById('mobileExpenses').textContent = formatNumber(data.expenses || 0);
+                                                            }
+                                                            // د کورته لېږل شوې اپډیټ
+                                                            if (document.getElementById('mobileSentHome')) {
+                                                                document.getElementById('mobileSentHome').textContent = formatNumber(data.sentHome || 0);
+                                                            }
+                                                            // د دکان کرایې اپډیټ
+                                                            if (document.getElementById('mobileShopRent')) {
+                                                                document.getElementById('mobileShopRent').textContent = formatNumber(data.shopRent || 0);
+                                                            }
+                                                            // د خالصه ګټې اپډیټ
+                                                            if (document.getElementById('mobileNetProfit')) {
+                                                                document.getElementById('mobileNetProfit').textContent = formatNumber(data.profit || 0);
+                                                            }
+                                                            
+                                                            showToast('success', 'بریا', 'موبایل ډیټا تازه شوه');
+                                                        } else {
+                                                            throw new Error(result.message || 'تېروتنه');
+                                                        }
+                                                    } catch (error) {
+                                                        console.error('Error fetching mobile data:', error);
+                                                        showToast('error', 'تېروتنه', 'د موبایل ډیټا تازه کولو کې ستونزه');
+                                                    } finally {
+                                                        hideLoading();
+                                                    }
+                                                }
+                                                
+                                                // د نمبرونو د فورمېټ فنګشن
+                                                function formatNumber(num) {
+                                                    if (num === undefined || num === null) return '0';
+                                                    return parseFloat(num).toLocaleString();
                                                 }
                                         </script>
                                         <script>
@@ -5762,11 +6100,14 @@
                                                         reportContainer.style.position = 'absolute';
                                                         reportContainer.style.left = '-9999px';
                                                         reportContainer.style.top = '0';
-                                                        reportContainer.style.width = '210mm'; // A4 width
+                                                        reportContainer.style.width = '190mm'; // A4 width with margin
+                                                        reportContainer.style.maxWidth = '190mm';
                                                         reportContainer.style.background = 'white';
                                                         reportContainer.style.color = '#1f2937';
-                                                        reportContainer.style.padding = '40px'; // Increased padding
+                                                        reportContainer.style.padding = '25px 30px'; // Better padding
                                                         reportContainer.style.direction = 'rtl';
+                                                        reportContainer.style.textAlign = 'center';
+                                                        reportContainer.style.boxSizing = 'border-box';
                                                         reportContainer.style.fontFamily = "'Noto Naskh Arabic', sans-serif";
 
                                                         // Generate Table Rows with improved styling
@@ -5786,64 +6127,60 @@
 
                                                                 return `
                 <tr style="background-color: ${bgClass}; border-bottom: 1px solid #e2e8f0;">
-                    <td style="padding: 10px 8px; font-size: 11px; color: #334155; border-right: 1px solid #f1f5f9;">${item.date}</td>
-                    <td style="padding: 10px 8px; color: #059669; font-weight: 600; font-size: 11px; text-align: left; direction: ltr;">${parseFloat(item.income || 0).toLocaleString()}</td>
-                    <td style="padding: 10px 8px; color: #dc2626; font-weight: 600; font-size: 11px; text-align: left; direction: ltr;">${parseFloat(item.expense || 0).toLocaleString()}</td>
-                    <td style="padding: 10px 8px; color: #d97706; font-weight: 600; font-size: 11px; text-align: left; direction: ltr;">${parseFloat(item.sentToHome || item.sentToHomeMobile || 0).toLocaleString()}</td>
-                    <td style="padding: 10px 8px; color: #7c3aed; font-weight: 600; font-size: 11px; text-align: left; direction: ltr;">${fifthColValue.toLocaleString()}</td>
-                    <td style="padding: 10px 8px; font-size: 11px; color: #475569; border-right: 1px solid #f1f5f9;">${detail}</td>
-                    <td style="padding: 10px 8px; font-size: 10px; color: #64748b;">${note}</td>
+                    <td style="padding: 10px 8px; font-size: 11px; color: #334155; text-align: center;">${item.date}</td>
+                    <td style="padding: 10px 8px; color: #059669; font-weight: 600; font-size: 11px; text-align: center; direction: ltr;">${parseFloat(item.income || 0).toLocaleString()}</td>
+                    <td style="padding: 10px 8px; color: #dc2626; font-weight: 600; font-size: 11px; text-align: center; direction: ltr;">${parseFloat(item.expense || 0).toLocaleString()}</td>
+                    <td style="padding: 10px 8px; color: #d97706; font-weight: 600; font-size: 11px; text-align: center; direction: ltr;">${parseFloat(item.sentToHome || item.sentToHomeMobile || 0).toLocaleString()}</td>
+                    <td style="padding: 10px 8px; color: #7c3aed; font-weight: 600; font-size: 11px; text-align: center; direction: ltr;">${fifthColValue.toLocaleString()}</td>
+                    <td style="padding: 10px 8px; font-size: 11px; color: #475569; text-align: center;">${detail}</td>
+                    <td style="padding: 10px 8px; font-size: 10px; color: #64748b; text-align: center;">${note}</td>
                 </tr>
             `
                                                         }).join('');
 
                                                         // Professional Header & Footer Structure
                                                         reportContainer.innerHTML = `
-                <div style="font-family: 'Noto Naskh Arabic', sans-serif; direction: rtl; position: relative;">
+                <div style="font-family: 'Noto Naskh Arabic', sans-serif; direction: rtl; position: relative; width: 100%; box-sizing: border-box; margin: 0 auto; text-align: center;">
                     
                     <!-- Decorative Top Line -->
-                    <div style="height: 4px; background: linear-gradient(90deg, #8b5cf6, #3b82f6); width: 100%; margin-bottom: 30px; border-radius: 2px;"></div>
+                    <div style="height: 4px; background: linear-gradient(90deg, #8b5cf6, #3b82f6); width: 100%; margin-bottom: 30px; border-radius: 2px; margin-left: auto; margin-right: auto;"></div>
 
                     <!-- Header Section -->
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 2px solid #f1f5f9;">
-                        <div style="text-align: right;">
-                            <h1 style="color: #1e293b; margin: 0; font-size: 28px; font-weight: 900; letter-spacing: -0.5px;">شېرزاد حسابونه</h1>
-                            <div style="color: #64748b; font-size: 12px; margin-top: 5px;">مسلکي مالي مدیریت سیستم</div>
-                        </div>
-                        <div style="text-align: left;">
-                            <div style="color: #1e293b; font-size: 18px; font-weight: 800;">${currentJob.name}</div>
-                            <div style="color: #64748b; font-size: 12px; margin-top: 5px;">${reportTitle}</div>
-                            <div style="color: #94a3b8; font-size: 10px; margin-top: 2px;">چاپ نېټه: ${todayGregorian}</div>
-                        </div>
+                    <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #f1f5f9;">
+                        <h1 style="color: #1e293b; margin: 0; font-size: 26px; font-weight: 900; letter-spacing: normal; word-spacing: normal; text-align: center; font-family: 'Noto Naskh Arabic', Arial, sans-serif;">شېرزاد حسابونه</h1>
+                        <div style="color: #64748b; font-size: 12px; margin-top: 5px; text-align: center;">مسلکي مالي مدیریت سیستم</div>
+                        <div style="color: #1e293b; font-size: 18px; font-weight: 800; margin-top: 15px; text-align: center;">${currentJob.name}</div>
+                        <div style="color: #64748b; font-size: 12px; margin-top: 5px; text-align: center;">${reportTitle}</div>
+                        <div style="color: #94a3b8; font-size: 10px; margin-top: 2px; text-align: center;">چاپ نېټه: ${todayGregorian}</div>
                     </div>
                     
                     <!-- Financial Summary Cards -->
-                    <div style="display: flex; gap: 15px; margin-bottom: 30px;">
-                        <div style="flex: 1; border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px; background: #fff;">
-                            <div style="font-size: 11px; color: #64748b; margin-bottom: 5px;">ټول عاید (Income)</div>
+                    <div style="display: flex; gap: 15px; margin-bottom: 30px; justify-content: center;">
+                        <div style="flex: 1; max-width: 180px; border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px; background: #f0fdf4; text-align: center;">
+                            <div style="font-size: 11px; color: #166534; margin-bottom: 5px;">ټول عاید (Income)</div>
                             <div style="color: #15803d; font-weight: 800; font-size: 16px; direction: ltr;">${totalIncome.toLocaleString()}</div>
                         </div>
-                        <div style="flex: 1; border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px; background: #fff;">
-                            <div style="font-size: 11px; color: #64748b; margin-bottom: 5px;">ټول لګښت (Expense)</div>
+                        <div style="flex: 1; max-width: 180px; border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px; background: #fef2f2; text-align: center;">
+                            <div style="font-size: 11px; color: #991b1b; margin-bottom: 5px;">ټول لګښت (Expense)</div>
                             <div style="color: #b91c1c; font-weight: 800; font-size: 16px; direction: ltr;">${grandTotalExpense.toLocaleString()}</div>
                         </div>
-                        <div style="flex: 1; border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px; background: #f8fafc;">
-                            <div style="font-size: 11px; color: #64748b; margin-bottom: 5px;">خالصه ګټه (Net)</div>
+                        <div style="flex: 1; max-width: 180px; border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px; background: #eff6ff; text-align: center;">
+                            <div style="font-size: 11px; color: #1e40af; margin-bottom: 5px;">خالصه ګټه (Net)</div>
                             <div style="color: #1d4ed8; font-weight: 800; font-size: 16px; direction: ltr;">${netBalance.toLocaleString()}</div>
                         </div>
                     </div>
 
                     <!-- Main Data Table -->
-                    <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; margin-bottom: 20px;">
+                    <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; margin-bottom: 20px; margin: 0 auto;">
                         <thead>
                             <tr style="background-color: #f1f5f9;">
-                                <th style="padding: 12px 8px; text-align: right; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">نېټه</th>
-                                <th style="padding: 12px 8px; text-align: left; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">عاید</th>
-                                <th style="padding: 12px 8px; text-align: left; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">لګښت</th>
-                                <th style="padding: 12px 8px; text-align: left; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">کور ته ورکړل شوې</th>
-                                <th style="padding: 12px 8px; text-align: left; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">${fifthColHeader}</th>
-                                <th style="padding: 12px 8px; text-align: right; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">تفصیل</th>
-                                <th style="padding: 12px 8px; text-align: right; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">یاداښت</th>
+                                <th style="padding: 12px 8px; text-align: center; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">نېټه</th>
+                                <th style="padding: 12px 8px; text-align: center; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">عاید</th>
+                                <th style="padding: 12px 8px; text-align: center; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">لګښت</th>
+                                <th style="padding: 12px 8px; text-align: center; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">کور ته ورکړل شوې</th>
+                                <th style="padding: 12px 8px; text-align: center; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">${fifthColHeader}</th>
+                                <th style="padding: 12px 8px; text-align: center; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">تفصیل</th>
+                                <th style="padding: 12px 8px; text-align: center; font-size: 11px; color: #475569; font-weight: 800; border-bottom: 2px solid #e2e8f0;">یاداښت</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -5851,20 +6188,19 @@
                         </tbody>
                         <tfoot>
                             <tr style="background-color: #f8fafc; font-weight: bold;">
-                                <td style="padding: 12px 8px; border-top: 2px solid #cbd5e1; color: #1e293b;">ټوټل (مجموعه)</td>
-                                <td style="padding: 12px 8px; border-top: 2px solid #cbd5e1; color: #059669; text-align: left; direction: ltr;">${totalIncome.toLocaleString()}</td>
-                                <td style="padding: 12px 8px; border-top: 2px solid #cbd5e1; color: #dc2626; text-align: left; direction: ltr;">${grandTotalExpense.toLocaleString()}</td>
-                                <td style="padding: 12px 8px; border-top: 2px solid #cbd5e1; color: #d97706; text-align: left; direction: ltr;">${totalSentHome.toLocaleString()}</td>
-                                <td style="padding: 12px 8px; border-top: 2px solid #cbd5e1; color: #7c3aed; text-align: left; direction: ltr;">${totalFifthCol.toLocaleString()}</td>
+                                <td style="padding: 12px 8px; border-top: 2px solid #cbd5e1; color: #1e293b; text-align: center;">ټوټل (مجموعه)</td>
+                                <td style="padding: 12px 8px; border-top: 2px solid #cbd5e1; color: #059669; text-align: center; direction: ltr;">${totalIncome.toLocaleString()}</td>
+                                <td style="padding: 12px 8px; border-top: 2px solid #cbd5e1; color: #dc2626; text-align: center; direction: ltr;">${grandTotalExpense.toLocaleString()}</td>
+                                <td style="padding: 12px 8px; border-top: 2px solid #cbd5e1; color: #d97706; text-align: center; direction: ltr;">${totalSentHome.toLocaleString()}</td>
+                                <td style="padding: 12px 8px; border-top: 2px solid #cbd5e1; color: #7c3aed; text-align: center; direction: ltr;">${totalFifthCol.toLocaleString()}</td>
                                 <td colspan="2" style="border-top: 2px solid #cbd5e1;"></td>
                             </tr>
                         </tfoot>
                     </table>
 
                     <!-- Footer -->
-                    <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-                        <div style="font-size: 9px; color: #94a3b8;">Sherzad Accounts System v2.0</div>
-                        <div style="font-size: 9px; color: #94a3b8;">Generated by Sherzad Accounts</div>
+                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center;">
+                        <div style="font-size: 10px; color: #94a3b8;">Sherzad Accounts System | Professional Report</div>
                     </div>
                 </div>
             `;
@@ -6130,12 +6466,15 @@
 
                                                         // PDF GENERATION
                                                         const reportContainer = document.createElement('div');
-                                                        reportContainer.style.width = '210mm';
+                                                        reportContainer.style.width = '190mm';
+                                                        reportContainer.style.maxWidth = '190mm';
                                                         reportContainer.style.background = '#ffffff';
                                                         reportContainer.style.color = '#000000';
-                                                        reportContainer.style.padding = '10mm'; // Reduced padding to allow more content
+                                                        reportContainer.style.padding = '25px 30px';
                                                         reportContainer.style.boxSizing = 'border-box';
                                                         reportContainer.style.direction = 'rtl';
+                                                        reportContainer.style.textAlign = 'center';
+                                                        reportContainer.style.margin = '0 auto';
                                                         reportContainer.style.fontFamily = "'Noto Naskh Arabic', sans-serif";
 
                                                         const bgEven = '#f8fafc';
@@ -6149,53 +6488,53 @@
 
                                                                 return `
                 <tr style="background-color: ${bgClass}; border-bottom: 1px solid #e2e8f0;">
-                    <td style="padding: 6px; font-size: 10px; border-right: 1px solid #e2e8f0; width: 10%;">${item.date}</td>
-                    <td style="padding: 6px; font-size: 10px; color: #166534; direction: ltr; text-align: left; width: 12%; font-weight: bold;">${parseFloat(item.income || 0).toLocaleString()}</td>
-                    <td style="padding: 6px; font-size: 10px; color: #991b1b; direction: ltr; text-align: left; width: 12%; font-weight: bold;">${parseFloat(item.expense || 0).toLocaleString()}</td>
-                    <td style="padding: 6px; font-size: 10px; color: #b45309; direction: ltr; text-align: left; width: 12%;">${parseFloat(item.sentToHome || item.sentToHomeMobile || 0).toLocaleString()}</td>
-                    <td style="padding: 6px; font-size: 10px; color: #6d28d9; direction: ltr; text-align: left; width: 12%;">${fifthColValue.toLocaleString()}</td>
-                    <td style="padding: 6px; font-size: 10px; border-right: 1px solid #e2e8f0; width: 22%;">${detail}</td>
-                    <td style="padding: 6px; font-size: 9px; color: #64748b; width: 20%;">${note}</td>
+                    <td style="padding: 6px; font-size: 10px; text-align: center; width: 10%;">${item.date}</td>
+                    <td style="padding: 6px; font-size: 10px; color: #166534; direction: ltr; text-align: center; width: 12%; font-weight: bold;">${parseFloat(item.income || 0).toLocaleString()}</td>
+                    <td style="padding: 6px; font-size: 10px; color: #991b1b; direction: ltr; text-align: center; width: 12%; font-weight: bold;">${parseFloat(item.expense || 0).toLocaleString()}</td>
+                    <td style="padding: 6px; font-size: 10px; color: #b45309; direction: ltr; text-align: center; width: 12%;">${parseFloat(item.sentToHome || item.sentToHomeMobile || 0).toLocaleString()}</td>
+                    <td style="padding: 6px; font-size: 10px; color: #6d28d9; direction: ltr; text-align: center; width: 12%;">${fifthColValue.toLocaleString()}</td>
+                    <td style="padding: 6px; font-size: 10px; text-align: center; width: 22%;">${detail}</td>
+                    <td style="padding: 6px; font-size: 9px; color: #64748b; text-align: center; width: 20%;">${note}</td>
                 </tr>
             `
                                                         }).join('');
 
                                                         reportContainer.innerHTML = `
-                <div style="width: 100%; font-family: 'Noto Naskh Arabic', sans-serif;">
+                <div style="width: 100%; font-family: 'Noto Naskh Arabic', sans-serif; direction: rtl; box-sizing: border-box; margin: 0 auto; text-align: center;">
                     <!-- Header -->
                     <div style="text-align: center; margin-bottom: 20px; border-bottom: 3px solid #3b82f6; padding-bottom: 15px;">
-                        <h1 style="margin: 0; font-size: 26px; color: #1e3a8a; font-family: 'Noto Naskh Arabic', sans-serif; font-weight: bold; line-height: 1.8; letter-spacing: 0; word-spacing: 2px;">شېرزاد حسابونه</h1>
-                        <h2 style="margin: 5px 0; font-size: 18px; color: #334155; font-family: 'Noto Naskh Arabic', sans-serif; font-weight: bold; line-height: 1.8; letter-spacing: 0; word-spacing: 1px;">${currentJob.name} - ${reportTitle}</h2>
-                        <p style="margin: 0; font-size: 10px; color: #94a3b8; font-family: 'Noto Naskh Arabic', sans-serif;">چاپ نېټه: ${todayGregorian}</p>
+                        <h1 style="margin: 0; font-size: 26px; color: #1e3a8a; font-family: 'Noto Naskh Arabic', Arial, sans-serif; font-weight: bold; letter-spacing: normal; word-spacing: normal; text-align: center;">شېرزاد حسابونه</h1>
+                        <h2 style="margin: 5px 0; font-size: 18px; color: #334155; font-family: 'Noto Naskh Arabic', sans-serif; font-weight: bold; line-height: 1.8; text-align: center;">${currentJob.name} - ${reportTitle}</h2>
+                        <p style="margin: 0; font-size: 10px; color: #94a3b8; font-family: 'Noto Naskh Arabic', sans-serif; text-align: center;">چاپ نېټه: ${todayGregorian}</p>
                     </div>
 
                     <!-- Summary Cards -->
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px; gap: 10px;">
-                        <div style="flex: 1; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px; border-radius: 8px; text-align: center;">
+                    <div style="display: flex; justify-content: center; margin-bottom: 20px; gap: 10px;">
+                        <div style="flex: 1; max-width: 180px; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px; border-radius: 8px; text-align: center;">
                             <div style="font-size: 10px; color: #166534;">عاید</div>
                             <div style="font-size: 14px; font-weight: bold; color: #15803d; direction: ltr;">${totalIncome.toLocaleString()}</div>
                         </div>
-                        <div style="flex: 1; background: #fef2f2; border: 1px solid #fecaca; padding: 10px; border-radius: 8px; text-align: center;">
+                        <div style="flex: 1; max-width: 180px; background: #fef2f2; border: 1px solid #fecaca; padding: 10px; border-radius: 8px; text-align: center;">
                             <div style="font-size: 10px; color: #991b1b;">لګښت</div>
                             <div style="font-size: 14px; font-weight: bold; color: #b91c1c; direction: ltr;">${grandTotalExpense.toLocaleString()}</div>
                         </div>
-                        <div style="flex: 1; background: #eff6ff; border: 1px solid #bfdbfe; padding: 10px; border-radius: 8px; text-align: center;">
+                        <div style="flex: 1; max-width: 180px; background: #eff6ff; border: 1px solid #bfdbfe; padding: 10px; border-radius: 8px; text-align: center;">
                             <div style="font-size: 10px; color: #1e40af;">خالصه ګټه</div>
                             <div style="font-size: 14px; font-weight: bold; color: #1d4ed8; direction: ltr;">${netBalance.toLocaleString()}</div>
                         </div>
                     </div>
 
                     <!-- Table -->
-                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #e2e8f0;">
+                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #e2e8f0; margin: 0 auto; text-align: center;">
                         <thead>
                             <tr style="background-color: #f1f5f9; border-bottom: 2px solid #cbd5e1;">
-                                <th style="padding: 8px; font-size: 11px; text-align: right; color: #334155;">نېټه</th>
-                                <th style="padding: 8px; font-size: 11px; text-align: left; color: #334155;">عاید</th>
-                                <th style="padding: 8px; font-size: 11px; text-align: left; color: #334155;">لګښت</th>
-                                <th style="padding: 8px; font-size: 11px; text-align: left; color: #334155;">کور لګښت</th>
-                                <th style="padding: 8px; font-size: 11px; text-align: left; color: #334155;">${fifthColHeader}</th>
-                                <th style="padding: 8px; font-size: 11px; text-align: right; color: #334155;">تفصیل</th>
-                                <th style="padding: 8px; font-size: 11px; text-align: right; color: #334155;">یاداښت</th>
+                                <th style="padding: 8px; font-size: 11px; text-align: center; color: #334155;">نېټه</th>
+                                <th style="padding: 8px; font-size: 11px; text-align: center; color: #334155;">عاید</th>
+                                <th style="padding: 8px; font-size: 11px; text-align: center; color: #334155;">لګښت</th>
+                                <th style="padding: 8px; font-size: 11px; text-align: center; color: #334155;">کور لګښت</th>
+                                <th style="padding: 8px; font-size: 11px; text-align: center; color: #334155;">${fifthColHeader}</th>
+                                <th style="padding: 8px; font-size: 11px; text-align: center; color: #334155;">تفصیل</th>
+                                <th style="padding: 8px; font-size: 11px; text-align: center; color: #334155;">یاداښت</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -6203,11 +6542,11 @@
                         </tbody>
                         <tfoot>
                             <tr style="background-color: #e2e8f0; font-weight: bold;">
-                                <td style="padding: 8px; font-size: 11px;">مجموعه</td>
-                                <td style="padding: 8px; font-size: 11px; direction: ltr; text-align: left;">${totalIncome.toLocaleString()}</td>
-                                <td style="padding: 8px; font-size: 11px; direction: ltr; text-align: left;">${totalExpense.toLocaleString()}</td>
-                                <td style="padding: 8px; font-size: 11px; direction: ltr; text-align: left;">${totalSentHome.toLocaleString()}</td>
-                                <td style="padding: 8px; font-size: 11px; direction: ltr; text-align: left;">${totalFifthCol.toLocaleString()}</td>
+                                <td style="padding: 8px; font-size: 11px; text-align: center;">مجموعه</td>
+                                <td style="padding: 8px; font-size: 11px; direction: ltr; text-align: center; color: #15803d;">${totalIncome.toLocaleString()}</td>
+                                <td style="padding: 8px; font-size: 11px; direction: ltr; text-align: center; color: #b91c1c;">${totalExpense.toLocaleString()}</td>
+                                <td style="padding: 8px; font-size: 11px; direction: ltr; text-align: center; color: #b45309;">${totalSentHome.toLocaleString()}</td>
+                                <td style="padding: 8px; font-size: 11px; direction: ltr; text-align: center; color: #6d28d9;">${totalFifthCol.toLocaleString()}</td>
                                 <td colspan="2"></td>
                             </tr>
                         </tfoot>
@@ -6220,7 +6559,7 @@
             `;
 
                                                         const opt = {
-                                                                margin: 0, // Margin is handled by reportContainer padding
+                                                                margin: [10, 10, 10, 10], // Equal margins on all sides
                                                                 filename: `${currentJob.name}_Report_${todayGregorian.replace(/\//g, '-')}.pdf`,
                                                                 image: { type: 'jpeg', quality: 0.98 },
                                                                 html2canvas: { scale: 2, useCORS: true, logging: false },
@@ -6232,6 +6571,46 @@
                                                                 showToast('success', 'ډاونلوډ شو', 'PDF فایل په بریالیتوب ډاونلوډ شو');
                                                         });
                                                 };
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                          // د میاشتې بدلېدل
+                                          const monthSelect = document.getElementById('homeMonthSelect');
+                                          if(monthSelect) {
+                                            monthSelect.addEventListener('change', function() {
+                                              console.log("Month changed to:", this.value);
+                                              fetchHomeDataFixed();
+                                            });
+                                          }
+                                          
+                                          // د کورنیو اکاونټونو لپاره د بیلانس بټن چیک
+                                          const refreshBtn = document.getElementById('refreshBalanceBtn');
+                                          if(refreshBtn) {
+                                            refreshBtn.addEventListener('click', fetchHomeDataFixed);
+                                          }
+                                          
+                                          // د ډشبورډ د ریفرېش بټن اونر
+                                          const dashboardRefreshBtn = document.querySelector('#dashboardScreen .modal-header button[onclick*="updateGeneralDashboard"]');
+                                          if(dashboardRefreshBtn) {
+                                            dashboardRefreshBtn.addEventListener('click', updateGeneralDashboardFixed);
+                                          }
+                                          
+                                          // د سعودي ډیټا ریفرېش بټن
+                                          const saudiRefreshBtn = document.getElementById('saudiRefreshBtn');
+                                          if(saudiRefreshBtn) {
+                                            saudiRefreshBtn.addEventListener('click', fetchSaudiDataFixed);
+                                          }
+                                          
+                                          // د موبایل ډیټا ریفرېش بټن
+                                          const mobileRefreshBtn = document.getElementById('mobileRefreshBtn');
+                                          if(mobileRefreshBtn) {
+                                            mobileRefreshBtn.addEventListener('click', fetchMobileDataFixed);
+                                          }
+                                          
+                                          // د عمومی ډشبورډ ټولیز ریفرېش بټن
+                                          const allRefreshBtn = document.getElementById('refreshAllBtn');
+                                          if(allRefreshBtn) {
+                                            allRefreshBtn.addEventListener('click', updateAllDashboards);
+                                          }
+                                        });
                                         </script>
 </body>
 
